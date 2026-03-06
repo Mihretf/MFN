@@ -1,46 +1,3 @@
-export interface Event {
-  id: string;
-  title: string;
-  date: string;
-  time: string;
-  image: string;
-  description?: string;
-}
-
-export interface ServiceTime {
-  day: string;
-  time: string;
-  type: string;
-}
-
-export interface Pastor {
-  name: string;
-  role: string;
-  image: string;
-  bio: string;
-}
-
-export interface Ministry {
-  id: string;
-  name: string;
-  description: string;
-  icon: string;
-}
-
-export interface Announcement {
-  id: string;
-  title: string;
-  date: string;
-  content: string;
-  priority: 'high' | 'medium' | 'low';
-}
-
-export interface GalleryImage {
-  id: string;
-  url: string;
-  caption: string;
-}
-
 export interface Branch {
   id: string;
   name: string;
@@ -57,7 +14,33 @@ export interface Branch {
   ministries: Ministry[];
   gallery: GalleryImage[];
   mapUrl: string;
+  regionId: string;
 }
+
+export interface Region {
+  id: string;
+  name: string;
+  description: string;
+}
+
+export const regions: Region[] = [
+  { id: "region-1", name: "Northern California", description: "Bay Area and surroundings" },
+  { id: "region-2", name: "Southern California", description: "Los Angeles and Orange County" },
+  { id: "region-3", name: "Central California", description: "Central Valley region" },
+  { id: "region-4", name: "Pacific Northwest", description: "Oregon and Washington" },
+  { id: "region-5", name: "Mountain West", description: "Colorado and Utah" },
+  { id: "region-6", name: "Southwest", description: "Arizona and Nevada" },
+  { id: "region-7", name: "Midwest", description: "Illinois and Ohio" },
+  { id: "region-8", name: "Great Lakes", description: "Michigan and Wisconsin" },
+  { id: "region-9", name: "Northeast", description: "New York and Massachusetts" },
+  { id: "region-10", name: "Mid-Atlantic", description: "Pennsylvania and Maryland" },
+  { id: "region-11", name: "Southeast", description: "Georgia and Florida" },
+  { id: "region-12", name: "Gulf Coast", description: "Louisiana and Texas" },
+  { id: "region-13", name: "Plains States", description: "Kansas and Nebraska" },
+  { id: "region-14", name: "Carolinas", description: "North and South Carolina" },
+  { id: "region-15", name: "New England", description: "Vermont and Maine" },
+  { id: "region-16", name: "Rocky Mountains", description: "Montana and Wyoming" },
+];
 
 export const branches: Branch[] = [
   {
@@ -178,6 +161,7 @@ export const branches: Branch[] = [
       },
     ],
     mapUrl: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3304.8574764436946!2d-118.1967!3d34.1139!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMzTCsDA2JzUwLjAiTiAxMTjCsDExJzQ4LjEiVw!5e0!3m2!1sen!2sus!4v1234567890",
+    regionId: "region-1",
   },
   {
     id: "south",
@@ -266,6 +250,7 @@ export const branches: Branch[] = [
       },
     ],
     mapUrl: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3305.1234!2d-118.2345!3d34.0987!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMzTCsDA1JzU1LjMiTiAxMTjCsDE0JzA0LjIiVw!5e0!3m2!1sen!2sus!4v1234567891",
+    regionId: "region-1",
   },
   {
     id: "east",
@@ -354,5 +339,239 @@ export const branches: Branch[] = [
       },
     ],
     mapUrl: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3305.5678!2d-118.2500!3d34.0521!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMzTCsDAzJzA3LjYiTiAxMTjCsDE1JzAwLjAiVw!5e0!3m2!1sen!2sus!4v1234567892",
+    regionId: "region-1",
+  },
+  // Additional Northern California locations
+  {
+    id: "sf-main",
+    name: "San Francisco Main",
+    location: "San Francisco",
+    address: "234 Market Street, San Francisco, CA 94102",
+    phone: "(415) 555-1001",
+    email: "sf@missionfornation.org",
+    description: "Our flagship location in the heart of San Francisco, serving the Bay Area community.",
+    heroImage: "https://images.unsplash.com/photo-1762967028624-d93c7b343701?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxtb2Rlcm4lMjBjaHVyY2glMjBidWlsZGluZyUyMGV4dGVyaW9yJTIwYXJjaGl0ZWN0dXJlfGVufDF8fHx8MTc3MjM2Mzk2NHww&ixlib=rb-4.1.0&q=80&w=1080",
+    serviceTimes: [
+      { day: "Sunday", time: "9:30 AM", type: "Morning Worship" },
+      { day: "Sunday", time: "11:30 AM", type: "Contemporary Service" },
+    ],
+    announcements: [],
+    pastor: {
+      name: "Rev. James Lee",
+      role: "Senior Pastor",
+      image: "https://images.unsplash.com/photo-1605518589548-27b44b941b4e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxjaHVyY2glMjBwYXN0b3IlMjBwcmVhY2hpbmd8ZW58MXx8fHwxNzcyMzYzOTY1fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      bio: "Pastor James has dedicated his life to urban ministry and community transformation.",
+    },
+    events: [],
+    ministries: [],
+    gallery: [],
+    mapUrl: "",
+    regionId: "region-1",
+  },
+  {
+    id: "oakland-branch",
+    name: "Oakland Community Church",
+    location: "Oakland",
+    address: "567 Broadway, Oakland, CA 94607",
+    phone: "(510) 555-2002",
+    email: "oakland@missionfornation.org",
+    description: "A vibrant multicultural congregation in Oakland, celebrating diversity and unity in Christ.",
+    heroImage: "https://images.unsplash.com/photo-1763688506433-033fc84f6559?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxtb2Rlcm4lMjBjaHVyY2glMjBidWlsZGluZyUyMGV4dGVyaW9yJTIwbWluaW1hbCUyMGFyY2hpdGVjdHVyZXxlbnwxfHx8fDE3NzA5MDQ0MTB8MA&ixlib=rb-4.1.0&q=80&w=1080",
+    serviceTimes: [
+      { day: "Sunday", time: "10:00 AM", type: "Main Service" },
+    ],
+    announcements: [],
+    pastor: {
+      name: "Pastor Maria Rodriguez",
+      role: "Lead Pastor",
+      image: "https://images.unsplash.com/photo-1605518589548-27b44b941b4e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxjaHVyY2glMjBwYXN0b3IlMjBwcmVhY2hpbmd8ZW58MXx8fHwxNzcyMzYzOTY1fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      bio: "Pastor Maria is passionate about building bridges across cultural divides through the love of Christ.",
+    },
+    events: [],
+    ministries: [],
+    gallery: [],
+    mapUrl: "",
+    regionId: "region-1",
+  },
+  // Southern California
+  {
+    id: "la-west",
+    name: "Los Angeles West",
+    location: "West Los Angeles",
+    address: "890 Wilshire Blvd, Los Angeles, CA 90024",
+    phone: "(310) 555-3003",
+    email: "lawest@missionfornation.org",
+    description: "Serving the West LA community with contemporary worship and authentic community.",
+    heroImage: "https://images.unsplash.com/photo-1768569391908-5c92c83744f3?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxjaHVyY2glMjBpbnRlcmlvciUyMHdvcnNoaXAlMjBzcGFjZXxlbnwxfHx8fDE3NzIzNjM5NjV8MA&ixlib=rb-4.1.0&q=80&w=1080",
+    serviceTimes: [
+      { day: "Sunday", time: "9:00 AM", type: "Morning Service" },
+      { day: "Sunday", time: "11:00 AM", type: "Family Service" },
+    ],
+    announcements: [],
+    pastor: {
+      name: "Rev. Tom Williams",
+      role: "Senior Pastor",
+      image: "https://images.unsplash.com/photo-1605518589548-27b44b941b4e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxjaHVyY2glMjBwYXN0b3IlMjBwcmVhY2hpbmd8ZW58MXx8fHwxNzcyMzYzOTY1fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      bio: "Pastor Tom brings a fresh perspective to ministry with a focus on young families.",
+    },
+    events: [],
+    ministries: [],
+    gallery: [],
+    mapUrl: "",
+    regionId: "region-2",
+  },
+  {
+    id: "oc-main",
+    name: "Orange County Central",
+    location: "Irvine",
+    address: "123 Main Plaza, Irvine, CA 92618",
+    phone: "(949) 555-4004",
+    email: "oc@missionfornation.org",
+    description: "A growing congregation in Orange County dedicated to reaching families and professionals.",
+    heroImage: "https://images.unsplash.com/photo-1762967028624-d93c7b343701?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxtb2Rlcm4lMjBjaHVyY2glMjBidWlsZGluZyUyMGV4dGVyaW9yJTIwYXJjaGl0ZWN0dXJlfGVufDF8fHx8MTc3MjM2Mzk2NHww&ixlib=rb-4.1.0&q=80&w=1080",
+    serviceTimes: [
+      { day: "Sunday", time: "10:30 AM", type: "Worship Service" },
+    ],
+    announcements: [],
+    pastor: {
+      name: "Pastor Jennifer Kim",
+      role: "Lead Pastor",
+      image: "https://images.unsplash.com/photo-1605518589548-27b44b941b4e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxjaHVyY2glMjBwYXN0b3IlMjBwcmVhY2hpbmd8ZW58MXx8fHwxNzcyMzYzOTY1fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      bio: "Pastor Jennifer has a heart for equipping leaders and building strong families.",
+    },
+    events: [],
+    ministries: [],
+    gallery: [],
+    mapUrl: "",
+    regionId: "region-2",
+  },
+  {
+    id: "sd-downtown",
+    name: "San Diego Downtown",
+    location: "San Diego",
+    address: "456 Harbor Drive, San Diego, CA 92101",
+    phone: "(619) 555-5005",
+    email: "sd@missionfornation.org",
+    description: "A waterfront congregation bringing hope to downtown San Diego.",
+    heroImage: "https://images.unsplash.com/photo-1763688506433-033fc84f6559?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxtb2Rlcm4lMjBjaHVyY2glMjBidWlsZGluZyUyMGV4dGVyaW9yJTIwbWluaW1hbCUyMGFyY2hpdGVjdHVyZXxlbnwxfHx8fDE3NzA5MDQ0MTB8MA&ixlib=rb-4.1.0&q=80&w=1080",
+    serviceTimes: [
+      { day: "Sunday", time: "9:30 AM", type: "Morning Worship" },
+    ],
+    announcements: [],
+    pastor: {
+      name: "Rev. Mark Thompson",
+      role: "Senior Pastor",
+      image: "https://images.unsplash.com/photo-1605518589548-27b44b941b4e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxjaHVyY2glMjBwYXN0b3IlMjBwcmVhY2hpbmd8ZW58MXx8fHwxNzcyMzYzOTY1fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      bio: "Pastor Mark is committed to community outreach and social justice ministry.",
+    },
+    events: [],
+    ministries: [],
+    gallery: [],
+    mapUrl: "",
+    regionId: "region-2",
+  },
+  // Central California
+  {
+    id: "fresno-central",
+    name: "Fresno Central",
+    location: "Fresno",
+    address: "789 Blackstone Ave, Fresno, CA 93720",
+    phone: "(559) 555-6006",
+    email: "fresno@missionfornation.org",
+    description: "Serving the Central Valley with authentic worship and community care.",
+    heroImage: "https://images.unsplash.com/photo-1768569391908-5c92c83744f3?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxjaHVyY2glMjBpbnRlcmlvciUyMHdvcnNoaXAlMjBzcGFjZXxlbnwxfHx8fDE3NzIzNjM5NjV8MA&ixlib=rb-4.1.0&q=80&w=1080",
+    serviceTimes: [
+      { day: "Sunday", time: "10:00 AM", type: "Main Service" },
+    ],
+    announcements: [],
+    pastor: {
+      name: "Pastor Carlos Martinez",
+      role: "Lead Pastor",
+      image: "https://images.unsplash.com/photo-1605518589548-27b44b941b4e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxjaHVyY2glMjBwYXN0b3IlMjBwcmVhY2hpbmd8ZW58MXx8fHwxNzcyMzYzOTY1fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      bio: "Pastor Carlos has a passion for reaching agricultural communities with the Gospel.",
+    },
+    events: [],
+    ministries: [],
+    gallery: [],
+    mapUrl: "",
+    regionId: "region-3",
+  },
+  // Pacific Northwest
+  {
+    id: "portland-main",
+    name: "Portland Main",
+    location: "Portland",
+    address: "321 SW Morrison St, Portland, OR 97204",
+    phone: "(503) 555-7007",
+    email: "portland@missionfornation.org",
+    description: "A welcoming community in the heart of Portland, Oregon.",
+    heroImage: "https://images.unsplash.com/photo-1762967028624-d93c7b343701?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxtb2Rlcm4lMjBjaHVyY2glMjBidWlsZGluZyUyMGV4dGVyaW9yJTIwYXJjaGl0ZWN0dXJlfGVufDF8fHx8MTc3MjM2Mzk2NHww&ixlib=rb-4.1.0&q=80&w=1080",
+    serviceTimes: [
+      { day: "Sunday", time: "10:30 AM", type: "Worship Service" },
+    ],
+    announcements: [],
+    pastor: {
+      name: "Rev. Emily Foster",
+      role: "Senior Pastor",
+      image: "https://images.unsplash.com/photo-1605518589548-27b44b941b4e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxjaHVyY2glMjBwYXN0b3IlMjBwcmVhY2hpbmd8ZW58MXx8fHwxNzcyMzYzOTY1fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      bio: "Pastor Emily loves the outdoors and connecting faith with environmental stewardship.",
+    },
+    events: [],
+    ministries: [],
+    gallery: [],
+    mapUrl: "",
+    regionId: "region-4",
+  },
+  {
+    id: "seattle-north",
+    name: "Seattle Northgate",
+    location: "Seattle",
+    address: "654 NE Northgate Way, Seattle, WA 98125",
+    phone: "(206) 555-8008",
+    email: "seattle@missionfornation.org",
+    description: "Serving the Seattle area with grace, truth, and community.",
+    heroImage: "https://images.unsplash.com/photo-1763688506433-033fc84f6559?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxtb2Rlcm4lMjBjaHVyY2glMjBidWlsZGluZyUyMGV4dGVyaW9yJTIwbWluaW1hbCUyMGFyY2hpdGVjdHVyZXxlbnwxfHx8fDE3NzA5MDQ0MTB8MA&ixlib=rb-4.1.0&q=80&w=1080",
+    serviceTimes: [
+      { day: "Sunday", time: "9:00 AM", type: "Morning Service" },
+      { day: "Sunday", time: "11:00 AM", type: "Contemporary Service" },
+    ],
+    announcements: [],
+    pastor: {
+      name: "Pastor Brian Walsh",
+      role: "Lead Pastor",
+      image: "https://images.unsplash.com/photo-1605518589548-27b44b941b4e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxjaHVyY2glMjBwYXN0b3IlMjBwcmVhY2hpbmd8ZW58MXx8fHwxNzcyMzYzOTY1fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      bio: "Pastor Brian is passionate about technology and using modern tools for ministry.",
+    },
+    events: [],
+    ministries: [],
+    gallery: [],
+    mapUrl: "",
+    regionId: "region-4",
+  },
+  // Mountain West
+  {
+    id: "denver-highlands",
+    name: "Denver Highlands",
+    location: "Denver",
+    address: "987 16th Street, Denver, CO 80202",
+    phone: "(303) 555-9009",
+    email: "denver@missionfornation.org",
+    description: "A mountain-view congregation dedicated to worship and community service.",
+    heroImage: "https://images.unsplash.com/photo-1768569391908-5c92c83744f3?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxjaHVyY2glMjBpbnRlcmlvciUyMHdvcnNoaXAlMjBzcGFjZXxlbnwxfHx8fDE3NzIzNjM5NjV8MA&ixlib=rb-4.1.0&q=80&w=1080",
+    serviceTimes: [
+      { day: "Sunday", time: "10:00 AM", type: "Main Service" },
+    ],
+    announcements: [],
+    pastor: {
+      name: "Rev. Sarah Mitchell",
+      role: "Senior Pastor",
+      image: "https://images.unsplash.com/photo-1605518589548-27b44b941b4e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxjaHVyY2glMjBwYXN0b3IlMjBwcmVhY2hpbmd8ZW58MXx8fHwxNzcyMzYzOTY1fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      bio: "Pastor Sarah combines adventure and faith in her unique ministry approach.",
+    },
+    events: [],
+    ministries: [],
+    gallery: [],
+    mapUrl: "",
+    regionId: "region-5",
   },
 ];
