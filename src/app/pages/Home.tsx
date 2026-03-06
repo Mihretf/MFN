@@ -80,7 +80,6 @@ export default function App() {
       <BibleVerse />
       <LiveStream />
       <Impact />
-      <Leaders />
       <GalleryHighlight />
     </>
   );

@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { motion, AnimatePresence } from 'motion/react';
-import { Menu, X } from 'lucide-react';
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
+import { motion, AnimatePresence } from "motion/react";
+import { Menu, X } from "lucide-react";
 
 export function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -17,32 +17,44 @@ export function Header() {
             <div className="w-10 h-10 bg-[#d4af37] rounded-sm flex items-center justify-center">
               <span className="text-[#1a3c34] font-bold text-xl">M</span>
             </div>
-            <span className="font-bold text-xl tracking-tight">MISSION FOR NATION</span>
+            <span className="font-bold text-xl tracking-tight">
+              MISSION FOR NATION
+            </span>
           </Link>
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-8">
-            <Link 
-              to="/about" 
+            <Link
+              to="/about"
               className="text-[#f5f5f5] hover:text-[#f0d082] transition-colors font-medium"
             >
               About Us
             </Link>
-            
+
             <Link
               to="/services"
               className="text-[#f5f5f5] hover:text-[#f0d082] transition-colors font-medium"
             >
               Services
             </Link>
+            <Link
+              to="/gallery"
+              className="text-[#f5f5f5] hover:text-[#f0d082] transition-colors font-medium"
+            >
+              Gallery
+            </Link>
           </nav>
 
           {/* Mobile Menu Button */}
-          <button 
+          <button
             onClick={toggleMobileMenu}
             className="md:hidden text-[#f5f5f5] hover:text-[#d4af37]"
           >
-            {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            {isMobileMenuOpen ? (
+              <X className="w-6 h-6" />
+            ) : (
+              <Menu className="w-6 h-6" />
+            )}
           </button>
         </div>
       </div>
@@ -57,15 +69,15 @@ export function Header() {
             className="md:hidden bg-[#1a3c34] border-t border-[#f5f5f5]/10 overflow-hidden"
           >
             <div className="flex flex-col p-4 space-y-4">
-              <Link 
-                to="/about" 
+              <Link
+                to="/about"
                 onClick={() => setIsMobileMenuOpen(false)}
                 className="text-[#f5f5f5] text-lg font-medium"
               >
                 About Us
               </Link>
-              <Link 
-                to="/services" 
+              <Link
+                to="/services"
                 onClick={() => setIsMobileMenuOpen(false)}
                 className="text-[#f5f5f5] text-lg font-medium"
               >
