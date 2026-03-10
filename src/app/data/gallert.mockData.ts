@@ -7,6 +7,7 @@ export const mockPosts: Post[] = [
     description:
       "Annual gathering of youth from across all regions. Join us for three days of worship, teaching, workshops, and fellowship as we seek God together.",
     type: "event",
+    deadline: "2026-03-05T23:59:59Z",
     media_url:
       "https://images.unsplash.com/photo-1760367120345-2b96c53de838?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxjaHVyY2glMjB3b3JzaGlwJTIwY29tbXVuaXR5fGVufDF8fHx8MTc3MjI5MjAzOXww&ixlib=rb-4.1.0&q=80&w=1080",
     show_on_homepage: true,
@@ -26,6 +27,7 @@ export const mockPosts: Post[] = [
     description:
       "Celebrate the resurrection of Jesus Christ with us this Easter Sunday. Special music, powerful message, and family activities throughout the day.",
     type: "event",
+    deadline: "2026-02-27T23:59:59Z",
     media_url:
       "https://images.unsplash.com/photo-1770097005000-edcd87ec41b9?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxjaHVyY2glMjBldmVudCUyMGNlbGVicmF0aW9ufGVufDF8fHx8MTc3MjM2NzgyOXww&ixlib=rb-4.1.0&q=80&w=1080",
     show_on_homepage: true,
@@ -102,6 +104,7 @@ export const mockPosts: Post[] = [
     description:
       "Calling all Sunday school teachers! Join us for a comprehensive training session on effective teaching methods and curriculum planning.",
     type: "event",
+    deadline: "2026-02-23T23:59:59Z",
     media_url:
       "https://images.unsplash.com/photo-1770240366512-9d75e9ca7ab8?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxjaHVyY2glMjB5b3V0aCUyMGdyb3VwfGVufDF8fHx8MTc3MjM2NzgzMHww&ixlib=rb-4.1.0&q=80&w=1080",
     show_on_homepage: false,

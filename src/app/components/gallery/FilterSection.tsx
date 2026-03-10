@@ -21,6 +21,7 @@ export function FilterSection({
     { value: "news", label: "News" },
     { value: "sermon", label: "Sermons" },
     { value: "announcement", label: "Announcements" },
+    { value: "gallery", label: "Gallery" },
   ];
 
   return (

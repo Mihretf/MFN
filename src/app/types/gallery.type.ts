@@ -11,7 +11,7 @@ export interface Church {
 }
 
 // post.interface.ts
-export type PostType = "event" | "announcement" | "news" | "sermon";
+export type PostType = "event" | "announcement" | "news" | "sermon" | "gallery";
 
 export interface Post {
   id: string;
@@ -23,6 +23,8 @@ export interface Post {
   region: Region;
   church: Church;
   created_at: string; // ISO string
+  // for events, the backend may include an optional deadline date (ISO string)
+  deadline?: string | null;
 }
 
 // pagination.interface.ts
@@ -44,4 +46,39 @@ export interface PostsResponse {
   meta: {
     pagination: PaginationMeta;
   };
+}
+
+// -----------------------------------------------------------------------------
+// Gallery types
+// -----------------------------------------------------------------------------
+
+/**
+ * Internal shape used by the UI components.
+ */
+export interface GalleryImage {
+  id: string;
+  url: string;
+  caption: string | null;
+}
+
+/**
+ * Response returned by the galleries endpoint.
+ */
+export interface GalleryApiResponse {
+  galleries: Array<{
+    id: string;
+    author_id: string;
+    region_id: string;
+    region_name?: string;
+    church_id: string | null;
+    church_name: string | null;
+    title?: string | null;
+    type?: string | null;
+    description?: string | null;
+    caption: string | null;
+    image_url: string;
+    location_link: string | null;
+    expires_at: string | null;
+    created_at: string;
+  }>;
 }

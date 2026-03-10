@@ -1,6 +1,6 @@
-import React from 'react';
-import { useParams, Link } from 'react-router-dom';
-import { motion } from 'motion/react';
+import React from "react";
+import { useParams, Link } from "react-router-dom";
+import { motion } from "motion/react";
 import {
   MapPin,
   Phone,
@@ -18,9 +18,13 @@ import {
   Building,
   Palette,
   Globe,
-} from 'lucide-react';
-import { branches } from '../data/mockData';
-import { EventCard } from '../components/EventCard';
+} from "lucide-react";
+import { branches } from "../data/mockData";
+import { EventCard } from "../components/EventCard";
+import { fetchGallery } from "../services/gallery.service";
+import { churchService } from "../services/app.service";
+import type { GalleryImage } from "../types/gallery.type";
+import type { ChurchResponse } from "../types/church.type";
 
 // Icon mapping for ministries
 const iconMap: { [key: string]: any } = {
@@ -36,13 +40,102 @@ const iconMap: { [key: string]: any } = {
 
 export function BranchDetail() {
   const { branchId } = useParams<{ branchId: string }>();
-  const branch = branches.find((b) => b.id === branchId);
+
+  // use mock entry as fallback while we request live church data
+  const local = branches.find((b) => b.id === branchId);
+  const [branch, setBranch] = React.useState<typeof local | null>(
+    local || null,
+  );
+  const [branchLoading, setBranchLoading] = React.useState(false);
+  const [branchError, setBranchError] = React.useState<string | null>(null);
+
+  // once branchId is known, hit the API for church details
+  React.useEffect(() => {
+    if (!branchId) return;
+    setBranchLoading(true);
+
+    churchService
+      .getChurch(branchId)
+      .then((res: ChurchResponse) => {
+        const c = res.church;
+        setBranch({
+          id: c.external_id || c.id,
+          name: c.name,
+          location: c.location,
+          address: c.address,
+          phone: c.phone,
+          email: c.email,
+          description: c.description,
+          heroImage: c.hero_image,
+          serviceTimes: c.service_times,
+          announcements: c.announcements,
+          pastor: c.pastor,
+          events: c.events,
+          ministries: c.ministries,
+          gallery: c.gallery,
+          mapUrl: c.map_url,
+          regionId: c.region_id,
+        } as any);
+      })
+      .catch((err) => {
+        console.error("failed to load branch", err);
+        setBranchError(err.message || "Unable to fetch branch info");
+      })
+      .finally(() => setBranchLoading(false));
+  }, [branchId]);
+
+  // gallery state will start with whatever is present on the branch object;
+  // once the real API responds we overwrite it.
+  const [galleryImages, setGalleryImages] = React.useState<GalleryImage[]>(
+    branch ? branch.gallery : [],
+  );
+  const [galleryLoading, setGalleryLoading] = React.useState(false);
+  const [galleryError, setGalleryError] = React.useState<string | null>(null);
+
+  React.useEffect(() => {
+    if (!branch) return;
+    if (!branch.regionId) return;
+
+    // if the branch already provided gallery items (from API response),
+    // we can skip the second request; otherwise fall back to region endpoint.
+    if (branch.gallery && branch.gallery.length > 0) {
+      setGalleryImages(branch.gallery);
+      return;
+    }
+
+    setGalleryLoading(true);
+    fetchGallery(branch.regionId)
+      .then((imgs) => setGalleryImages(imgs))
+      .catch((err) => {
+        console.error("gallery fetch failed", err);
+        setGalleryError(err.message || "Unable to load gallery");
+      })
+      .finally(() => setGalleryLoading(false));
+  }, [branch]);
+
+  if (branchLoading) {
+    return (
+      <div className="pt-24 pb-20 min-h-screen flex items-center justify-center">
+        <p className="text-gray-500">Loading location...</p>
+      </div>
+    );
+  }
+
+  if (branchError) {
+    return (
+      <div className="pt-24 pb-20 min-h-screen flex items-center justify-center">
+        <p className="text-red-500">{branchError}</p>
+      </div>
+    );
+  }
 
   if (!branch) {
     return (
       <div className="pt-24 pb-20 min-h-screen flex items-center justify-center">
         <div className="text-center">
-          <h2 className="text-3xl font-bold text-[#1a3c34] mb-4">Branch Not Found</h2>
+          <h2 className="text-3xl font-bold text-[#1a3c34] mb-4">
+            Branch Not Found
+          </h2>
           <Link to="/services" className="text-[#d4af37] hover:underline">
             ← Back to All Locations
           </Link>
@@ -52,9 +145,9 @@ export function BranchDetail() {
   }
 
   const priorityColors = {
-    high: 'border-l-red-500 bg-red-50',
-    medium: 'border-l-[#d4af37] bg-yellow-50',
-    low: 'border-l-blue-500 bg-blue-50',
+    high: "border-l-red-500 bg-red-50",
+    medium: "border-l-[#d4af37] bg-yellow-50",
+    low: "border-l-blue-500 bg-blue-50",
   };
 
   return (
@@ -67,7 +160,10 @@ export function BranchDetail() {
               Home
             </Link>
             <ChevronRight className="w-4 h-4 mx-2" />
-            <Link to="/services" className="hover:text-[#d4af37] transition-colors">
+            <Link
+              to="/services"
+              className="hover:text-[#d4af37] transition-colors"
+            >
               Services
             </Link>
             <ChevronRight className="w-4 h-4 mx-2" />
@@ -98,7 +194,9 @@ export function BranchDetail() {
                 <MapPin className="w-5 h-5 mr-2 text-[#d4af37]" />
                 <span>{branch.location}</span>
               </div>
-              <p className="text-white/90 text-lg max-w-2xl">{branch.description}</p>
+              <p className="text-white/90 text-lg max-w-2xl">
+                {branch.description}
+              </p>
             </motion.div>
           </div>
         </div>
@@ -118,7 +216,9 @@ export function BranchDetail() {
             >
               <div className="flex items-center mb-6">
                 <Clock className="w-6 h-6 text-[#d4af37] mr-3" />
-                <h2 className="text-3xl font-bold text-[#1a3c34]">Service Times</h2>
+                <h2 className="text-3xl font-bold text-[#1a3c34]">
+                  Service Times
+                </h2>
               </div>
               <div className="grid md:grid-cols-2 gap-4">
                 {branch.serviceTimes.map((service, index) => (
@@ -126,7 +226,9 @@ export function BranchDetail() {
                     key={index}
                     className="border border-gray-200 rounded-lg p-4 hover:border-[#d4af37] transition-colors"
                   >
-                    <p className="font-semibold text-[#1a3c34] mb-1">{service.type}</p>
+                    <p className="font-semibold text-[#1a3c34] mb-1">
+                      {service.type}
+                    </p>
                     <p className="text-gray-600">
                       {service.day} at {service.time}
                     </p>
@@ -145,7 +247,9 @@ export function BranchDetail() {
             >
               <div className="flex items-center mb-6">
                 <AlertCircle className="w-6 h-6 text-[#d4af37] mr-3" />
-                <h2 className="text-3xl font-bold text-[#1a3c34]">Announcements</h2>
+                <h2 className="text-3xl font-bold text-[#1a3c34]">
+                  Announcements
+                </h2>
               </div>
               <div className="space-y-4">
                 {branch.announcements.map((announcement) => (
@@ -154,12 +258,16 @@ export function BranchDetail() {
                     className={`border-l-4 p-4 rounded-r-lg ${priorityColors[announcement.priority]}`}
                   >
                     <div className="flex items-start justify-between mb-2">
-                      <h3 className="font-semibold text-[#1a3c34]">{announcement.title}</h3>
+                      <h3 className="font-semibold text-[#1a3c34]">
+                        {announcement.title}
+                      </h3>
                       <span className="text-xs text-gray-500 whitespace-nowrap ml-4">
                         {announcement.date}
                       </span>
                     </div>
-                    <p className="text-gray-700 text-sm">{announcement.content}</p>
+                    <p className="text-gray-700 text-sm">
+                      {announcement.content}
+                    </p>
                   </div>
                 ))}
               </div>
@@ -173,7 +281,9 @@ export function BranchDetail() {
               transition={{ delay: 0.4 }}
               className="bg-white rounded-xl shadow-md p-8"
             >
-              <h2 className="text-3xl font-bold text-[#1a3c34] mb-6">Leadership</h2>
+              <h2 className="text-3xl font-bold text-[#1a3c34] mb-6">
+                Leadership
+              </h2>
               <div className="flex flex-col md:flex-row gap-6">
                 <div className="md:w-48 h-48 rounded-lg overflow-hidden flex-shrink-0">
                   <img
@@ -186,8 +296,12 @@ export function BranchDetail() {
                   <h3 className="text-2xl font-bold text-[#1a3c34] mb-1">
                     {branch.pastor.name}
                   </h3>
-                  <p className="text-[#d4af37] font-semibold mb-4">{branch.pastor.role}</p>
-                  <p className="text-gray-700 leading-relaxed">{branch.pastor.bio}</p>
+                  <p className="text-[#d4af37] font-semibold mb-4">
+                    {branch.pastor.role}
+                  </p>
+                  <p className="text-gray-700 leading-relaxed">
+                    {branch.pastor.bio}
+                  </p>
                 </div>
               </div>
             </motion.section>
@@ -202,7 +316,9 @@ export function BranchDetail() {
             >
               <div className="flex items-center mb-6">
                 <Calendar className="w-6 h-6 text-[#d4af37] mr-3" />
-                <h2 className="text-3xl font-bold text-[#1a3c34]">Regular Events</h2>
+                <h2 className="text-3xl font-bold text-[#1a3c34]">
+                  Regular Events
+                </h2>
               </div>
               <div className="grid md:grid-cols-2 gap-6">
                 {branch.events.map((event) => (
@@ -219,7 +335,9 @@ export function BranchDetail() {
               transition={{ delay: 0.6 }}
               className="bg-white rounded-xl shadow-md p-8"
             >
-              <h2 className="text-3xl font-bold text-[#1a3c34] mb-6">Get Involved</h2>
+              <h2 className="text-3xl font-bold text-[#1a3c34] mb-6">
+                Get Involved
+              </h2>
               <div className="grid md:grid-cols-2 gap-6">
                 {branch.ministries.map((ministry) => {
                   const IconComponent = iconMap[ministry.icon] || Users;
@@ -236,7 +354,9 @@ export function BranchDetail() {
                           <h3 className="font-semibold text-[#1a3c34] mb-2">
                             {ministry.name}
                           </h3>
-                          <p className="text-gray-600 text-sm">{ministry.description}</p>
+                          <p className="text-gray-600 text-sm">
+                            {ministry.description}
+                          </p>
                         </div>
                       </div>
                     </div>
@@ -255,12 +375,16 @@ export function BranchDetail() {
             >
               <div className="flex items-center mb-6">
                 <MapPin className="w-6 h-6 text-[#d4af37] mr-3" />
-                <h2 className="text-3xl font-bold text-[#1a3c34]">Location & Contact</h2>
+                <h2 className="text-3xl font-bold text-[#1a3c34]">
+                  Location & Contact
+                </h2>
               </div>
               <div className="grid md:grid-cols-2 gap-8">
                 <div className="space-y-4">
                   <div>
-                    <h3 className="font-semibold text-[#1a3c34] mb-2">Address</h3>
+                    <h3 className="font-semibold text-[#1a3c34] mb-2">
+                      Address
+                    </h3>
                     <p className="text-gray-700">{branch.address}</p>
                   </div>
                   <div>
@@ -314,26 +438,42 @@ export function BranchDetail() {
               transition={{ delay: 0.8 }}
               className="bg-white rounded-xl shadow-md p-8"
             >
-              <h2 className="text-3xl font-bold text-[#1a3c34] mb-6">Gallery</h2>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                {branch.gallery.map((image) => (
-                  <div
-                    key={image.id}
-                    className="relative aspect-square rounded-lg overflow-hidden group cursor-pointer"
-                  >
-                    <img
-                      src={image.url}
-                      alt={image.caption}
-                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
-                    />
-                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-colors flex items-end">
-                      <p className="text-white text-sm p-3 opacity-0 group-hover:opacity-100 transition-opacity">
-                        {image.caption}
-                      </p>
+              <h2 className="text-3xl font-bold text-[#1a3c34] mb-6">
+                Gallery
+              </h2>
+              {galleryLoading && (
+                <div className="py-8 text-center">
+                  <p className="text-gray-500">Loading gallery…</p>
+                </div>
+              )}
+
+              {galleryError && (
+                <div className="py-8 text-center">
+                  <p className="text-red-500">{galleryError}</p>
+                </div>
+              )}
+
+              {!galleryLoading && !galleryError && (
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                  {galleryImages.map((image) => (
+                    <div
+                      key={image.id}
+                      className="relative aspect-square rounded-lg overflow-hidden group cursor-pointer"
+                    >
+                      <img
+                        src={image.url}
+                        alt={image.caption ?? ""}
+                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                      />
+                      <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-colors flex items-end">
+                        <p className="text-white text-sm p-3 opacity-0 group-hover:opacity-100 transition-opacity">
+                          {image.caption}
+                        </p>
+                      </div>
                     </div>
-                  </div>
-                ))}
-              </div>
+                  ))}
+                </div>
+              )}
             </motion.section>
           </div>
 
@@ -347,7 +487,9 @@ export function BranchDetail() {
                 transition={{ delay: 0.3 }}
                 className="bg-white rounded-xl shadow-md p-6"
               >
-                <h3 className="font-bold text-[#1a3c34] mb-4 text-lg">Quick Info</h3>
+                <h3 className="font-bold text-[#1a3c34] mb-4 text-lg">
+                  Quick Info
+                </h3>
                 <div className="space-y-3 text-sm">
                   <div className="flex items-start space-x-3">
                     <MapPin className="w-4 h-4 text-[#d4af37] mt-0.5 flex-shrink-0" />
@@ -355,13 +497,19 @@ export function BranchDetail() {
                   </div>
                   <div className="flex items-center space-x-3">
                     <Phone className="w-4 h-4 text-[#d4af37] flex-shrink-0" />
-                    <a href={`tel:${branch.phone}`} className="text-[#d4af37] hover:underline">
+                    <a
+                      href={`tel:${branch.phone}`}
+                      className="text-[#d4af37] hover:underline"
+                    >
                       {branch.phone}
                     </a>
                   </div>
                   <div className="flex items-center space-x-3">
                     <Mail className="w-4 h-4 text-[#d4af37] flex-shrink-0" />
-                    <a href={`mailto:${branch.email}`} className="text-[#d4af37] hover:underline">
+                    <a
+                      href={`mailto:${branch.email}`}
+                      className="text-[#d4af37] hover:underline"
+                    >
                       {branch.email}
                     </a>
                   </div>
@@ -375,16 +523,18 @@ export function BranchDetail() {
                 transition={{ delay: 0.4 }}
                 className="bg-white rounded-xl shadow-md p-6"
               >
-                <h3 className="font-bold text-[#1a3c34] mb-4 text-lg">Quick Navigation</h3>
+                <h3 className="font-bold text-[#1a3c34] mb-4 text-lg">
+                  Quick Navigation
+                </h3>
                 <nav className="space-y-2 text-sm">
                   {[
-                    { id: 'service-times', label: 'Service Times' },
-                    { id: 'announcements', label: 'Announcements' },
-                    { id: 'leadership', label: 'Leadership' },
-                    { id: 'events', label: 'Events' },
-                    { id: 'ministries', label: 'Ministries' },
-                    { id: 'location', label: 'Location' },
-                    { id: 'gallery', label: 'Gallery' },
+                    { id: "service-times", label: "Service Times" },
+                    { id: "announcements", label: "Announcements" },
+                    { id: "leadership", label: "Leadership" },
+                    { id: "events", label: "Events" },
+                    { id: "ministries", label: "Ministries" },
+                    { id: "location", label: "Location" },
+                    { id: "gallery", label: "Gallery" },
                   ].map((link) => (
                     <a
                       key={link.id}

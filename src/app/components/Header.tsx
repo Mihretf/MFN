@@ -83,6 +83,13 @@ export function Header() {
               >
                 Services
               </Link>
+              <Link
+                to="/gallery"
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="text-[#f5f5f5] text-lg font-medium"
+              >
+                Gallery
+              </Link>
             </div>
           </motion.div>
         )}

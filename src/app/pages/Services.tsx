@@ -1,21 +1,146 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { motion, AnimatePresence } from 'motion/react';
-import { MapPin, Phone, Mail, Clock, ArrowRight, ChevronRight } from 'lucide-react';
-import { branches, regions } from '../data/mockData';
+import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+import { motion, AnimatePresence } from "motion/react";
+import {
+  MapPin,
+  Phone,
+  Mail,
+  Clock,
+  ArrowRight,
+  ChevronRight,
+} from "lucide-react";
+import { regionService, churchService } from "../services/app.service";
+import { getCache, setCache } from "../utils/cache";
+import type { Branch } from "../data/mockData"; // reuse Branch shape
 
 export function Services() {
-  const [selectedRegionId, setSelectedRegionId] = useState<string>(regions[0].id);
+  interface RegionAPI {
+    id: string;
+    name: string;
+    description?: string; // may be provided by API
+  }
 
-  // Filter branches by selected region
-  const filteredBranches = branches.filter(
-    (branch) => branch.regionId === selectedRegionId
-  );
+  const [regions, setRegions] = useState<RegionAPI[]>([]);
+  const [churches, setChurches] = useState<Branch[]>([]);
+  const [loadingRegions, setLoadingRegions] = useState(false);
+  const [loadingChurches, setLoadingChurches] = useState(false);
+  const [errorRegions, setErrorRegions] = useState<string | null>(null);
+  const [errorChurches, setErrorChurches] = useState<string | null>(null);
 
-  // Get branch count for each region
-  const getRegionBranchCount = (regionId: string) => {
-    return branches.filter((branch) => branch.regionId === regionId).length;
+  const [selectedRegionId, setSelectedRegionId] = useState<string>("");
+
+  // clicking same region toggles filter off
+  const handleRegionClick = (id: string) => {
+    setSelectedRegionId((prev) => (prev === id ? "" : id));
   };
+
+  // filter to show in main column
+  const filteredBranches = churches.filter((branch) => {
+    if (!selectedRegionId) return true;
+    return branch.regionId === selectedRegionId;
+  });
+
+  // count helper
+  const getRegionBranchCount = (regionId: string) => {
+    return churches.filter((branch) => branch.regionId === regionId).length;
+  };
+
+  // load regions on mount (with explicit cache check as example)
+  useEffect(() => {
+    setLoadingRegions(true);
+    const cacheKey = "regions";
+    const cached = getCache<RegionAPI[]>(cacheKey);
+    if (cached) {
+      setRegions(cached);
+      setLoadingRegions(false);
+      return;
+    }
+
+    regionService
+      .getRegions()
+      .then((res) => {
+        const list: RegionAPI[] = res?.regions || res || [];
+        setRegions(list);
+        setCache(cacheKey, list);
+      })
+      .catch((err) => {
+        console.error("failed to fetch regions", err);
+        setErrorRegions(err.message || "Unable to load regions");
+      })
+      .finally(() => setLoadingRegions(false));
+  }, []);
+
+  // load churches once (cache handled by service already, but demonstrating)
+  useEffect(() => {
+    setLoadingChurches(true);
+    const cacheKey = "churches:all";
+    const cached = getCache<any>(cacheKey);
+    if (cached) {
+      const raw: any[] = cached.churches || [];
+      const mapped: Branch[] = raw.map(
+        (c) =>
+          ({
+            id: c.id,
+            name: c.name,
+            externalId: c.external_id,
+            location: c.location,
+            address: c.address,
+            phone: c.phone,
+            email: c.email,
+            description: c.description,
+            heroImage: c.hero_image,
+            serviceTimes: c.service_times,
+            announcements: c.announcements,
+            pastor: c.pastor,
+            events: c.events,
+            ministries: c.ministries,
+            gallery: c.gallery,
+            mapUrl: c.map_url,
+            regionId: c.region_id,
+          }) as Branch,
+      );
+      setChurches(mapped);
+      setLoadingChurches(false);
+      return;
+    }
+
+    churchService
+      .getChurches({}, "")
+      .then((res: any) => {
+        setCache(cacheKey, res);
+        const raw: any[] =
+          (res as import("../types/church.type").ChurchListResponse).churches ||
+          [];
+        const mapped: Branch[] = raw.map(
+          (c) =>
+            ({
+              id: c.id,
+              name: c.name,
+              externalId: c.external_id,
+              location: c.location,
+              address: c.address,
+              phone: c.phone,
+              email: c.email,
+              description: c.description,
+              heroImage: c.hero_image,
+              serviceTimes: c.service_times,
+              announcements: c.announcements,
+              pastor: c.pastor,
+              events: c.events,
+              ministries: c.ministries,
+              gallery: c.gallery,
+              mapUrl: c.map_url,
+              regionId: c.region_id,
+            }) as Branch,
+        );
+        setChurches(mapped);
+      })
+      .catch((err) => {
+        console.error("failed to fetch churches", err);
+        setErrorChurches(err.message || "Unable to load churches");
+      })
+      .finally(() => setLoadingChurches(false));
+  }, []);
 
   return (
     <div className="pt-24 pb-20 min-h-screen bg-[#f5f5f5]">
@@ -26,7 +151,9 @@ export function Services() {
             Our Church Locations
           </h1>
           <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-            Find a branch near you and become part of our growing community. Each location offers unique programs while sharing our common mission.
+            Find a branch near you and become part of our growing community.
+            Each location offers unique programs while sharing our common
+            mission.
           </p>
         </div>
 
@@ -35,57 +162,76 @@ export function Services() {
           {/* Left Sidebar - Regions */}
           <div className="lg:col-span-3">
             <div className="bg-white rounded-xl shadow-md p-6 sticky top-24">
-              <h3 className="text-lg font-bold text-[#1a3c34] mb-4">Select a Region</h3>
+              <h3 className="text-lg font-bold text-[#1a3c34] mb-4">
+                Select a Region
+              </h3>
+
+              {loadingRegions && <p>Loading regions…</p>}
+              {errorRegions && <p className="text-red-500">{errorRegions}</p>}
+
               <div className="space-y-2 max-h-[600px] overflow-y-auto pr-2 scrollbar-hide">
-                {regions.map((region) => {
-                  const branchCount = getRegionBranchCount(region.id);
-                  const isSelected = selectedRegionId === region.id;
-                  
-                  return (
-                    <motion.button
-                      key={region.id}
-                      onClick={() => setSelectedRegionId(region.id)}
-                      className={`w-full text-left p-3 rounded-lg transition-all duration-200 group ${
-                        isSelected
-                          ? 'bg-[#1a3c34] text-white shadow-md'
-                          : 'bg-gray-50 text-gray-700 hover:bg-[#d4af37]/10 hover:shadow-sm'
-                      }`}
-                      whileHover={{ x: 4 }}
-                      whileTap={{ scale: 0.98 }}
-                    >
-                      <div className="flex items-start justify-between">
-                        <div className="flex-1">
-                          <div className="font-semibold mb-1 flex items-center gap-2">
-                            <span>{region.name}</span>
-                            {isSelected && (
-                              <motion.div
-                                initial={{ scale: 0 }}
-                                animate={{ scale: 1 }}
-                                transition={{ type: 'spring', stiffness: 500 }}
-                              >
-                                <ChevronRight className="w-4 h-4" />
-                              </motion.div>
-                            )}
+                {regions
+                  .slice()
+                  .sort((a, b) => {
+                    // sort by descending branch count
+                    return (
+                      getRegionBranchCount(b.id) - getRegionBranchCount(a.id)
+                    );
+                  })
+                  .map((region) => {
+                    const branchCount = getRegionBranchCount(region.id);
+                    const isSelected = selectedRegionId === region.id;
+
+                    return (
+                      <motion.button
+                        key={region.id}
+                        onClick={() => handleRegionClick(region.id)}
+                        className={`w-full text-left p-3 rounded-lg transition-all duration-200 group ${
+                          isSelected
+                            ? "bg-[#1a3c34] text-white shadow-md"
+                            : "bg-gray-50 text-gray-700 hover:bg-[#d4af37]/10 hover:shadow-sm"
+                        }`}
+                        whileHover={{ x: 4 }}
+                        whileTap={{ scale: 0.98 }}
+                      >
+                        <div className="flex items-start justify-between">
+                          <div className="flex-1">
+                            <div className="font-semibold mb-1 flex items-center gap-2">
+                              <span>{region.name}</span>
+                              {isSelected && (
+                                <motion.div
+                                  initial={{ scale: 0 }}
+                                  animate={{ scale: 1 }}
+                                  transition={{
+                                    type: "spring",
+                                    stiffness: 500,
+                                  }}
+                                >
+                                  <ChevronRight className="w-4 h-4" />
+                                </motion.div>
+                              )}
+                            </div>
+                            <p
+                              className={`text-xs ${isSelected ? "text-white/80" : "text-gray-500"}`}
+                            >
+                              {region.description}
+                            </p>
                           </div>
-                          <p className={`text-xs ${isSelected ? 'text-white/80' : 'text-gray-500'}`}>
-                            {region.description}
-                          </p>
+                          {branchCount > 0 && (
+                            <div
+                              className={`ml-2 px-2 py-1 rounded-full text-xs font-bold ${
+                                isSelected
+                                  ? "bg-[#d4af37] text-[#1a3c34]"
+                                  : "bg-[#d4af37]/20 text-[#1a3c34]"
+                              }`}
+                            >
+                              {branchCount}
+                            </div>
+                          )}
                         </div>
-                        {branchCount > 0 && (
-                          <div
-                            className={`ml-2 px-2 py-1 rounded-full text-xs font-bold ${
-                              isSelected
-                                ? 'bg-[#d4af37] text-[#1a3c34]'
-                                : 'bg-[#d4af37]/20 text-[#1a3c34]'
-                            }`}
-                          >
-                            {branchCount}
-                          </div>
-                        )}
-                      </div>
-                    </motion.button>
-                  );
-                })}
+                      </motion.button>
+                    );
+                  })}
               </div>
             </div>
           </div>
@@ -103,12 +249,27 @@ export function Services() {
                 {/* Selected Region Header */}
                 <div className="mb-6">
                   <h2 className="text-2xl font-bold text-[#1a3c34] mb-2">
-                    {regions.find((r) => r.id === selectedRegionId)?.name}
+                    {selectedRegionId
+                      ? regions.find((r) => r.id === selectedRegionId)?.name
+                      : "All Regions"}
                   </h2>
                   <p className="text-gray-600">
-                    {filteredBranches.length} {filteredBranches.length === 1 ? 'location' : 'locations'} available in this region
+                    {filteredBranches.length}{" "}
+                    {filteredBranches.length === 1 ? "location" : "locations"}{" "}
+                    {selectedRegionId ? "in this region" : "total"}
                   </p>
                 </div>
+
+                {loadingChurches && (
+                  <div className="py-8 text-center">
+                    <p className="text-gray-500">Loading locations…</p>
+                  </div>
+                )}
+                {errorChurches && (
+                  <div className="py-8 text-center">
+                    <p className="text-red-500">{errorChurches}</p>
+                  </div>
+                )}
 
                 {/* Branch Listings */}
                 {filteredBranches.length > 0 ? (
@@ -156,24 +317,35 @@ export function Services() {
                                   <div className="flex items-start space-x-2">
                                     <Clock className="w-4 h-4 text-[#d4af37] mt-1 flex-shrink-0" />
                                     <div>
-                                      <p className="text-sm font-semibold text-[#1a3c34]">Service Times</p>
+                                      <p className="text-sm font-semibold text-[#1a3c34]">
+                                        Service Times
+                                      </p>
                                       <p className="text-xs text-gray-600">
-                                        {branch.serviceTimes[0]?.day} {branch.serviceTimes[0]?.time}
+                                        {branch.serviceTimes[0]?.day}{" "}
+                                        {branch.serviceTimes[0]?.time}
                                       </p>
                                     </div>
                                   </div>
                                   <div className="flex items-start space-x-2">
                                     <Phone className="w-4 h-4 text-[#d4af37] mt-1 flex-shrink-0" />
                                     <div>
-                                      <p className="text-sm font-semibold text-[#1a3c34]">Contact</p>
-                                      <p className="text-xs text-gray-600">{branch.phone}</p>
+                                      <p className="text-sm font-semibold text-[#1a3c34]">
+                                        Contact
+                                      </p>
+                                      <p className="text-xs text-gray-600">
+                                        {branch.phone}
+                                      </p>
                                     </div>
                                   </div>
                                   <div className="flex items-start space-x-2">
                                     <Mail className="w-4 h-4 text-[#d4af37] mt-1 flex-shrink-0" />
                                     <div>
-                                      <p className="text-sm font-semibold text-[#1a3c34]">Pastor</p>
-                                      <p className="text-xs text-gray-600">{branch.pastor.name}</p>
+                                      <p className="text-sm font-semibold text-[#1a3c34]">
+                                        Pastor
+                                      </p>
+                                      <p className="text-xs text-gray-600">
+                                        {branch.pastor.name}
+                                      </p>
                                     </div>
                                   </div>
                                 </div>
@@ -200,7 +372,8 @@ export function Services() {
                         No Locations Yet
                       </h3>
                       <p className="text-gray-600">
-                        We're currently expanding to this region. Check back soon for updates on new church locations!
+                        We're currently expanding to this region. Check back
+                        soon for updates on new church locations!
                       </p>
                     </div>
                   </div>

@@ -13,7 +13,6 @@ import { AboutUs } from "./pages/AboutUs";
 import { Services } from "./pages/Services";
 import { BranchDetail } from "./pages/BranchDetail";
 import Gallery from "./pages/Gallery";
-import { testProtectedApis, testPublicApis } from "./services/test.service";
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -26,9 +25,6 @@ function ScrollToTop() {
 }
 
 export default function App() {
-  testPublicApis();
-  testProtectedApis();
-
   return (
     <Router>
       <ScrollToTop />

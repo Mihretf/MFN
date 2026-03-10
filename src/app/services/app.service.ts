@@ -1,5 +1,7 @@
 // services/api.ts
 
+import { getCache, setCache } from "../utils/cache";
+
 const API_BASE_URL = "http://localhost:4000";
 
 type Role = "super" | "regional_admin" | "user";
@@ -103,11 +105,19 @@ export const regionService = {
       token,
     }),
 
-  getRegions: (token: string) =>
-    request("/api/regions", {
+  getRegions: async (token?: string) => {
+    const cacheKey = "regions";
+    const cached = getCache<any>(cacheKey);
+    if (cached) {
+      return Promise.resolve(cached);
+    }
+    const res = await request("/api/regions", {
       method: "GET",
       token,
-    }),
+    });
+    setCache(cacheKey, res);
+    return res;
+  },
 };
 
 export const churchService = {
@@ -125,22 +135,31 @@ export const churchService = {
       token,
     }),
 
-  getChurches: (
+  getChurches: async (
     params: { region_id?: string | number } = {},
     token: string,
   ) => {
-    const searchParams = new URLSearchParams();
+    const keyParts = ["churches"];
+    if (params.region_id) keyParts.push(String(params.region_id));
+    const cacheKey = keyParts.join(":");
+    const cached = getCache<any>(cacheKey);
+    if (cached) return Promise.resolve(cached);
 
+    const searchParams = new URLSearchParams();
     if (params.region_id) {
       searchParams.append("region_id", String(params.region_id));
     }
 
     const query = searchParams.toString();
-    return request(`/api/churches${query ? `?${query}` : ""}`, {
+    const res = await request(`/api/churches${query ? `?${query}` : ""}`, {
       method: "GET",
       token,
     });
+    setCache(cacheKey, res);
+    return res;
   },
+
+  getChurch: (id: string) => request(`/api/churches/${id}`, { method: "GET" }),
 };
 
 /* =========================
@@ -192,7 +211,7 @@ export const blogService = {
       token,
     }),
 
-  getBlogs: (params?: {
+  getBlogs: async (params?: {
     search?: string;
     sort?: SortOrder;
     include_expired?: boolean;
@@ -206,7 +225,13 @@ export const blogService = {
     }
 
     const query = searchParams.toString();
-    return request(`/api/blogs${query ? `?${query}` : ""}`);
+    const cacheKey = `blogs:${query}`;
+    const cached = getCache<any>(cacheKey);
+    if (cached) return Promise.resolve(cached);
+
+    const res = await request(`/api/blogs${query ? `?${query}` : ""}`);
+    setCache(cacheKey, res);
+    return res;
   },
 };
 

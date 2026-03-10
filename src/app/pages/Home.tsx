@@ -72,12 +72,14 @@ import LiveStream from "../components/home/LiveStream";
 import Impact from "../components/home/Impact";
 import Leaders from "../components/home/Leader";
 import GalleryHighlight from "../components/home/GalleryHighlight";
+import Blogs from "../components/home/Blogs";
 
 export default function App() {
   return (
     <>
       <Hero />
       <BibleVerse />
+      <Blogs />
       <LiveStream />
       <Impact />
       <GalleryHighlight />

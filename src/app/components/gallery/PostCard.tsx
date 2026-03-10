@@ -1,7 +1,7 @@
 import { Calendar, MapPin, Church } from "lucide-react";
 import { ImageWithFallback } from "../figma/ImageWithFallback";
 
-export type PostType = "event" | "news" | "sermon" | "announcement";
+export type PostType = "event" | "news" | "sermon" | "announcement" | "gallery";
 
 export interface Post {
   id: string;
@@ -11,6 +11,8 @@ export interface Post {
   type: PostType;
   show_on_homepage: boolean;
   created_at: string;
+  // optional deadline added for events
+  deadline?: string | null;
   region: {
     id: string;
     name: string;
@@ -23,6 +25,7 @@ export interface Post {
 
 interface PostCardProps {
   post: Post;
+  onClick?: () => void;
 }
 
 const postTypeBadgeColors: Record<PostType, string> = {
@@ -30,9 +33,10 @@ const postTypeBadgeColors: Record<PostType, string> = {
   news: "bg-green-100 text-green-700 border-green-200",
   sermon: "bg-purple-100 text-purple-700 border-purple-200",
   announcement: "bg-amber-100 text-amber-700 border-amber-200",
+  gallery: "bg-gray-100 text-gray-700 border-gray-200",
 };
 
-export function PostCard({ post }: PostCardProps) {
+export function PostCard({ post, onClick }: PostCardProps) {
   const truncateText = (text: string, maxLength: number) => {
     return text.length > maxLength
       ? text.substring(0, maxLength) + "..."
@@ -59,7 +63,10 @@ export function PostCard({ post }: PostCardProps) {
   return (
     <div className="group bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1 border border-gray-100">
       {/* Image */}
-      <div className="relative h-48 overflow-hidden bg-gray-100">
+      <div
+        className="relative h-48 overflow-hidden bg-gray-100 cursor-pointer"
+        onClick={onClick}
+      >
         <ImageWithFallback
           src={post.media_url}
           alt={post.title}
@@ -101,6 +108,15 @@ export function PostCard({ post }: PostCardProps) {
             <Calendar className="w-4 h-4 text-gray-400" />
             <span>{formatDate(post.created_at)}</span>
           </div>
+
+          {post.type === "event" && post.deadline && (
+            <div className="flex items-center gap-2">
+              <Calendar className="w-4 h-4 text-gray-400" />
+              <span className="font-semibold">
+                Deadline: {formatDate(post.deadline)}
+              </span>
+            </div>
+          )}
         </div>
       </div>
     </div>
