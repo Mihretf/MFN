@@ -1,4 +1,4 @@
-import { ChevronRight } from "lucide-react";
+import { Link } from "react-router-dom";
 
 export default function Hero() {
   return (
@@ -6,11 +6,12 @@ export default function Hero() {
       {/* Background Image with Overlay */}
       <div className="absolute inset-0 z-0">
         <img
-          src="https://images.unsplash.com/photo-1760367120345-2b96c53de838?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxjaHVyY2glMjB3b3JzaGlwJTIwY29tbXVuaXR5fGVufDF8fHx8MTc3MjI5MjAzOXww&ixlib=rb-4.1.0&q=80&w=1080"
-          alt="Church worship"
+          src="https://images.unsplash.com/photo-1763688506433-033fc84f6559?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxtb2Rlcm4lMjBjaHVyY2glMjBidWlsZGluZyUyMGV4dGVyaW9yJTIwbWluaW1hbCUyMGFyY2hpdGVjdHVyZXxlbnwxfHx8fDE3NzA5MDQ0MTB8MA&ixlib=rb-4.1.0&q=80&w=1080"
+          alt="Mission For Nation Building"
           className="w-full h-full object-cover"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/50 to-black/70"></div>
+        <div className="absolute inset-0 bg-gradient-to-r from-[#1a3c34]/90 to-[#1a3c34]/60 mix-blend-multiply" />
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent to-[#1a3c34]" />
       </div>
 
       {/* Content */}
@@ -23,13 +24,19 @@ export default function Hero() {
           and grow in Christ.
         </p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <button className="px-8 py-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-all transform hover:scale-105 shadow-lg flex items-center justify-center gap-2">
+          <Link
+            to="/services"
+            className="px-8 py-4 bg-yellow-600 text-white rounded-lg hover:bg-yellow-700 transition-all"
+          >
             Join Us This Sunday
-            <ChevronRight className="w-5 h-5" />
-          </button>
-          <button className="px-8 py-4 bg-white/10 backdrop-blur-sm text-white border-2 border-white/30 rounded-lg hover:bg-white/20 transition-all">
-            Watch Live Stream
-          </button>
+          </Link>
+
+          <Link
+            to="/live"
+            className="px-8 py-4 bg-white/10 backdrop-blur-sm text-white border rounded-lg"
+          >
+            Watch Live
+          </Link>
         </div>
       </div>
 

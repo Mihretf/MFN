@@ -42,6 +42,7 @@ export function PostCard({ post, onClick }: PostCardProps) {
       ? text.substring(0, maxLength) + "..."
       : text;
   };
+  console.log("rendering post card for post", post);
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);

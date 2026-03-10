@@ -11,7 +11,9 @@ import {
 } from "lucide-react";
 import { regionService, churchService } from "../services/app.service";
 import { getCache, setCache } from "../utils/cache";
+import { fetchGalleryPosts } from "../services/gallery.service";
 import type { Branch } from "../data/mockData"; // reuse Branch shape
+import type { Post } from "../types/gallery.type"; // for announcements
 
 export function Services() {
   interface RegionAPI {
@@ -28,6 +30,9 @@ export function Services() {
   const [errorChurches, setErrorChurches] = useState<string | null>(null);
 
   const [selectedRegionId, setSelectedRegionId] = useState<string>("");
+
+  // announcements area: upcoming events from gallery
+  const [announcements, setAnnouncements] = useState<Post[]>([]);
 
   // clicking same region toggles filter off
   const handleRegionClick = (id: string) => {
@@ -142,6 +147,21 @@ export function Services() {
       .finally(() => setLoadingChurches(false));
   }, []);
 
+  // fetch announcement posts (events not expired)
+  useEffect(() => {
+    fetchGalleryPosts()
+      .then((posts) => {
+        const now = new Date();
+        const events = posts.filter((p) => {
+          if (p.type !== "event") return false;
+          if (!p.deadline) return true;
+          return new Date(p.deadline) > now;
+        });
+        setAnnouncements(events);
+      })
+      .catch((err) => console.error("failed to load announcements", err));
+  }, []);
+
   return (
     <div className="pt-24 pb-20 min-h-screen bg-[#f5f5f5]">
       <div className="max-w-7xl mx-auto px-4 md:px-8">
@@ -156,6 +176,38 @@ export function Services() {
             mission.
           </p>
         </div>
+
+        {/* announcement ad strip */}
+        {announcements.length > 0 && (
+          <section className="mb-12">
+            <h2 className="text-2xl font-bold text-[#1a3c34] mb-4">
+              Announcements
+            </h2>
+            <div className="flex space-x-4 overflow-x-auto pb-2">
+              {announcements.map((a) => (
+                <Link
+                  key={a.id}
+                  to="/gallery"
+                  className="min-w-[280px] bg-white rounded-lg shadow p-4 flex-shrink-0"
+                >
+                  {a.media_url && (
+                    <img
+                      src={a.media_url}
+                      alt={a.title}
+                      className="w-full h-40 object-cover rounded-md mb-3"
+                    />
+                  )}
+                  <h3 className="text-lg font-semibold text-[#1a3c34] mb-1">
+                    {a.title}
+                  </h3>
+                  <p className="text-sm text-gray-600 line-clamp-2">
+                    {a.description}
+                  </p>
+                </Link>
+              ))}
+            </div>
+          </section>
+        )}
 
         {/* Two Column Layout */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
