@@ -36,9 +36,30 @@ export default function Highlights() {
 
   const [currentIndex, setCurrentIndex] = React.useState(0);
 
-  const goNext = () => setCurrentIndex((i) => (i + 1) % sortedItems.length);
+  const goNext = () =>
+    setCurrentIndex((i) =>
+      sortedItems.length ? (i + 1) % sortedItems.length : 0,
+    );
   const goPrev = () =>
-    setCurrentIndex((i) => (i - 1 + sortedItems.length) % sortedItems.length);
+    setCurrentIndex((i) =>
+      sortedItems.length
+        ? (i - 1 + sortedItems.length) % sortedItems.length
+        : 0,
+    );
+
+  // reset when items list changes
+  React.useEffect(() => {
+    if (currentIndex >= sortedItems.length) {
+      setCurrentIndex(0);
+    }
+  }, [sortedItems, currentIndex]);
+
+  // auto rotation
+  React.useEffect(() => {
+    if (sortedItems.length === 0) return;
+    const timer = setInterval(goNext, 5000);
+    return () => clearInterval(timer);
+  }, [sortedItems]);
 
   if (loading) {
     return (

@@ -124,7 +124,6 @@ export default function App() {
   const recentPosts = useMemo(() => getRecentPosts(posts, 3), [posts]);
 
   // Get random posts
-  const randomPosts = useMemo(() => getRandomPosts(posts, 3), [posts]);
 
   // Pagination calculations
   const totalPages = Math.ceil(filteredPosts.length / postsPerPage);
@@ -181,42 +180,6 @@ export default function App() {
                       onClick={() => openViewer("recent", idx)}
                     />
                   ))}
-                </div>
-              </section>
-            )}
-
-            {/* Random Posts Section */}
-            {randomPosts.length > 0 && (
-              <section className="mb-12">
-                <div className="flex items-center gap-2 mb-6">
-                  <Shuffle className="w-6 h-6 text-purple-600" />
-                  <h2 className="text-2xl text-gray-900">Discover More</h2>
-                </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {randomPosts.map((post) => {
-                    const idx = filteredPosts.findIndex(
-                      (p) => p.id === post.id,
-                    );
-                    if (idx >= 0) {
-                      return (
-                        <PostCard
-                          key={post.id}
-                          post={post}
-                          onClick={() => openViewer("all", idx)}
-                        />
-                      );
-                    }
-                    const allIdx = posts.findIndex((p) => p.id === post.id);
-                    return (
-                      <PostCard
-                        key={post.id}
-                        post={post}
-                        onClick={() =>
-                          openViewer("all", Math.max(allIdx, 0), posts)
-                        }
-                      />
-                    );
-                  })}
                 </div>
               </section>
             )}

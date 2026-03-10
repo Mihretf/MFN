@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "motion/react";
 import {
@@ -33,6 +33,53 @@ export function Services() {
 
   // announcements area: upcoming events from gallery
   const [announcements, setAnnouncements] = useState<Post[]>([]);
+
+  // carousel helpers for announcements
+  const sortedAnnouncements = useMemo(
+    () =>
+      [...announcements].sort(
+        (a, b) =>
+          new Date(b.created_at).getTime() - new Date(a.created_at).getTime(),
+      ),
+    [announcements],
+  );
+
+  const [currentAnnIndex, setCurrentAnnIndex] = useState(0);
+  const goNextAnn = () =>
+    setCurrentAnnIndex((i) =>
+      sortedAnnouncements.length ? (i + 1) % sortedAnnouncements.length : 0,
+    );
+  const goPrevAnn = () =>
+    setCurrentAnnIndex((i) =>
+      sortedAnnouncements.length
+        ? (i - 1 + sortedAnnouncements.length) % sortedAnnouncements.length
+        : 0,
+    );
+
+  // reset index when list changes
+  useEffect(() => {
+    if (currentAnnIndex >= sortedAnnouncements.length) {
+      setCurrentAnnIndex(0);
+    }
+  }, [sortedAnnouncements, currentAnnIndex]);
+
+  // auto-advance announcements at interval
+  useEffect(() => {
+    if (sortedAnnouncements.length === 0) return;
+    const timer = setInterval(goNextAnn, 5000);
+    return () => clearInterval(timer);
+  }, [sortedAnnouncements]);
+
+  // optional label logic copied from home blogs
+  const getAnnLabel = (post: Post) => {
+    const text = post.description?.toLowerCase() || "";
+    if (text.includes("quote") || text.includes("”") || text.includes("“"))
+      return "Quote";
+    if (text.includes("offer") || text.includes("discount")) return "Offer";
+    if (new Date(post.created_at) > new Date(Date.now() - 1000 * 60 * 60 * 72))
+      return "New";
+    return "Update";
+  };
 
   // clicking same region toggles filter off
   const handleRegionClick = (id: string) => {
@@ -147,7 +194,7 @@ export function Services() {
       .finally(() => setLoadingChurches(false));
   }, []);
 
-  // fetch announcement posts (events not expired)
+  // fetch announcement posts (events not expired); fall back to mock if empty
   useEffect(() => {
     fetchGalleryPosts()
       .then((posts) => {
@@ -159,7 +206,11 @@ export function Services() {
         });
         setAnnouncements(events);
       })
-      .catch((err) => console.error("failed to load announcements", err));
+      .catch((err) => {
+        console.error("failed to load announcements", err);
+        // on error just clear announcements; UI hides section automatically
+        setAnnouncements([]);
+      });
   }, []);
 
   return (
@@ -177,34 +228,115 @@ export function Services() {
           </p>
         </div>
 
-        {/* announcement ad strip */}
-        {announcements.length > 0 && (
+        {/* announcement carousel (same style as home blogs) */}
+        {sortedAnnouncements.length > 0 && (
           <section className="mb-12">
             <h2 className="text-2xl font-bold text-[#1a3c34] mb-4">
               Announcements
             </h2>
-            <div className="flex space-x-4 overflow-x-auto pb-2">
-              {announcements.map((a) => (
-                <Link
-                  key={a.id}
-                  to="/gallery"
-                  className="min-w-[280px] bg-white rounded-lg shadow p-4 flex-shrink-0"
+
+            <div className="relative flex items-center justify-center">
+              {/* previous */}
+              <button
+                onClick={goPrevAnn}
+                className="absolute left-0 sm:left-4 lg:left-8 top-1/2 transform -translate-y-1/2 z-10 p-4 bg-white/90 backdrop-blur-sm rounded-full shadow-lg hover:bg-white hover:scale-105 transition-all"
+                aria-label="Previous"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-6 w-6 text-gray-700"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
                 >
-                  {a.media_url && (
-                    <img
-                      src={a.media_url}
-                      alt={a.title}
-                      className="w-full h-40 object-cover rounded-md mb-3"
-                    />
-                  )}
-                  <h3 className="text-lg font-semibold text-[#1a3c34] mb-1">
-                    {a.title}
-                  </h3>
-                  <p className="text-sm text-gray-600 line-clamp-2">
-                    {a.description}
-                  </p>
-                </Link>
-              ))}
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M15 19l-7-7 7-7"
+                  />
+                </svg>
+              </button>
+
+              {/* card */}
+              {(() => {
+                const current = sortedAnnouncements[currentAnnIndex];
+                const hasText =
+                  current.description && current.description.trim().length > 0;
+                const hasImage =
+                  current.media_url != null &&
+                  current.media_url.trim().length > 0;
+                return (
+                  <div
+                    className={`
+                      w-full max-w-lg sm:max-w-xl md:max-w-2xl lg:max-w-3xl 
+                      mx-6 sm:mx-12 md:mx-16 
+                      bg-white rounded-2xl shadow-xl overflow-hidden
+                      transition-all duration-300
+                      flex flex-col
+                    `}
+                  >
+                    {hasImage && (
+                      <div className="w-full max-h-[60vh] overflow-hidden">
+                        <img
+                          src={current.media_url || ""}
+                          alt=""
+                          className="w-full h-auto object-contain"
+                          loading="lazy"
+                        />
+                      </div>
+                    )}
+
+                    {hasText && (
+                      <div className="p-5 sm:p-7 md:p-9 space-y-4">
+                        <div className="flex justify-center">
+                          <span className="inline-block px-3 py-1 text-xs font-semibold uppercase tracking-wide rounded-full bg-indigo-100 text-indigo-800">
+                            {getAnnLabel(current)}
+                          </span>
+                        </div>
+
+                        <p
+                          className={`
+                            text-center leading-relaxed
+                            ${hasImage ? "text-base sm:text-lg" : "text-lg sm:text-xl md:text-2xl font-medium"}
+                            text-gray-800 whitespace-pre-line
+                          `}
+                        >
+                          {current.description}
+                        </p>
+                      </div>
+                    )}
+
+                    {!hasText && !hasImage && (
+                      <div className="p-12 text-center text-gray-400 italic">
+                        (No content available)
+                      </div>
+                    )}
+                  </div>
+                );
+              })()}
+
+              {/* next */}
+              <button
+                onClick={goNextAnn}
+                className="absolute right-0 sm:right-4 lg:right-8 top-1/2 transform -translate-y-1/2 z-10 p-4 bg-white/90 backdrop-blur-sm rounded-full shadow-lg hover:bg-white hover:scale-105 transition-all"
+                aria-label="Next"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-6 w-6 text-gray-700"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M9 5l7 7-7 7"
+                  />
+                </svg>
+              </button>
             </div>
           </section>
         )}
