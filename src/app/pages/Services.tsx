@@ -22,6 +22,57 @@ export function Services() {
     description?: string; // may be provided by API
   }
 
+  const normalizeRegion = (region: any, index: number): RegionAPI => ({
+    id: String(region?.id ?? region?.external_id ?? `region-${index}`),
+    name: String(region?.name ?? "Unnamed Region"),
+    description:
+      typeof region?.description === "string" ? region.description : "",
+  });
+
+  const normalizeChurch = (church: any, index: number): Branch => ({
+    id: String(church?.id ?? church?.external_id ?? `church-${index}`),
+    name: String(church?.name ?? "Unnamed Church"),
+    externalId:
+      church?.external_id != null ? String(church.external_id) : undefined,
+    location: String(church?.location ?? "Location unavailable"),
+    address: String(church?.address ?? ""),
+    phone: String(church?.phone ?? ""),
+    email: String(church?.email ?? ""),
+    description: String(church?.description ?? ""),
+    heroImage: String(church?.hero_image ?? ""),
+    serviceTimes: Array.isArray(church?.service_times) ? church.service_times : [],
+    announcements: Array.isArray(church?.announcements)
+      ? church.announcements
+      : [],
+    pastor:
+      church?.pastor && typeof church.pastor === "object"
+        ? {
+            name: String(church.pastor.name ?? "Pastor information unavailable"),
+            role: String(church.pastor.role ?? ""),
+            image: String(church.pastor.image ?? ""),
+            bio: String(church.pastor.bio ?? ""),
+          }
+        : {
+            name: "Pastor information unavailable",
+            role: "",
+            image: "",
+            bio: "",
+          },
+    events: Array.isArray(church?.events) ? church.events : [],
+    ministries: Array.isArray(church?.ministries) ? church.ministries : [],
+    gallery: Array.isArray(church?.gallery) ? church.gallery : [],
+    mapUrl: String(church?.map_url ?? ""),
+    regionId: String(church?.region_id ?? ""),
+  });
+
+  const extractArrayPayload = (payload: any, candidates: string[]): any[] => {
+    if (Array.isArray(payload)) return payload;
+    for (const key of candidates) {
+      if (Array.isArray(payload?.[key])) return payload[key];
+    }
+    return [];
+  };
+
   const [regions, setRegions] = useState<RegionAPI[]>([]);
   const [churches, setChurches] = useState<Branch[]>([]);
   const [loadingRegions, setLoadingRegions] = useState(false);
@@ -111,7 +162,12 @@ export function Services() {
     regionService
       .getRegions()
       .then((res) => {
-        const list: RegionAPI[] = res?.regions || res || [];
+        const rawList: any[] = extractArrayPayload(res, [
+          "regions",
+          "data",
+          "results",
+        ]);
+        const list: RegionAPI[] = rawList.map((r, i) => normalizeRegion(r, i));
         setRegions(list);
         setCache(cacheKey, list);
       })
@@ -128,29 +184,12 @@ export function Services() {
     const cacheKey = "churches:all";
     const cached = getCache<any>(cacheKey);
     if (cached) {
-      const raw: any[] = cached.churches || [];
-      const mapped: Branch[] = raw.map(
-        (c) =>
-          ({
-            id: c.id,
-            name: c.name,
-            externalId: c.external_id,
-            location: c.location,
-            address: c.address,
-            phone: c.phone,
-            email: c.email,
-            description: c.description,
-            heroImage: c.hero_image,
-            serviceTimes: c.service_times,
-            announcements: c.announcements,
-            pastor: c.pastor,
-            events: c.events,
-            ministries: c.ministries,
-            gallery: c.gallery,
-            mapUrl: c.map_url,
-            regionId: c.region_id,
-          }) as Branch,
-      );
+      const raw: any[] = extractArrayPayload(cached, [
+        "churches",
+        "data",
+        "results",
+      ]);
+      const mapped: Branch[] = raw.map((c, i) => normalizeChurch(c, i));
       setChurches(mapped);
       setLoadingChurches(false);
       return;
@@ -160,31 +199,13 @@ export function Services() {
       .getChurches({}, "")
       .then((res: any) => {
         setCache(cacheKey, res);
-        const raw: any[] =
-          (res as import("../types/church.type").ChurchListResponse).churches ||
-          [];
-        const mapped: Branch[] = raw.map(
-          (c) =>
-            ({
-              id: c.id,
-              name: c.name,
-              externalId: c.external_id,
-              location: c.location,
-              address: c.address,
-              phone: c.phone,
-              email: c.email,
-              description: c.description,
-              heroImage: c.hero_image,
-              serviceTimes: c.service_times,
-              announcements: c.announcements,
-              pastor: c.pastor,
-              events: c.events,
-              ministries: c.ministries,
-              gallery: c.gallery,
-              mapUrl: c.map_url,
-              regionId: c.region_id,
-            }) as Branch,
-        );
+        const rawResponse = res as import("../types/church.type").ChurchListResponse;
+        const raw: any[] = extractArrayPayload(rawResponse, [
+          "churches",
+          "data",
+          "results",
+        ]);
+        const mapped: Branch[] = raw.map((c, i) => normalizeChurch(c, i));
         setChurches(mapped);
       })
       .catch((err) => {
