@@ -12,7 +12,7 @@ interface ImportMeta {
 
 const BASE_URL =
   ((import.meta as any).env?.VITE_API_BASE_URL as string) ||
-  "http://localhost:4000/api";
+  "https://missionfornationbacked-1.onrender.com";
 
 /**
  * Fetches gallery images for a given region from the backend.
@@ -20,7 +20,7 @@ const BASE_URL =
  * @returns Array of images formatted for the UI
  */
 export async function fetchGallery(regionId: string): Promise<GalleryImage[]> {
-  const url = `${BASE_URL}/galleries?region_id=${encodeURIComponent(regionId)}`;
+  const url = `${BASE_URL}/api/galleries?region_id=${encodeURIComponent(regionId)}`;
   const res = await fetch(url);
   if (!res.ok) {
     throw new Error(
@@ -48,7 +48,7 @@ export async function fetchGalleryPosts(): Promise<Post[]> {
     return cached;
   }
 
-  const url = `${BASE_URL}/galleries/all`;
+  const url = `${BASE_URL}/api/galleries/all`;
   const res = await fetch(url);
   if (!res.ok) {
     throw new Error(
