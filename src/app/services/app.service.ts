@@ -2,8 +2,7 @@
 
 import { getCache, setCache } from "../utils/cache";
 
-const API_BASE_URL = "https://missionfornationbacked-1.onrender.com
-";
+const API_BASE_URL = "https://missionfornationbacked-1.onrender.com";
 
 type Role = "super" | "regional_admin" | "user";
 type SortOrder = "newest" | "oldest";
