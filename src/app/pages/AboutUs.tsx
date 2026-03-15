@@ -214,7 +214,7 @@ export function AboutUs() {
               <div className="relative">
                 <div className="absolute top-4 -left-4 w-full h-full bg-[#f0d082] rounded-2xl z-0" />
                 <img
-                  src="https://images.unsplash.com/photo-1695266391814-a276948f1775?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxwcm9mZXNzaW9uYWwlMjBtYW4lMjBpbiUyMHN1aXQlMjBwb3J0cmFpdCUyMGZyaWVuZGx5fGVufDF8fHx8MTc3MDkwNDQxM3ww&ixlib=rb-4.1.0&q=80&w=1080"
+                  src="https://res.cloudinary.com/di5zfjqlt/image/upload/v1773571945/photo_2026-03-15_13-51-33_rus4x4.jpg"
                   alt="Founder"
                   className="relative z-10 rounded-2xl shadow-xl w-full aspect-[4/5] object-cover"
                 />
