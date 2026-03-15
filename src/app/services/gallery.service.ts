@@ -1,5 +1,6 @@
 import { GalleryImage, GalleryApiResponse, Post } from "../types/gallery.type";
 import { getCache, setCache } from "../utils/cache";
+import { mockPosts } from "../data/gallert.mockData";
 
 // declare environment interface so TypeScript knows about VITE_API_BASE_URL
 interface ImportMetaEnv {
@@ -48,32 +49,38 @@ export async function fetchGalleryPosts(): Promise<Post[]> {
     return cached;
   }
 
-  const url = `${BASE_URL}/api/galleries/all`;
-  const res = await fetch(url);
-  if (!res.ok) {
-    throw new Error(
-      `Failed to load gallery posts (${res.status}): ${res.statusText}`,
-    );
+  let apiPosts: Post[] = [];
+
+  try {
+    const url = `${BASE_URL}/api/galleries/all`;
+    const res = await fetch(url);
+    if (res.ok) {
+      const payload: GalleryApiResponse = await res.json();
+      apiPosts = payload.galleries.map((g) => ({
+        id: g.id,
+        title: g.title ?? "",
+        description: g.description ?? "",
+        type: "gallery",
+        media_url: g.image_url,
+        show_on_homepage: false,
+        created_at: g.created_at,
+        region: {
+          id: g.region_id,
+          name: g.region_name || "",
+        },
+        church: {
+          id: g.church_id ?? "",
+          name: g.church_name ?? "",
+        },
+      }));
+    }
+  } catch (error) {
+    console.warn("Failed to fetch from API, using mock data:", error);
   }
 
-  const payload: GalleryApiResponse = await res.json();
-  const posts: Post[] = payload.galleries.map((g) => ({
-    id: g.id,
-    title: g.title ?? "",
-    description: g.description ?? "",
-    type: "gallery",
-    media_url: g.image_url,
-    show_on_homepage: false,
-    created_at: g.created_at,
-    region: {
-      id: g.region_id,
-      name: g.region_name || "",
-    },
-    church: {
-      id: g.church_id ?? "",
-      name: g.church_name ?? "",
-    },
-  }));
-  setCache(cacheKey, posts);
-  return posts;
+  // Combine API posts with mock posts
+  const allPosts = [...apiPosts, ...mockPosts];
+
+  setCache(cacheKey, allPosts);
+  return allPosts;
 }

@@ -232,4 +232,58 @@ export const mockPosts: Post[] = [
       name: "Holy Trinity Church",
     },
   },
+  {
+    id: "local-photo-001",
+    title: "Community Worship Gathering",
+    description:
+      "A beautiful moment captured during our recent community worship gathering, showcasing the unity and joy of our congregation coming together in praise.",
+    type: "gallery",
+    media_url: "/photo_1_2026-03-15_09-31-24.jpg",
+    show_on_homepage: true,
+    created_at: "2026-03-15T09:31:24Z",
+    region: {
+      id: "550e8400-e29b-41d4-a716-446655440011",
+      name: "Addis Ababa Region",
+    },
+    church: {
+      id: "550e8400-e29b-41d4-a716-446655440021",
+      name: "Holy Trinity Church",
+    },
+  },
+  {
+    id: "local-photo-002",
+    title: "Youth Ministry Activities",
+    description:
+      "Our youth ministry in action! This photo captures the energy and enthusiasm of our young people engaging in meaningful activities and fellowship.",
+    type: "gallery",
+    media_url: "/photo_2_2026-03-15_09-31-24.jpg",
+    show_on_homepage: true,
+    created_at: "2026-03-15T09:31:25Z",
+    region: {
+      id: "550e8400-e29b-41d4-a716-446655440012",
+      name: "Oromia Region",
+    },
+    church: {
+      id: "550e8400-e29b-41d4-a716-446655440022",
+      name: "Beza International Church",
+    },
+  },
+  {
+    id: "local-photo-003",
+    title: "Church Family Celebration",
+    description:
+      "Celebrating the bonds of our church family! This image represents the love, support, and community that makes our church such a special place.",
+    type: "gallery",
+    media_url: "/photo_3_2026-03-15_09-31-24.jpg",
+    show_on_homepage: true,
+    created_at: "2026-03-15T09:31:26Z",
+    region: {
+      id: "550e8400-e29b-41d4-a716-446655440013",
+      name: "Amhara Region",
+    },
+    church: {
+      id: "550e8400-e29b-41d4-a716-446655440023",
+      name: "Mekane Yesus Church",
+    },
+  },
 ];
