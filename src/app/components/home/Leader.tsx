@@ -7,7 +7,7 @@ export default function Leaders() {
       name: "Pastor Daniel Kebede",
       role: "Senior Pastor",
       image:
-        "https://images.unsplash.com/photo-1620565404581-e0aea3f826ef?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxjaHVyY2glMjBzZXJtb24lMjBiaWJsZXxlbnwxfHx8fDE3NzIzNjc4Mjl8MA&ixlib=rb-4.1.0&q=80&w=1080",
+        "https://res.cloudinary.com/di5zfjqlt/image/upload/v1773561663/photo_2_2026-03-15_10-59-30_ddub3t.jpg",
       bio: "Leading our congregation with wisdom and compassion for over 15 years.",
       email: "pastor.daniel@church.org",
       phone: "+251-911-234567",
@@ -17,7 +17,7 @@ export default function Leaders() {
       name: "Pastor Ruth Alemayehu",
       role: "Associate Pastor",
       image:
-        "https://images.unsplash.com/photo-1623096939009-cb651b7700f9?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxjaHVyY2glMjBwcmF5ZXIlMjBtZWV0aW5nfGVufDF8fHx8MTc3MjM2NzgzMHww&ixlib=rb-4.1.0&q=80&w=1080",
+        "https://res.cloudinary.com/di5zfjqlt/image/upload/v1773561663/photo_1_2026-03-15_10-59-30_uhbgop.jpg",
       bio: "Passionate about worship, prayer, and empowering women in ministry.",
       email: "pastor.ruth@church.org",
       phone: "+251-911-345678",
@@ -27,7 +27,7 @@ export default function Leaders() {
       name: "Elder Solomon Tesfaye",
       role: "Youth Pastor",
       image:
-        "https://images.unsplash.com/photo-1770240366512-9d75e9ca7ab8?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxjaHVyY2glMjB5b3V0aCUyMGdyb3VwfGVufDF8fHx8MTc3MjM2NzgzMHww&ixlib=rb-4.1.0&q=80&w=1080",
+        "https://res.cloudinary.com/di5zfjqlt/image/upload/v1773561663/photo_3_2026-03-15_10-59-30_xbfqt4.jpg",
       bio: "Dedicated to guiding the next generation in their walk with Christ.",
       email: "solomon@church.org",
       phone: "+251-911-456789",
@@ -37,7 +37,7 @@ export default function Leaders() {
       name: "Sister Marta Hailu",
       role: "Worship Leader",
       image:
-        "https://images.unsplash.com/photo-1617544518238-492c0c419a6d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxjaHVyY2glMjBtdXNpYyUyMGNob2lyfGVufDF8fHx8MTc3MjM2NzgzMXww&ixlib=rb-4.1.0&q=80&w=1080",
+        "https://res.cloudinary.com/di5zfjqlt/image/upload/v1773561663/photo_3_2026-03-15_10-59-30_xbfqt4.jpg",
       bio: "Creating an atmosphere of worship where hearts are transformed.",
       email: "marta@church.org",
       phone: "+251-911-567890",
