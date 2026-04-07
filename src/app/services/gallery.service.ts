@@ -1,6 +1,5 @@
 import { GalleryImage, GalleryApiResponse, Post } from "../types/gallery.type";
 import { getCache, setCache } from "../utils/cache";
-import { mockPosts } from "../data/gallert.mockData";
 
 // declare environment interface so TypeScript knows about VITE_API_BASE_URL
 interface ImportMetaEnv {
@@ -75,12 +74,11 @@ export async function fetchGalleryPosts(): Promise<Post[]> {
       }));
     }
   } catch (error) {
-    console.warn("Failed to fetch from API, using mock data:", error);
+    console.error("Failed to fetch gallery posts from API:", error);
+    // If API fails, we throw to let the UI's ErrorState handle it elegantly
+    throw error;
   }
 
-  // Combine API posts with mock posts
-  const allPosts = [...apiPosts, ...mockPosts];
-
-  setCache(cacheKey, allPosts);
-  return allPosts;
+  setCache(cacheKey, apiPosts);
+  return apiPosts;
 }

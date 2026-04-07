@@ -14,6 +14,8 @@ import { getCache, setCache } from "../utils/cache";
 import { fetchGalleryPosts } from "../services/gallery.service";
 import type { Branch } from "../data/mockData"; // reuse Branch shape
 import type { Post } from "../types/gallery.type"; // for announcements
+import { LoadingState } from "../components/ui/LoadingState";
+import { ErrorState } from "../components/ui/ErrorState";
 
 export function Services() {
   interface RegionAPI {
@@ -235,14 +237,14 @@ export function Services() {
   }, []);
 
   return (
-    <div className="pt-24 pb-20 min-h-screen bg-[#f5f5f5]">
+    <div className="pt-24 pb-20 min-h-screen bg-[#f5f5f5] dark:bg-gray-900 transition-colors duration-300">
       <div className="max-w-7xl mx-auto px-4 md:px-8">
         {/* Header */}
         <div className="text-center mb-12">
-          <h1 className="text-4xl md:text-5xl font-bold text-[#1a3c34] mb-4">
+          <h1 className="text-4xl md:text-5xl font-bold text-[#1a3c34] dark:text-gray-100 mb-4 transition-colors">
             Our Church Locations
           </h1>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+          <p className="text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto transition-colors">
             Find a branch near you and become part of our growing community.
             Each location offers unique programs while sharing our common
             mission.
@@ -292,7 +294,7 @@ export function Services() {
                     className={`
                       w-full max-w-lg sm:max-w-xl md:max-w-2xl lg:max-w-3xl 
                       mx-6 sm:mx-12 md:mx-16 
-                      bg-white rounded-2xl shadow-xl overflow-hidden
+                      bg-white dark:bg-gray-800 rounded-2xl shadow-xl border border-gray-100 dark:border-gray-700 overflow-hidden
                       transition-all duration-300
                       flex flex-col
                     `}
@@ -311,7 +313,7 @@ export function Services() {
                     {hasText && (
                       <div className="p-5 sm:p-7 md:p-9 space-y-4">
                         <div className="flex justify-center">
-                          <span className="inline-block px-3 py-1 text-xs font-semibold uppercase tracking-wide rounded-full bg-indigo-100 text-indigo-800">
+                          <span className="inline-block px-3 py-1 text-xs font-semibold uppercase tracking-wide rounded-full bg-[#d4af37]/20 text-[#1a3c34] dark:text-[#d4af37]">
                             {getAnnLabel(current)}
                           </span>
                         </div>
@@ -320,7 +322,7 @@ export function Services() {
                           className={`
                             text-center leading-relaxed
                             ${hasImage ? "text-base sm:text-lg" : "text-lg sm:text-xl md:text-2xl font-medium"}
-                            text-gray-800 whitespace-pre-line
+                            text-gray-800 dark:text-gray-200 whitespace-pre-line
                           `}
                         >
                           {current.description}
@@ -329,7 +331,7 @@ export function Services() {
                     )}
 
                     {!hasText && !hasImage && (
-                      <div className="p-12 text-center text-gray-400 italic">
+                      <div className="p-12 text-center text-gray-400 dark:text-gray-500 italic">
                         (No content available)
                       </div>
                     )}
@@ -366,13 +368,19 @@ export function Services() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
           {/* Left Sidebar - Regions */}
           <div className="lg:col-span-3">
-            <div className="bg-white rounded-xl shadow-md p-6 sticky top-24">
-              <h3 className="text-lg font-bold text-[#1a3c34] mb-4">
+            <div className="bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-xl shadow-md p-6 sticky top-24 transition-colors duration-300">
+              <h3 className="text-lg font-bold text-[#1a3c34] dark:text-[#d4af37] mb-4">
                 Select a Region
               </h3>
 
-              {loadingRegions && <p>Loading regions…</p>}
-              {errorRegions && <p className="text-red-500">{errorRegions}</p>}
+              {loadingRegions && <LoadingState message="Loading regions..." className="py-8" />}
+              {errorRegions && (
+                <ErrorState 
+                  message={errorRegions} 
+                  className="mb-4"
+                  onRetry={() => window.location.reload()}
+                />
+              )}
 
               <div className="space-y-2 max-h-[600px] overflow-y-auto pr-2 scrollbar-hide">
                 {regions
@@ -393,8 +401,8 @@ export function Services() {
                         onClick={() => handleRegionClick(region.id)}
                         className={`w-full text-left p-3 rounded-lg transition-all duration-200 group ${
                           isSelected
-                            ? "bg-[#1a3c34] text-white shadow-md"
-                            : "bg-gray-50 text-gray-700 hover:bg-[#d4af37]/10 hover:shadow-sm"
+                            ? "bg-[#1a3c34] dark:bg-[#d4af37] text-white dark:text-gray-900 shadow-md"
+                            : "bg-gray-50 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-[#d4af37]/10 dark:hover:bg-gray-700 hover:shadow-sm"
                         }`}
                         whileHover={{ x: 4 }}
                         whileTap={{ scale: 0.98 }}
@@ -453,12 +461,12 @@ export function Services() {
               >
                 {/* Selected Region Header */}
                 <div className="mb-6">
-                  <h2 className="text-2xl font-bold text-[#1a3c34] mb-2">
+                  <h2 className="text-2xl font-bold text-[#1a3c34] dark:text-gray-100 mb-2 transition-colors">
                     {selectedRegionId
                       ? regions.find((r) => r.id === selectedRegionId)?.name
                       : "All Regions"}
                   </h2>
-                  <p className="text-gray-600">
+                  <p className="text-gray-600 dark:text-gray-400 transition-colors">
                     {filteredBranches.length}{" "}
                     {filteredBranches.length === 1 ? "location" : "locations"}{" "}
                     {selectedRegionId ? "in this region" : "total"}
@@ -466,14 +474,14 @@ export function Services() {
                 </div>
 
                 {loadingChurches && (
-                  <div className="py-8 text-center">
-                    <p className="text-gray-500">Loading locations…</p>
-                  </div>
+                  <LoadingState message="Loading locations..." className="py-12" />
                 )}
                 {errorChurches && (
-                  <div className="py-8 text-center">
-                    <p className="text-red-500">{errorChurches}</p>
-                  </div>
+                  <ErrorState 
+                    message={errorChurches} 
+                    className="mb-8"
+                    onRetry={() => window.location.reload()}
+                  />
                 )}
 
                 {/* Branch Listings */}
@@ -487,7 +495,7 @@ export function Services() {
                         transition={{ delay: index * 0.1 }}
                       >
                         <Link to={`/services/${branch.id}`}>
-                          <div className="bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden group">
+                          <div className="bg-white dark:bg-gray-900 rounded-xl shadow-md border border-gray-100 dark:border-gray-800 hover:shadow-xl transition-all duration-300 overflow-hidden group">
                             <div className="flex flex-col md:flex-row">
                               {/* Image */}
                               <div className="md:w-2/5 h-64 md:h-auto relative overflow-hidden">
@@ -503,17 +511,17 @@ export function Services() {
                               <div className="md:w-3/5 p-8">
                                 <div className="flex items-start justify-between mb-4">
                                   <div>
-                                    <h2 className="text-3xl font-bold text-[#1a3c34] mb-2 group-hover:text-[#d4af37] transition-colors">
+                                    <h2 className="text-3xl font-bold text-[#1a3c34] dark:text-white mb-2 group-hover:text-[#d4af37] transition-colors">
                                       {branch.name}
                                     </h2>
-                                    <div className="flex items-center text-gray-600 mb-3">
+                                    <div className="flex items-center text-gray-600 dark:text-gray-400 mb-3 transition-colors">
                                       <MapPin className="w-4 h-4 mr-2 text-[#d4af37]" />
                                       <span>{branch.location}</span>
                                     </div>
                                   </div>
                                 </div>
 
-                                <p className="text-gray-700 mb-6 line-clamp-2">
+                                <p className="text-gray-700 dark:text-gray-300 mb-6 line-clamp-2 transition-colors">
                                   {branch.description}
                                 </p>
 
@@ -522,10 +530,10 @@ export function Services() {
                                   <div className="flex items-start space-x-2">
                                     <Clock className="w-4 h-4 text-[#d4af37] mt-1 flex-shrink-0" />
                                     <div>
-                                      <p className="text-sm font-semibold text-[#1a3c34]">
+                                      <p className="text-sm font-semibold text-[#1a3c34] dark:text-gray-200 transition-colors">
                                         Service Times
                                       </p>
-                                      <p className="text-xs text-gray-600">
+                                      <p className="text-xs text-gray-600 dark:text-gray-400 transition-colors">
                                         {branch.serviceTimes[0]?.day}{" "}
                                         {branch.serviceTimes[0]?.time}
                                       </p>
@@ -534,10 +542,10 @@ export function Services() {
                                   <div className="flex items-start space-x-2">
                                     <Phone className="w-4 h-4 text-[#d4af37] mt-1 flex-shrink-0" />
                                     <div>
-                                      <p className="text-sm font-semibold text-[#1a3c34]">
+                                      <p className="text-sm font-semibold text-[#1a3c34] dark:text-gray-200 transition-colors">
                                         Contact
                                       </p>
-                                      <p className="text-xs text-gray-600">
+                                      <p className="text-xs text-gray-600 dark:text-gray-400 transition-colors">
                                         {branch.phone}
                                       </p>
                                     </div>
@@ -545,10 +553,10 @@ export function Services() {
                                   <div className="flex items-start space-x-2">
                                     <Mail className="w-4 h-4 text-[#d4af37] mt-1 flex-shrink-0" />
                                     <div>
-                                      <p className="text-sm font-semibold text-[#1a3c34]">
+                                      <p className="text-sm font-semibold text-[#1a3c34] dark:text-gray-200 transition-colors">
                                         Pastor
                                       </p>
-                                      <p className="text-xs text-gray-600">
+                                      <p className="text-xs text-gray-600 dark:text-gray-400 transition-colors">
                                         {branch.pastor.name}
                                       </p>
                                     </div>

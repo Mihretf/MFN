@@ -1,6 +1,8 @@
 import React from "react";
 import { blogService } from "../../services/app.service";
 import type { BlogPost } from "../../types/blog.type";
+import { LoadingState } from "../ui/LoadingState";
+import { ErrorState } from "../ui/ErrorState";
 
 export default function Highlights() {
   const [items, setItems] = React.useState<BlogPost[]>([]);
@@ -63,16 +65,28 @@ export default function Highlights() {
 
   if (loading) {
     return (
-      <section className="py-16 md:py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-5 sm:px-6 lg:px-8 text-center">
-          <p className="text-gray-500">Loading updates…</p>
+      <section className="py-16 md:py-20 bg-[#faf9f6] dark:bg-gray-950 transition-colors duration-300">
+        <LoadingState message="Loading updates..." />
+      </section>
+    );
+  }
+
+  if (error) {
+    return (
+      <section className="py-16 md:py-20 bg-[#faf9f6] dark:bg-gray-950 transition-colors duration-300">
+        <div className="max-w-4xl mx-auto px-5">
+          <ErrorState 
+            title="Failed to load updates" 
+            message={error} 
+            onRetry={() => window.location.reload()}
+          />
         </div>
       </section>
     );
   }
 
-  if (error || sortedItems.length === 0) {
-    return null; // silent fail — or show minimal message if preferred
+  if (sortedItems.length === 0) {
+    return null;
   }
 
   const current = sortedItems[currentIndex];
@@ -91,18 +105,18 @@ export default function Highlights() {
     if (text.includes("offer") || text.includes("discount")) return "Offer";
     if (new Date(post.created_at) > new Date(Date.now() - 1000 * 60 * 60 * 72))
       return "New"; // last 3 days
-    return "Update";
+    return "Highlight";
   };
 
   return (
-    <section className="py-16 md:py-20 bg-gray-50/70">
+    <section className="py-16 md:py-20 bg-[#faf9f6] dark:bg-gray-950 transition-colors duration-300">
       <div className="max-w-6xl mx-auto px-5 sm:px-6 lg:px-8">
         <div className="text-center mb-10 md:mb-14">
-          <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 tracking-tight">
-            Highlights & Updates
+          <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-gray-100 tracking-tight transition-colors">
+            Highlights
           </h2>
-          <p className="mt-3 text-lg sm:text-xl text-gray-600 max-w-2xl mx-auto">
-            Latest announcements, quotes, offers and community moments
+          <p className="mt-3 text-lg sm:text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto transition-colors">
+            Key announcements, quotes, offers and community moments
           </p>
         </div>
 
@@ -129,30 +143,30 @@ export default function Highlights() {
             </svg>
           </button>
 
-          {/* Card */}
           <div
             className={`
-              w-full max-w-lg sm:max-w-xl md:max-w-2xl lg:max-w-3xl 
+              w-full max-w-lg sm:max-w-xl md:max-w-3xl lg:max-w-4xl
               mx-6 sm:mx-12 md:mx-16 
-              bg-white rounded-2xl shadow-xl overflow-hidden
-              transition-all duration-300
-              flex flex-col
+              bg-white dark:bg-gray-900 rounded-3xl shadow-xl dark:shadow-2xl overflow-hidden
+              transition-all duration-500 hover:shadow-2xl
+              flex flex-col border border-gray-100 dark:border-gray-800
             `}
           >
             {(hasImage || hasVideo) && (
-              <div className="w-full max-h-[60vh] overflow-hidden">
+              <div className="w-full relative overflow-hidden bg-gray-100 dark:bg-gray-800 h-[350px] md:h-[500px]">
+                <div className="absolute inset-0 bg-gradient-to-t from-gray-900/60 to-transparent z-10 transition-opacity" />
                 {hasImage && current.image_url && (
                   <img
                     src={current.image_url || ""}
                     alt=""
-                    className="w-full h-auto object-contain"
+                    className="w-full h-full object-cover absolute inset-0 transform hover:scale-105 transition-transform duration-700"
                     loading="lazy"
                   />
                 )}
                 {hasVideo && current.video_url && (
                   <video
                     controls
-                    className="w-full h-auto object-contain"
+                    className="w-full h-full object-cover absolute inset-0 z-20"
                     poster={current.image_url || undefined}
                   >
                     <source src={current.video_url} />
@@ -164,19 +178,15 @@ export default function Highlights() {
             )}
 
             {hasText && (
-              <div className="p-5 sm:p-7 md:p-9 space-y-4">
-                {/* Optional label pill */}
-                <div className="flex justify-center">
-                  <span className="inline-block px-3 py-1 text-xs font-semibold uppercase tracking-wide rounded-full bg-indigo-100 text-indigo-800">
-                    {getLabel(current)}
-                  </span>
-                </div>
+              <div className="p-8 sm:p-10 space-y-4 w-full flex flex-col items-center justify-center">
+
+                <div className="w-12 h-1 bg-[#d4af37] rounded-full mx-auto" />
 
                 <p
                   className={`
                     text-center leading-relaxed
-                    ${hasImage || hasVideo ? "text-base sm:text-lg" : "text-lg sm:text-xl md:text-2xl font-medium"}
-                    text-gray-800 whitespace-pre-line
+                    ${hasImage || hasVideo ? "text-lg sm:text-xl font-medium" : "text-xl md:text-3xl font-semibold"}
+                    text-gray-800 dark:text-gray-200 whitespace-pre-line
                   `}
                 >
                   {current.text}
@@ -229,7 +239,7 @@ export default function Highlights() {
                 onClick={() => setCurrentIndex(idx)}
                 className={`
                   w-2.5 h-2.5 rounded-full transition-all
-                  ${idx === currentIndex ? "bg-indigo-600 w-6" : "bg-gray-300 hover:bg-gray-400"}
+                  ${idx === currentIndex ? "bg-[#d4af37] w-8" : "bg-gray-300 dark:bg-gray-700 hover:bg-gray-400 dark:hover:bg-gray-600"}
                 `}
                 aria-label={`Go to slide ${idx + 1}`}
               />

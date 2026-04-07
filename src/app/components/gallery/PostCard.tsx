@@ -62,10 +62,10 @@ export function PostCard({ post, onClick }: PostCardProps) {
   };
 
   return (
-    <div className="group bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1 border border-gray-100">
+    <div className="group bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1 border border-gray-100 dark:border-gray-700">
       {/* Image */}
       <div
-        className="relative h-48 overflow-hidden bg-gray-100 cursor-pointer"
+        className="relative h-48 overflow-hidden bg-gray-100 dark:bg-gray-900 cursor-pointer"
         onClick={onClick}
       >
         <ImageWithFallback
@@ -85,35 +85,35 @@ export function PostCard({ post, onClick }: PostCardProps) {
 
       {/* Content */}
       <div className="p-5">
-        <h3 className="text-xl mb-2 text-gray-900 group-hover:text-blue-600 transition-colors">
+        <h3 className="text-xl mb-2 text-gray-900 dark:text-gray-100 group-hover:text-blue-600 dark:group-hover:text-[#d4af37] transition-colors">
           {post.title}
         </h3>
 
-        <p className="text-gray-600 text-sm mb-4 line-clamp-3">
+        <p className="text-gray-600 dark:text-gray-400 text-sm mb-4 line-clamp-3 transition-colors">
           {truncateText(post.description, 120)}
         </p>
 
         {/* Meta Information */}
-        <div className="space-y-2 text-sm text-gray-500">
+        <div className="space-y-2 text-sm text-gray-500 dark:text-gray-400 transition-colors">
           <div className="flex items-center gap-2">
-            <MapPin className="w-4 h-4 text-gray-400" />
+            <MapPin className="w-4 h-4 text-gray-400 dark:text-[#d4af37]" />
             <span>{post.region.name}</span>
           </div>
 
           <div className="flex items-center gap-2">
-            <Church className="w-4 h-4 text-gray-400" />
+            <Church className="w-4 h-4 text-gray-400 dark:text-[#d4af37]" />
             <span>{post.church.name}</span>
           </div>
 
           <div className="flex items-center gap-2">
-            <Calendar className="w-4 h-4 text-gray-400" />
+            <Calendar className="w-4 h-4 text-gray-400 dark:text-[#d4af37]" />
             <span>{formatDate(post.created_at)}</span>
           </div>
 
           {post.type === "event" && post.deadline && (
             <div className="flex items-center gap-2">
-              <Calendar className="w-4 h-4 text-gray-400" />
-              <span className="font-semibold">
+              <Calendar className="w-4 h-4 text-gray-400 dark:text-[#d4af37]" />
+              <span className="font-semibold text-gray-700 dark:text-gray-300">
                 Deadline: {formatDate(post.deadline)}
               </span>
             </div>

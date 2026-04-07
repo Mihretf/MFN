@@ -13,6 +13,7 @@ import { AboutUs } from "./pages/AboutUs";
 import { Services } from "./pages/Services";
 import { BranchDetail } from "./pages/BranchDetail";
 import Gallery from "./pages/Gallery";
+import { ThemeProvider } from "./providers/ThemeProvider";
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -26,10 +27,11 @@ function ScrollToTop() {
 
 export default function App() {
   return (
-    <Router>
-      <ScrollToTop />
-      <div className="min-h-screen bg-[#f5f5f5] font-sans text-[#1a3c34]">
-        <Header />
+    <ThemeProvider>
+      <Router>
+        <ScrollToTop />
+        <div className="min-h-screen bg-[#f5f5f5] dark:bg-gray-900 font-sans text-[#1a3c34] dark:text-gray-100 transition-colors duration-300">
+          <Header />
 
         <main>
           <Routes>
@@ -46,5 +48,6 @@ export default function App() {
         <Footer />
       </div>
     </Router>
+    </ThemeProvider>
   );
 }

@@ -7,6 +7,8 @@ import { PostCard } from "../components/gallery/PostCard";
 import { GalleryViewer } from "../components/gallery/GalleryViewer";
 import { fetchGalleryPosts } from "../services/gallery.service";
 import { regionService } from "../services/app.service";
+import { LoadingState } from "../components/ui/LoadingState";
+import { ErrorState } from "../components/ui/ErrorState";
 
 // regions list is fetched from backend instead of hardcoded
 interface RegionAPI {
@@ -145,23 +147,28 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 mt-16">
+    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 mt-16 transition-colors duration-300">
       {/* Header */}
-      <header className="bg-white shadow-sm border-b border-gray-200">
+      <header className="bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700 transition-colors">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <h1 className="text-4xl text-gray-900 text-center mb-2">
+          <h1 className="text-4xl text-gray-900 dark:text-gray-100 text-center mb-2 transition-colors">
             Church Posts & Gallery
           </h1>
-          <p className="text-center text-gray-600">
+          <p className="text-center text-gray-600 dark:text-gray-400 transition-colors">
             Stay connected with what's happening in our community
           </p>
         </div>
       </header>
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {loading && <div className="text-center py-20">Loading gallery...</div>}
+        {loading && <LoadingState message="Loading gallery..." className="py-20" />}
         {!loading && error && (
-          <div className="text-center py-20 text-red-600">{error}</div>
+          <ErrorState 
+            title="Failed to load gallery" 
+            message={error} 
+            className="my-10" 
+            onRetry={() => window.location.reload()} 
+          />
         )}
         {!loading && !error && (
           <>
@@ -186,14 +193,14 @@ export default function App() {
 
             {/* Filters */}
             {loadingRegions && (
-              <div className="text-center py-4 text-gray-600">
-                Loading regions…
-              </div>
+              <LoadingState message="Loading regions..." className="py-8" />
             )}
             {errorRegions && (
-              <div className="text-center py-4 text-red-600">
-                {errorRegions}
-              </div>
+              <ErrorState 
+                message={errorRegions} 
+                className="mb-8"
+                onRetry={() => window.location.reload()}
+              />
             )}
             <FilterSection
               selectedRegion={selectedRegion}
@@ -237,12 +244,12 @@ export default function App() {
                 </>
               ) : (
                 // No Results State
-                <div className="text-center py-16 bg-white rounded-xl shadow-sm border border-gray-100">
+                <div className="text-center py-16 bg-white dark:bg-gray-900 rounded-xl shadow-sm border border-gray-100 dark:border-gray-800 transition-colors">
                   <div className="max-w-md mx-auto">
-                    <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                      <Sparkles className="w-8 h-8 text-gray-400" />
+                    <div className="w-16 h-16 bg-gray-100 dark:bg-gray-800 rounded-full flex items-center justify-center mx-auto mb-4 transition-colors">
+                      <Sparkles className="w-8 h-8 text-[#d4af37]" />
                     </div>
-                    <h3 className="text-xl text-gray-900 mb-2">
+                    <h3 className="text-xl text-gray-900 dark:text-gray-100 mb-2 transition-colors">
                       No Posts Found
                     </h3>
                     <p className="text-gray-600 mb-6">
@@ -278,9 +285,10 @@ export default function App() {
           onClose={() => setViewerOpen(false)}
         />
       )}
-      <footer className="bg-white border-t border-gray-200 mt-16">
+      {/* Footer */}
+      <footer className="bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 mt-16 transition-colors">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <p className="text-center text-gray-600 text-sm">
+          <p className="text-center text-gray-600 dark:text-gray-400 text-sm transition-colors">
             © 2026 Church Posts Gallery. All rights reserved.
           </p>
         </div>

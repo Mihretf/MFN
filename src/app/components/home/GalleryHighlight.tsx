@@ -2,6 +2,8 @@ import React from "react";
 import { Calendar, MapPin, Church, ArrowRight } from "lucide-react";
 import { Post } from "../../types/gallery.type";
 import { fetchGalleryPosts } from "../../services/gallery.service";
+import { LoadingState } from "../ui/LoadingState";
+import { ErrorState } from "../ui/ErrorState";
 
 const postTypeBadgeColors: Record<string, string> = {
   event: "bg-blue-100 text-blue-700 border-blue-200",
@@ -13,6 +15,8 @@ const postTypeBadgeColors: Record<string, string> = {
 
 export default function GalleryHighlight() {
   const [displayPosts, setDisplayPosts] = React.useState<Post[]>([]);
+  const [loading, setLoading] = React.useState(true);
+  const [error, setError] = React.useState<string | null>(null);
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
@@ -24,33 +28,60 @@ export default function GalleryHighlight() {
   };
 
   React.useEffect(() => {
+    setLoading(true);
     fetchGalleryPosts()
       .then((all) => {
         setDisplayPosts(all.filter((p) => p.show_on_homepage).slice(0, 6));
       })
-      .catch((err) => console.error("failed to fetch homepage posts", err));
+      .catch((err) => {
+        console.error("failed to fetch homepage posts", err);
+        setError(err.message || "Unable to load latest updates");
+      })
+      .finally(() => setLoading(false));
   }, []);
+
+  if (loading) {
+    return (
+      <section className="py-20 bg-gradient-to-b from-gray-50 to-white">
+        <LoadingState message="Loading latest updates..." />
+      </section>
+    );
+  }
+
+  if (error) {
+    return (
+      <section className="py-20 bg-gradient-to-b from-gray-50 to-white">
+        <div className="max-w-4xl mx-auto px-4">
+          <ErrorState 
+            title="Updates Unavailable" 
+            message={error} 
+            onRetry={() => window.location.reload()}
+          />
+        </div>
+      </section>
+    );
+  }
 
   if (displayPosts.length === 0) return null;
 
   return (
-    <section className="py-20 bg-gradient-to-b from-gray-50 to-white">
+    <section className="py-20 bg-gray-50 dark:bg-gray-950 transition-colors duration-300">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
-          <h2 className="text-4xl text-gray-900 mb-4">Latest Updates</h2>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+          <h2 className="text-4xl font-bold text-gray-900 dark:text-white mb-4 transition-colors">Latest Updates</h2>
+          <p className="text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto transition-colors">
             Stay connected with what's happening in our community
           </p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
           {displayPosts.map((post) => (
-            <div
+              <div
               key={post.id}
-              className="group bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 hover:shadow-xl transition-all transform hover:-translate-y-1"
+              className="group bg-white dark:bg-gray-900 rounded-2xl overflow-hidden shadow-sm border border-gray-100 dark:border-gray-800 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1"
             >
               {/* Image */}
-              <div className="relative h-52 overflow-hidden bg-gray-100">
+              <div className="relative h-52 overflow-hidden bg-gray-100 dark:bg-gray-800">
                 <img
                   src={post.media_url}
                   alt={post.title}
@@ -59,7 +90,7 @@ export default function GalleryHighlight() {
                 {/* Post Type Badge */}
                 <div className="absolute top-3 right-3">
                   <span
-                    className={`px-3 py-1 rounded-full text-xs uppercase tracking-wide border ${postTypeBadgeColors[post.type]}`}
+                    className={`px-3 py-1 rounded-full text-xs uppercase tracking-wide shadow-sm border ${postTypeBadgeColors[post.type]}`}
                   >
                     {post.type}
                   </span>
@@ -68,36 +99,36 @@ export default function GalleryHighlight() {
 
               {/* Content */}
               <div className="p-6">
-                <h3 className="text-xl text-gray-900 mb-2 group-hover:text-blue-600 transition-colors">
+                <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2 group-hover:text-[#d4af37] transition-colors">
                   {post.title}
                 </h3>
 
-                <p className="text-gray-600 text-sm mb-4 line-clamp-2">
+                <p className="text-gray-600 dark:text-gray-400 text-sm mb-4 line-clamp-2 transition-colors">
                   {post.description}
                 </p>
 
                 {/* Meta Information */}
-                <div className="space-y-2 text-sm text-gray-500 mb-4">
+                <div className="space-y-2 text-sm text-gray-500 dark:text-gray-400 mb-4 transition-colors">
                   <div className="flex items-center gap-2">
-                    <MapPin className="w-4 h-4 text-gray-400" />
+                    <MapPin className="w-4 h-4 text-gray-400 dark:text-[#d4af37]" />
                     <span>{post.region.name}</span>
                   </div>
 
                   <div className="flex items-center gap-2">
-                    <Church className="w-4 h-4 text-gray-400" />
+                    <Church className="w-4 h-4 text-gray-400 dark:text-[#d4af37]" />
                     <span className="truncate">{post.church.name}</span>
                   </div>
 
                   <div className="flex items-center gap-2">
-                    <Calendar className="w-4 h-4 text-gray-400" />
+                    <Calendar className="w-4 h-4 text-gray-400 dark:text-[#d4af37]" />
                     <span>{formatDate(post.created_at)}</span>
                   </div>
                 </div>
 
-                <button className="text-blue-600 text-sm hover:text-blue-700 flex items-center gap-1 group/btn">
+                <div className="text-[#1a3c34] dark:text-[#d4af37] font-semibold text-sm hover:text-[#d4af37] flex items-center gap-1 group/btn transition-colors">
                   Read More
                   <ArrowRight className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
-                </button>
+                </div>
               </div>
             </div>
           ))}

@@ -10,8 +10,8 @@ export default function Hero() {
           alt="Mission For Nation Building"
           className="w-full h-full object-cover"
         />
-        <div className="absolute inset-0 bg-gradient-to-r from-[#1a3c34]/90 to-[#1a3c34]/60 mix-blend-multiply" />
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent to-[#1a3c34]" />
+        <div className="absolute inset-0 bg-gradient-to-r from-[#1a3c34]/90 to-black/60 mix-blend-multiply" />
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#1a3c34]/80 to-[#1a3c34] dark:to-gray-900 transition-colors duration-300" />
       </div>
 
       {/* Content */}
@@ -26,14 +26,14 @@ export default function Hero() {
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <Link
             to="/services"
-            className="px-8 py-4 bg-yellow-600 text-white rounded-lg hover:bg-yellow-700 transition-all"
+            className="px-8 py-4 bg-[#d4af37] text-gray-900 hover:text-white dark:hover:text-gray-900 font-bold rounded-lg hover:bg-[#f0d082] transition-colors shadow-lg"
           >
             Join Us This Sunday
           </Link>
 
           <Link
             to="/live"
-            className="px-8 py-4 bg-white/10 backdrop-blur-sm text-white border rounded-lg"
+            className="px-8 py-4 bg-white/10 backdrop-blur-md text-white font-semibold border border-white/30 rounded-lg hover:bg-white/20 transition-colors"
           >
             Watch Live
           </Link>
@@ -41,9 +41,9 @@ export default function Hero() {
       </div>
 
       {/* Scroll Indicator */}
-      <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-10 animate-bounce">
-        <div className="w-6 h-10 border-2 border-white/50 rounded-full flex items-start justify-center p-2">
-          <div className="w-1.5 h-3 bg-white/70 rounded-full"></div>
+      <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-10 animate-bounce text-gray-400 dark:text-gray-500">
+        <div className="w-6 h-10 border-2 border-current rounded-full flex items-start justify-center p-2">
+          <div className="w-1.5 h-3 bg-current rounded-full"></div>
         </div>
       </div>
     </section>

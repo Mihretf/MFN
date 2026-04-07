@@ -13,8 +13,37 @@ const stagger = {
 };
 
 export function AboutUs() {
+  const journeyItems = [
+    {
+      year: "2010",
+      title: "The Beginning",
+      desc: "MFN started in a small living room with just 12 people committed to prayer and service.",
+    },
+    {
+      year: "2015",
+      title: "First Campus",
+      desc: "We opened our first physical location in the heart of the city, expanding our outreach programs.",
+    },
+    {
+      year: "2020",
+      title: "Digital Expansion",
+      desc: "Launched online services and global community groups to stay connected during challenging times.",
+    },
+    {
+      year: "2025",
+      title: "Nationwide Impact",
+      desc: "Now operating in 5 major cities with over 10,000 active members serving weekly.",
+    },
+  ];
+
+  const stats = [
+    { number: "15+", label: "Years Served" },
+    { number: "5", label: "Campuses" },
+    { number: "10k+", label: "Community Members" },
+    { number: "50k+", label: "Lives Impacted" },
+  ];
   return (
-    <div className="pt-20">
+    <div className="pt-20 bg-white dark:bg-gray-900 transition-colors duration-300">
       {/* Hero Section */}
       <section className="relative h-[60vh] min-h-[500px] flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0 z-0">
@@ -58,7 +87,7 @@ export function AboutUs() {
       </section>
 
       {/* Mission & Vision */}
-      <section className="py-24 bg-white">
+      <section className="py-24 bg-white dark:bg-gray-950 transition-colors duration-300">
         <div className="max-w-7xl mx-auto px-4 md:px-8">
           <motion.div
             initial="hidden"
@@ -72,8 +101,8 @@ export function AboutUs() {
               <div className="w-16 h-16 bg-[#1a3c34]/5 rounded-2xl flex items-center justify-center">
                 <Target className="w-8 h-8 text-[#1a3c34]" />
               </div>
-              <h2 className="text-3xl font-bold text-[#1a3c34]">Our Mission</h2>
-              <p className="text-gray-600 text-lg leading-relaxed">
+              <h2 className="text-3xl font-bold text-[#1a3c34] dark:text-gray-100 transition-colors">Our Mission</h2>
+              <p className="text-gray-600 dark:text-gray-400 text-lg leading-relaxed transition-colors">
                 To reach the lost, disciple the found, and serve the hurting. We
                 exist to be a beacon of light in every city we plant our roots,
                 providing spiritual guidance and practical support to those in
@@ -86,8 +115,8 @@ export function AboutUs() {
               <div className="w-16 h-16 bg-[#d4af37]/10 rounded-2xl flex items-center justify-center">
                 <Eye className="w-8 h-8 text-[#d4af37]" />
               </div>
-              <h2 className="text-3xl font-bold text-[#1a3c34]">Our Vision</h2>
-              <p className="text-gray-600 text-lg leading-relaxed">
+              <h2 className="text-3xl font-bold text-[#1a3c34] dark:text-gray-100 transition-colors">Our Vision</h2>
+              <p className="text-gray-600 dark:text-gray-400 text-lg leading-relaxed transition-colors">
                 A nation united in purpose and faith, where every individual has
                 the opportunity to experience the transformative power of
                 community and divine love. We see a future where no one walks
@@ -99,7 +128,7 @@ export function AboutUs() {
       </section>
 
       {/* Our Story (Timeline) */}
-      <section className="py-24 bg-[#f8f9fa] overflow-hidden">
+      <section className="py-24 bg-[#f8f9fa] dark:bg-gray-900 transition-colors duration-300 overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 md:px-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -107,10 +136,10 @@ export function AboutUs() {
             viewport={{ once: true }}
             className="text-center mb-16"
           >
-            <h2 className="text-3xl md:text-4xl font-bold text-[#1a3c34] mb-4">
+            <h2 className="text-3xl md:text-4xl font-bold text-[#1a3c34] dark:text-white mb-4 transition-colors">
               Our Journey
             </h2>
-            <p className="text-gray-600 max-w-2xl mx-auto">
+            <p className="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto transition-colors">
               From humble beginnings to a nationwide movement.
             </p>
           </motion.div>
@@ -120,89 +149,83 @@ export function AboutUs() {
             <div className="absolute left-1/2 transform -translate-x-1/2 h-full w-0.5 bg-[#d4af37]/30 hidden md:block" />
 
             <div className="space-y-12 md:space-y-24">
-              {[
-                {
-                  year: "2010",
-                  title: "The Beginning",
-                  desc: "MFN started in a small living room with just 12 people committed to prayer and service.",
-                },
-                {
-                  year: "2015",
-                  title: "First Campus",
-                  desc: "We opened our first physical location in the heart of the city, expanding our outreach programs.",
-                },
-                {
-                  year: "2020",
-                  title: "Digital Expansion",
-                  desc: "Launched online services and global community groups to stay connected during challenging times.",
-                },
-                {
-                  year: "2025",
-                  title: "Nationwide Impact",
-                  desc: "Now operating in 5 major cities with over 10,000 active members serving weekly.",
-                },
-              ].map((item, index) => (
-                <motion.div
-                  key={index}
-                  initial={{ opacity: 0, x: index % 2 === 0 ? -50 : 50 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true, margin: "-50px" }}
-                  transition={{ duration: 0.6 }}
-                  className={`flex flex-col md:flex-row items-center justify-between gap-8 ${index % 2 !== 0 ? "md:flex-row-reverse" : ""}`}
-                >
-                  <div className="w-full md:w-5/12 text-center md:text-right">
-                    <div
-                      className={`p-6 bg-white rounded-xl shadow-sm border-l-4 border-[#d4af37] ${index % 2 !== 0 ? "md:text-left md:border-l-0 md:border-r-4" : ""}`}
-                    >
-                      <span className="text-[#d4af37] font-bold text-xl block mb-2">
-                        {item.year}
-                      </span>
-                      <h3 className="text-xl font-bold text-[#1a3c34] mb-2">
-                        {item.title}
-                      </h3>
-                      <p className="text-gray-600">{item.desc}</p>
+              {journeyItems.length === 0 ? (
+                <div className="text-center py-12 rounded-2xl bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 shadow-sm">
+                  <p className="text-gray-500 dark:text-gray-400 italic">Timeline history will be available soon.</p>
+                </div>
+              ) : (
+                journeyItems.map((item, index) => (
+                  <motion.div
+                    key={index}
+                    initial={{ opacity: 0, x: index % 2 === 0 ? -50 : 50 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true, margin: "-50px" }}
+                    transition={{ duration: 0.6, type: "spring", bounce: 0.4 }}
+                    className={`flex flex-col md:flex-row items-center justify-between gap-8 ${index % 2 !== 0 ? "md:flex-row-reverse" : ""}`}
+                  >
+                    <div className="w-full md:w-5/12 text-center md:text-right">
+                      <div
+                        className={`p-8 bg-white dark:bg-gray-800 rounded-2xl shadow-xl shadow-gray-200/50 dark:shadow-none border border-gray-100 dark:border-gray-700 hover:-translate-y-2 transition-transform duration-300 relative group ${index % 2 !== 0 ? "md:text-left" : ""}`}
+                      >
+                        {/* Decorative glow behind card */}
+                        <div className="absolute inset-0 bg-gradient-to-r from-[#d4af37]/0 to-[#d4af37]/0 group-hover:from-[#d4af37]/5 group-hover:to-transparent rounded-2xl transition-colors duration-500 pointer-events-none" />
+                        
+                        <span className="text-[#d4af37] font-extrabold text-2xl block mb-3 drop-shadow-sm">
+                          {item.year}
+                        </span>
+                        <h3 className="text-2xl font-bold text-[#1a3c34] dark:text-gray-100 mb-3 transition-colors">
+                          {item.title}
+                        </h3>
+                        <p className="text-gray-600 dark:text-gray-400 leading-relaxed transition-colors">{item.desc}</p>
+                      </div>
                     </div>
-                  </div>
 
-                  <div className="w-8 h-8 rounded-full bg-[#1a3c34] border-4 border-white shadow-lg z-10 hidden md:block" />
+                    <div className="relative group">
+                      <div className="absolute inset-0 rounded-full bg-[#d4af37] blur-md opacity-20 group-hover:opacity-60 transition-opacity duration-300" />
+                      <div className="w-10 h-10 rounded-full bg-[#1a3c34] dark:bg-[#d4af37] border-4 border-white dark:border-gray-900 shadow-xl z-10 flex items-center justify-center relative hidden md:flex">
+                        <div className="w-2 h-2 rounded-full bg-[#d4af37] dark:bg-[#1a3c34]" />
+                      </div>
+                    </div>
 
-                  <div className="w-full md:w-5/12 hidden md:block" />
-                </motion.div>
-              ))}
+                    <div className="w-full md:w-5/12 hidden md:block" />
+                  </motion.div>
+                ))
+              )}
             </div>
           </div>
         </div>
       </section>
 
       {/* Stats */}
-      <section className="py-20 bg-[#1a3c34] text-white">
+      <section className="py-20 bg-[#1a3c34] dark:bg-[#0c1f1a] transition-colors duration-300 text-white">
         <div className="max-w-7xl mx-auto px-4 md:px-8">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
-            {[
-              { number: "15+", label: "Years Served" },
-              { number: "5", label: "Campuses" },
-              { number: "10k+", label: "Community Members" },
-              { number: "50k+", label: "Lives Impacted" },
-            ].map((stat, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, scale: 0.5 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.1 }}
-              >
-                <div className="text-4xl md:text-5xl font-bold text-[#d4af37] mb-2">
-                  {stat.number}
-                </div>
-                <div className="text-gray-300 font-medium">{stat.label}</div>
-              </motion.div>
-            ))}
+            {stats.length === 0 ? (
+               <div className="col-span-2 md:col-span-4 text-center py-6">
+                 <p className="text-gray-400 italic">Statistics will be updated.</p>
+               </div>
+            ) : (
+              stats.map((stat, i) => (
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, scale: 0.5 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: i * 0.1 }}
+                >
+                  <div className="text-4xl md:text-5xl font-bold text-[#d4af37] mb-2">
+                    {stat.number}
+                  </div>
+                  <div className="text-gray-300 font-medium">{stat.label}</div>
+                </motion.div>
+              ))
+            )}
           </div>
         </div>
       </section>
 
       {/* Founder */}
-      <section className="py-24 bg-white">
+      <section className="py-24 bg-white dark:bg-gray-950 transition-colors duration-300">
         <div className="max-w-7xl mx-auto px-4 md:px-8">
           <div className="flex flex-col md:flex-row items-center gap-12 lg:gap-20">
             <motion.div
@@ -230,10 +253,10 @@ export function AboutUs() {
               <h4 className="text-[#d4af37] font-semibold uppercase tracking-wider">
                 Our Founder
               </h4>
-              <h2 className="text-4xl font-bold text-[#1a3c34]">
+              <h2 className="text-4xl font-bold text-[#1a3c34] dark:text-gray-100 transition-colors">
                 Rev. Dr. John Doe
               </h2>
-              <p className="text-gray-600 text-lg leading-relaxed">
+              <p className="text-gray-600 dark:text-gray-400 text-lg leading-relaxed transition-colors italic">
                 "Our mission isn't just about building churches; it's about
                 building people. When I started Mission For Nation, I dreamt of
                 a place where everyone—regardless of their background—could find
@@ -243,9 +266,8 @@ export function AboutUs() {
                 <img
                   src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/Signature_sample.svg/1200px-Signature_sample.svg.png"
                   alt="Signature"
-                  className="h-12 opacity-60"
+                  className="h-12 opacity-60 dark:invert transition-all"
                 />
-                {/* Note: Using a generic signature placeholder or text if preferred, but this is fine for visual */}
               </div>
             </motion.div>
           </div>

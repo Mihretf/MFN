@@ -25,6 +25,8 @@ import { fetchGallery } from "../services/gallery.service";
 import { churchService } from "../services/app.service";
 import type { GalleryImage } from "../types/gallery.type";
 import type { ChurchResponse } from "../types/church.type";
+import { LoadingState } from "../components/ui/LoadingState";
+import { ErrorState } from "../components/ui/ErrorState";
 
 // Icon mapping for ministries
 const iconMap: { [key: string]: any } = {
@@ -115,16 +117,20 @@ export function BranchDetail() {
 
   if (branchLoading) {
     return (
-      <div className="pt-24 pb-20 min-h-screen flex items-center justify-center">
-        <p className="text-gray-500">Loading location...</p>
+      <div className="pt-24 pb-20 min-h-screen flex items-center justify-center bg-[#f5f5f5]">
+        <LoadingState message="Loading location information..." />
       </div>
     );
   }
 
   if (branchError) {
     return (
-      <div className="pt-24 pb-20 min-h-screen flex items-center justify-center">
-        <p className="text-red-500">{branchError}</p>
+      <div className="pt-24 pb-20 min-h-screen flex items-center justify-center bg-[#f5f5f5] px-4">
+        <ErrorState 
+          title="Location Not Found" 
+          message={branchError} 
+          onRetry={() => window.location.reload()}
+        />
       </div>
     );
   }
@@ -133,7 +139,7 @@ export function BranchDetail() {
     return (
       <div className="pt-24 pb-20 min-h-screen flex items-center justify-center">
         <div className="text-center">
-          <h2 className="text-3xl font-bold text-[#1a3c34] mb-4">
+          <h2 className="text-3xl font-bold text-[#1a3c34] dark:text-[#f0d082] mb-4">
             Branch Not Found
           </h2>
           <Link to="/services" className="text-[#d4af37] hover:underline">
@@ -151,11 +157,11 @@ export function BranchDetail() {
   };
 
   return (
-    <div className="pt-20 pb-20 min-h-screen bg-[#f5f5f5]">
+    <div className="pt-20 pb-20 min-h-screen bg-[#f5f5f5] dark:bg-gray-900 transition-colors duration-300">
       {/* Breadcrumb */}
-      <div className="bg-white border-b">
+      <div className="bg-white dark:bg-gray-800 border-b dark:border-gray-700 transition-colors">
         <div className="max-w-7xl mx-auto px-4 md:px-8 py-4">
-          <div className="flex items-center text-sm text-gray-600">
+          <div className="flex items-center text-sm text-gray-600 dark:text-gray-400 dark:text-gray-300">
             <Link to="/" className="hover:text-[#d4af37] transition-colors">
               Home
             </Link>
@@ -167,7 +173,7 @@ export function BranchDetail() {
               Services
             </Link>
             <ChevronRight className="w-4 h-4 mx-2" />
-            <span className="text-[#1a3c34] font-semibold">{branch.name}</span>
+            <span className="text-[#1a3c34] dark:text-[#f0d082] dark:text-[#f0d082] font-semibold transition-colors">{branch.name}</span>
           </div>
         </div>
       </div>
@@ -212,11 +218,11 @@ export function BranchDetail() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
-              className="bg-white rounded-xl shadow-md p-8"
+              className="bg-white dark:bg-gray-800 rounded-xl shadow-md border border-gray-100 dark:border-gray-700 p-8 transition-colors duration-300"
             >
               <div className="flex items-center mb-6">
                 <Clock className="w-6 h-6 text-[#d4af37] mr-3" />
-                <h2 className="text-3xl font-bold text-[#1a3c34]">
+                <h2 className="text-3xl font-bold text-[#1a3c34] dark:text-[#f0d082]">
                   Service Times
                 </h2>
               </div>
@@ -226,10 +232,10 @@ export function BranchDetail() {
                     key={index}
                     className="border border-gray-200 rounded-lg p-4 hover:border-[#d4af37] transition-colors"
                   >
-                    <p className="font-semibold text-[#1a3c34] mb-1">
+                    <p className="font-semibold text-[#1a3c34] dark:text-[#f0d082] mb-1">
                       {service.type}
                     </p>
-                    <p className="text-gray-600">
+                    <p className="text-gray-600 dark:text-gray-400">
                       {service.day} at {service.time}
                     </p>
                   </div>
@@ -243,11 +249,11 @@ export function BranchDetail() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3 }}
-              className="bg-white rounded-xl shadow-md p-8"
+              className="bg-white dark:bg-gray-800 rounded-xl shadow-md border border-gray-100 dark:border-gray-700 p-8 transition-colors duration-300"
             >
               <div className="flex items-center mb-6">
                 <AlertCircle className="w-6 h-6 text-[#d4af37] mr-3" />
-                <h2 className="text-3xl font-bold text-[#1a3c34]">
+                <h2 className="text-3xl font-bold text-[#1a3c34] dark:text-[#f0d082]">
                   Announcements
                 </h2>
               </div>
@@ -255,17 +261,17 @@ export function BranchDetail() {
                 {branch.announcements.map((announcement) => (
                   <div
                     key={announcement.id}
-                    className={`border-l-4 p-4 rounded-r-lg ${priorityColors[announcement.priority]}`}
+                    className={`border-l-4 p-4 rounded-r-lg ${priorityColors[announcement.priority as keyof typeof priorityColors] || priorityColors.low}`}
                   >
                     <div className="flex items-start justify-between mb-2">
-                      <h3 className="font-semibold text-[#1a3c34]">
+                      <h3 className="font-semibold text-[#1a3c34] dark:text-[#f0d082]">
                         {announcement.title}
                       </h3>
                       <span className="text-xs text-gray-500 whitespace-nowrap ml-4">
                         {announcement.date}
                       </span>
                     </div>
-                    <p className="text-gray-700 text-sm">
+                    <p className="text-gray-700 dark:text-gray-300 text-sm">
                       {announcement.content}
                     </p>
                   </div>
@@ -279,9 +285,9 @@ export function BranchDetail() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.4 }}
-              className="bg-white rounded-xl shadow-md p-8"
+              className="bg-white dark:bg-gray-800 rounded-xl shadow-md border border-gray-100 dark:border-gray-700 p-8 transition-colors duration-300"
             >
-              <h2 className="text-3xl font-bold text-[#1a3c34] mb-6">
+              <h2 className="text-3xl font-bold text-[#1a3c34] dark:text-[#f0d082] mb-6">
                 Leadership
               </h2>
               <div className="flex flex-col md:flex-row gap-6">
@@ -293,13 +299,13 @@ export function BranchDetail() {
                   />
                 </div>
                 <div className="flex-1">
-                  <h3 className="text-2xl font-bold text-[#1a3c34] mb-1">
+                  <h3 className="text-2xl font-bold text-[#1a3c34] dark:text-[#f0d082] mb-1">
                     {branch.pastor.name}
                   </h3>
                   <p className="text-[#d4af37] font-semibold mb-4">
                     {branch.pastor.role}
                   </p>
-                  <p className="text-gray-700 leading-relaxed">
+                  <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
                     {branch.pastor.bio}
                   </p>
                 </div>
@@ -312,17 +318,17 @@ export function BranchDetail() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.5 }}
-              className="bg-white rounded-xl shadow-md p-8"
+              className="bg-white dark:bg-gray-800 rounded-xl shadow-md border border-gray-100 dark:border-gray-700 p-8 transition-colors duration-300"
             >
               <div className="flex items-center mb-6">
                 <Calendar className="w-6 h-6 text-[#d4af37] mr-3" />
-                <h2 className="text-3xl font-bold text-[#1a3c34]">
+                <h2 className="text-3xl font-bold text-[#1a3c34] dark:text-[#f0d082]">
                   Regular Events
                 </h2>
               </div>
               <div className="grid md:grid-cols-2 gap-6">
-                {branch.events.map((event) => (
-                  <EventCard key={event.id} event={event} />
+                {branch.events.map((event: any) => (
+                  <EventCard key={event.id || event.title} event={event} />
                 ))}
               </div>
             </motion.section>
@@ -333,9 +339,9 @@ export function BranchDetail() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.6 }}
-              className="bg-white rounded-xl shadow-md p-8"
+              className="bg-white dark:bg-gray-800 rounded-xl shadow-md border border-gray-100 dark:border-gray-700 p-8 transition-colors duration-300"
             >
-              <h2 className="text-3xl font-bold text-[#1a3c34] mb-6">
+              <h2 className="text-3xl font-bold text-[#1a3c34] dark:text-[#f0d082] mb-6">
                 Get Involved
               </h2>
               <div className="grid md:grid-cols-2 gap-6">
@@ -351,10 +357,10 @@ export function BranchDetail() {
                           <IconComponent className="w-6 h-6 text-[#d4af37]" />
                         </div>
                         <div>
-                          <h3 className="font-semibold text-[#1a3c34] mb-2">
+                          <h3 className="font-semibold text-[#1a3c34] dark:text-[#f0d082] mb-2">
                             {ministry.name}
                           </h3>
-                          <p className="text-gray-600 text-sm">
+                          <p className="text-gray-600 dark:text-gray-400 text-sm">
                             {ministry.description}
                           </p>
                         </div>
@@ -371,24 +377,24 @@ export function BranchDetail() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.7 }}
-              className="bg-white rounded-xl shadow-md p-8"
+              className="bg-white dark:bg-gray-800 rounded-xl shadow-md border border-gray-100 dark:border-gray-700 p-8 transition-colors duration-300"
             >
               <div className="flex items-center mb-6">
                 <MapPin className="w-6 h-6 text-[#d4af37] mr-3" />
-                <h2 className="text-3xl font-bold text-[#1a3c34]">
+                <h2 className="text-3xl font-bold text-[#1a3c34] dark:text-[#f0d082]">
                   Location & Contact
                 </h2>
               </div>
               <div className="grid md:grid-cols-2 gap-8">
                 <div className="space-y-4">
                   <div>
-                    <h3 className="font-semibold text-[#1a3c34] mb-2">
+                    <h3 className="font-semibold text-[#1a3c34] dark:text-[#f0d082] mb-2">
                       Address
                     </h3>
-                    <p className="text-gray-700">{branch.address}</p>
+                    <p className="text-gray-700 dark:text-gray-300">{branch.address}</p>
                   </div>
                   <div>
-                    <h3 className="font-semibold text-[#1a3c34] mb-2">Phone</h3>
+                    <h3 className="font-semibold text-[#1a3c34] dark:text-[#f0d082] mb-2">Phone</h3>
                     <a
                       href={`tel:${branch.phone}`}
                       className="text-[#d4af37] hover:underline"
@@ -397,7 +403,7 @@ export function BranchDetail() {
                     </a>
                   </div>
                   <div>
-                    <h3 className="font-semibold text-[#1a3c34] mb-2">Email</h3>
+                    <h3 className="font-semibold text-[#1a3c34] dark:text-[#f0d082] mb-2">Email</h3>
                     <a
                       href={`mailto:${branch.email}`}
                       className="text-[#d4af37] hover:underline"
@@ -436,21 +442,19 @@ export function BranchDetail() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.8 }}
-              className="bg-white rounded-xl shadow-md p-8"
+              className="bg-white dark:bg-gray-800 rounded-xl shadow-md border border-gray-100 dark:border-gray-700 p-8 transition-colors duration-300"
             >
-              <h2 className="text-3xl font-bold text-[#1a3c34] mb-6">
+              <h2 className="text-3xl font-bold text-[#1a3c34] dark:text-[#f0d082] mb-6">
                 Gallery
               </h2>
-              {galleryLoading && (
-                <div className="py-8 text-center">
-                  <p className="text-gray-500">Loading gallery…</p>
-                </div>
-              )}
+              {galleryLoading && <LoadingState message="Loading gallery..." className="py-8" />}
 
               {galleryError && (
-                <div className="py-8 text-center">
-                  <p className="text-red-500">{galleryError}</p>
-                </div>
+                <ErrorState 
+                  message={galleryError} 
+                  className="mb-8"
+                  onRetry={() => window.location.reload()}
+                />
               )}
 
               {!galleryLoading && !galleryError && (
@@ -485,15 +489,15 @@ export function BranchDetail() {
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.3 }}
-                className="bg-white rounded-xl shadow-md p-6"
+                className="bg-white dark:bg-gray-800 rounded-xl shadow-md border border-gray-100 dark:border-gray-700 p-6 transition-colors duration-300"
               >
-                <h3 className="font-bold text-[#1a3c34] mb-4 text-lg">
+                <h3 className="font-bold text-[#1a3c34] dark:text-[#f0d082] mb-4 text-lg">
                   Quick Info
                 </h3>
                 <div className="space-y-3 text-sm">
                   <div className="flex items-start space-x-3">
                     <MapPin className="w-4 h-4 text-[#d4af37] mt-0.5 flex-shrink-0" />
-                    <span className="text-gray-700">{branch.address}</span>
+                    <span className="text-gray-700 dark:text-gray-300">{branch.address}</span>
                   </div>
                   <div className="flex items-center space-x-3">
                     <Phone className="w-4 h-4 text-[#d4af37] flex-shrink-0" />
@@ -521,9 +525,9 @@ export function BranchDetail() {
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.4 }}
-                className="bg-white rounded-xl shadow-md p-6"
+                className="bg-white dark:bg-gray-800 rounded-xl shadow-md border border-gray-100 dark:border-gray-700 p-6 transition-colors duration-300"
               >
-                <h3 className="font-bold text-[#1a3c34] mb-4 text-lg">
+                <h3 className="font-bold text-[#1a3c34] dark:text-[#f0d082] mb-4 text-lg">
                   Quick Navigation
                 </h3>
                 <nav className="space-y-2 text-sm">
@@ -539,7 +543,7 @@ export function BranchDetail() {
                     <a
                       key={link.id}
                       href={`#${link.id}`}
-                      className="block text-gray-700 hover:text-[#d4af37] hover:translate-x-1 transition-all py-1"
+                      className="block text-gray-700 dark:text-gray-300 hover:text-[#d4af37] hover:translate-x-1 transition-all py-1"
                     >
                       {link.label}
                     </a>

@@ -1,50 +1,102 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Link, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "motion/react";
-import { Menu, X } from "lucide-react";
+import { Menu, X, Sun, Moon } from "lucide-react";
+import { useTheme } from "next-themes";
+import { IconButton } from "@mui/material";
 
 export function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+  const { theme, setTheme } = useTheme();
+  const location = useLocation();
+
+  const isHomePage = location.pathname === "/";
+  // The header should be transparent if we are on the homepage and haven't scrolled past the hero + quote (~700px)
+  const transparentMode = isHomePage && !isScrolled;
+
+  useEffect(() => {
+    const handleScroll = () => {
+      // 800px roughly covers the Hero and Quote sections 
+      setIsScrolled(window.scrollY > 800);
+    };
+
+    if (isHomePage) {
+      window.addEventListener("scroll", handleScroll);
+      handleScroll(); // initialize
+      return () => window.removeEventListener("scroll", handleScroll);
+    } else {
+      setIsScrolled(true); // always solid on other pages
+    }
+  }, [isHomePage]);
 
   const toggleMobileMenu = () => setIsMobileMenuOpen(!isMobileMenuOpen);
 
+  const headerStyles = transparentMode
+    ? "bg-transparent text-white border-transparent shadow-none"
+    : "bg-white/80 dark:bg-gray-900/80 backdrop-blur-lg text-gray-900 dark:text-white shadow-sm border-b border-gray-200 dark:border-gray-800";
+
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-[#1a3c34]/80 backdrop-blur-md text-[#f5f5f5] shadow-lg border-b border-[#f5f5f5]/10">
+    <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ease-in-out ${headerStyles}`}>
       <div className="max-w-7xl mx-auto px-4 md:px-8">
         <div className="flex items-center justify-between h-20">
           {/* Logo */}
-          <Link to="/" className="flex items-center space-x-2 z-50 group">
+          <Link to="/" className="flex items-center space-x-3 z-50 group">
             <motion.div
-              whileHover={{ rotate: 360 }}
-              transition={{ duration: 0.5 }}
-              className="w-10 h-10 bg-gradient-to-br from-[#d4af37] to-[#f0d082] rounded-sm flex items-center justify-center shadow-md"
+              whileHover={{ rotate: 180 }}
+              transition={{ type: "spring", stiffness: 200, damping: 10 }}
+              className="w-10 h-10 bg-gradient-to-tr from-[#d4af37] to-[#f0d082] rounded-xl flex items-center justify-center shadow-lg group-hover:shadow-xl transition-all"
             >
-              <span className="text-[#1a3c34] font-bold text-xl">M</span>
+              <span className="text-gray-900 font-extrabold text-xl">M</span>
             </motion.div>
-            <span className="font-bold text-xl tracking-tight group-hover:text-[#f0d082] transition-colors">
+            <span
+              className={`font-extrabold text-xl tracking-tight bg-clip-text text-transparent group-hover:from-[#d4af37] group-hover:to-[#f0d082] transition-colors
+              ${transparentMode ? "bg-gradient-to-r from-white to-gray-200" : "bg-gradient-to-r from-gray-900 to-gray-600 dark:from-white dark:to-gray-300"}`}
+            >
               MISSION FOR NATION
             </span>
           </Link>
 
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center space-x-1">
-            <NavLink to="/about">About Us</NavLink>
-            <NavLink to="/services">Services</NavLink>
-            <NavLink to="/gallery">Gallery</NavLink>
+          <nav className="hidden md:flex items-center space-x-2">
+            <NavLink to="/" transparentMode={transparentMode}>Home</NavLink>
+            <NavLink to="/about" transparentMode={transparentMode}>About Us</NavLink>
+            <NavLink to="/services" transparentMode={transparentMode}>Services</NavLink>
+            <NavLink to="/gallery" transparentMode={transparentMode}>Gallery</NavLink>
+            <div className={`pl-4 ml-6 border-l ${transparentMode ? 'border-white/20' : 'border-gray-200 dark:border-gray-700'} transition-colors`}>
+              <IconButton 
+                onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+                sx={{ 
+                  color: transparentMode ? 'white' : 'text.primary', 
+                  '&:hover': { color: '#d4af37', transform: 'scale(1.1)' },
+                  transition: 'all 0.2s ease-in-out'
+                }}
+              >
+                {theme === 'dark' ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+              </IconButton>
+            </div>
           </nav>
 
-          {/* Mobile Menu Button */}
-          <motion.button
-            whileTap={{ scale: 0.9 }}
-            onClick={toggleMobileMenu}
-            className="md:hidden text-[#f5f5f5] hover:text-[#d4af37] transition-colors"
-          >
-            {isMobileMenuOpen ? (
-              <X className="w-6 h-6" />
-            ) : (
-              <Menu className="w-6 h-6" />
-            )}
-          </motion.button>
+          {/* Mobile Menu Settings */}
+          <div className="md:hidden flex items-center space-x-3">
+            <IconButton 
+              onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+              sx={{ color: transparentMode ? 'white' : 'text.primary' }}
+            >
+              {theme === 'dark' ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+            </IconButton>
+            <motion.button
+              whileTap={{ scale: 0.9 }}
+              onClick={toggleMobileMenu}
+              className={`${transparentMode ? 'text-white' : 'text-gray-900 dark:text-white'} hover:text-[#d4af37] dark:hover:text-[#d4af37] transition-colors p-2 rounded-full focus:outline-none focus:ring-2 focus:ring-[#d4af37]`}
+            >
+              {isMobileMenuOpen ? (
+                <X className="w-6 h-6" />
+              ) : (
+                <Menu className="w-6 h-6" />
+              )}
+            </motion.button>
+          </div>
         </div>
       </div>
 
@@ -55,9 +107,15 @@ export function Header() {
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
-            className="md:hidden bg-[#1a3c34]/95 backdrop-blur-md border-t border-[#f5f5f5]/10 overflow-hidden"
+            className="md:hidden bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800 overflow-hidden shadow-xl"
           >
-            <div className="flex flex-col p-4 space-y-4">
+            <div className="flex flex-col p-6 space-y-4">
+              <MobileNavLink
+                to="/"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                Home
+              </MobileNavLink>
               <MobileNavLink
                 to="/about"
                 onClick={() => setIsMobileMenuOpen(false)}
@@ -87,25 +145,24 @@ export function Header() {
 // Cool Navigation Link Component
 function NavLink({
   to,
+  transparentMode,
   children,
-}: Readonly<{ to: string; children: React.ReactNode }>) {
+}: Readonly<{ to: string; transparentMode?: boolean; children: React.ReactNode }>) {
   return (
-    <Link to={to} className="relative group px-4 py-2">
-      <span className="relative z-10 text-[#f5f5f5] group-hover:text-[#d4af37] transition-colors font-medium">
+    <Link to={to} className="relative group px-4 py-2 rounded-lg">
+      <span className={`relative z-10 transition-colors font-semibold group-hover:text-[#1a3c34] dark:group-hover:text-[#d4af37] ${transparentMode ? 'text-white/90 hover:text-white' : 'text-gray-600 dark:text-gray-300'}`}>
         {children}
       </span>
-      {/* Animated underline */}
+      {/* Animated active pill */}
       <motion.div
-        className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-[#d4af37] to-[#f0d082]"
-        initial={{ scaleX: 0 }}
-        whileHover={{ scaleX: 1 }}
-        transition={{ duration: 0.3 }}
+        className={`absolute inset-0 rounded-lg scale-0 group-hover:scale-100 opacity-0 group-hover:opacity-100 ${transparentMode ? 'bg-white/10' : 'bg-gray-100 dark:bg-gray-800'}`}
+        transition={{ type: "spring", stiffness: 300, damping: 20 }}
       />
-      {/* Hover background */}
+      {/* Underline accent */}
       <motion.div
-        className="absolute inset-0 bg-[#f5f5f5]/10 rounded-md -z-10"
-        initial={{ opacity: 0 }}
-        whileHover={{ opacity: 1 }}
+        className="absolute bottom-1 left-1/2 -translate-x-1/2 h-1 rounded-full bg-gradient-to-r from-[#d4af37] to-[#f0d082]"
+        initial={{ width: 0 }}
+        whileHover={{ width: "60%" }}
         transition={{ duration: 0.2 }}
       />
     </Link>
@@ -127,10 +184,10 @@ function MobileNavLink({
       <Link
         to={to}
         onClick={onClick}
-        className="text-[#f5f5f5] text-lg font-medium hover:text-[#d4af37] transition-colors flex items-center space-x-2"
+        className="text-gray-700 dark:text-gray-200 text-lg font-semibold hover:text-[#d4af37] dark:hover:text-[#f0d082] transition-colors flex items-center space-x-3 p-2 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800"
       >
         <motion.div
-          className="w-1 h-6 bg-gradient-to-b from-[#d4af37] to-[#f0d082] rounded-full"
+          className="w-1.5 h-6 bg-gradient-to-b from-[#d4af37] to-[#f0d082] rounded-full shadow-sm"
           initial={{ scaleY: 0 }}
           animate={{ scaleY: 1 }}
           transition={{ duration: 0.3 }}
