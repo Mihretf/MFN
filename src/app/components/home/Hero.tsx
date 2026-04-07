@@ -1,6 +1,8 @@
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 export default function Hero() {
+  const { t } = useTranslation();
   return (
     <section className="relative h-screen flex items-center justify-center overflow-hidden">
       {/* Background Image with Overlay */}
@@ -10,32 +12,31 @@ export default function Hero() {
           alt="Mission For Nation Building"
           className="w-full h-full object-cover"
         />
-        <div className="absolute inset-0 bg-gradient-to-r from-[#1a3c34]/90 to-black/60 mix-blend-multiply" />
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#1a3c34]/80 to-[#1a3c34] dark:to-gray-900 transition-colors duration-300" />
+        <div className="absolute inset-0 bg-gradient-to-r from-[#1a3c34]/90 dark:from-gray-900/90 to-black/60 dark:to-black/80 mix-blend-multiply transition-colors duration-300" />
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#1a3c34]/80 dark:via-gray-900/80 to-[#1a3c34] dark:to-gray-900 transition-colors duration-300" />
       </div>
 
       {/* Content */}
       <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <h1 className="text-5xl md:text-7xl text-white mb-6 animate-fade-in">
-          Welcome to Our Church
+          {t("hero.welcome")}
         </h1>
         <p className="text-xl md:text-2xl text-gray-200 mb-8 max-w-3xl mx-auto">
-          A community of faith, hope, and love. Join us as we worship together
-          and grow in Christ.
+          {t("hero.subtitle")}
         </p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <Link
             to="/services"
             className="px-8 py-4 bg-[#d4af37] text-gray-900 hover:text-white dark:hover:text-gray-900 font-bold rounded-lg hover:bg-[#f0d082] transition-colors shadow-lg"
           >
-            Join Us This Sunday
+            {t("hero.joinUs")}
           </Link>
 
           <Link
             to="/live"
             className="px-8 py-4 bg-white/10 backdrop-blur-md text-white font-semibold border border-white/30 rounded-lg hover:bg-white/20 transition-colors"
           >
-            Watch Live
+            {t("hero.watchLive")}
           </Link>
         </div>
       </div>

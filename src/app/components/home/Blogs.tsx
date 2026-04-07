@@ -1,10 +1,12 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 import { blogService } from "../../services/app.service";
 import type { BlogPost } from "../../types/blog.type";
 import { LoadingState } from "../ui/LoadingState";
 import { ErrorState } from "../ui/ErrorState";
 
 export default function Highlights() {
+  const { t } = useTranslation();
   const [items, setItems] = React.useState<BlogPost[]>([]);
   const [loading, setLoading] = React.useState(false);
   const [error, setError] = React.useState<string | null>(null);
@@ -113,10 +115,10 @@ export default function Highlights() {
       <div className="max-w-6xl mx-auto px-5 sm:px-6 lg:px-8">
         <div className="text-center mb-10 md:mb-14">
           <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-gray-100 tracking-tight transition-colors">
-            Highlights
+            {t("blogs.highlights")}
           </h2>
           <p className="mt-3 text-lg sm:text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto transition-colors">
-            Key announcements, quotes, offers and community moments
+            {t("blogs.highlightsDesc")}
           </p>
         </div>
 
@@ -202,7 +204,7 @@ export default function Highlights() {
             {/* Fallback when no content at all */}
             {!hasText && !hasImage && !hasVideo && (
               <div className="p-12 text-center text-gray-400 italic">
-                (No content available)
+                {t("blogs.noContent")}
               </div>
             )}
           </div>

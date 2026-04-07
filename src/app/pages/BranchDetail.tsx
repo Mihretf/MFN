@@ -1,5 +1,6 @@
 import React from "react";
 import { useParams, Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { motion } from "motion/react";
 import {
   MapPin,
@@ -42,6 +43,7 @@ const iconMap: { [key: string]: any } = {
 
 export function BranchDetail() {
   const { branchId } = useParams<{ branchId: string }>();
+  const { t } = useTranslation();
 
   // use mock entry as fallback while we request live church data
   const local = branches.find((b) => b.id === branchId);
@@ -140,10 +142,10 @@ export function BranchDetail() {
       <div className="pt-24 pb-20 min-h-screen flex items-center justify-center">
         <div className="text-center">
           <h2 className="text-3xl font-bold text-[#1a3c34] dark:text-[#f0d082] mb-4">
-            Branch Not Found
+            {t("branchDetail.branchNotFound")}
           </h2>
           <Link to="/services" className="text-[#d4af37] hover:underline">
-            ← Back to All Locations
+            {t("branchDetail.backToAll")}
           </Link>
         </div>
       </div>
@@ -223,7 +225,7 @@ export function BranchDetail() {
               <div className="flex items-center mb-6">
                 <Clock className="w-6 h-6 text-[#d4af37] mr-3" />
                 <h2 className="text-3xl font-bold text-[#1a3c34] dark:text-[#f0d082]">
-                  Service Times
+                  {t("branchDetail.serviceTimes")}
                 </h2>
               </div>
               <div className="grid md:grid-cols-2 gap-4">
@@ -254,7 +256,7 @@ export function BranchDetail() {
               <div className="flex items-center mb-6">
                 <AlertCircle className="w-6 h-6 text-[#d4af37] mr-3" />
                 <h2 className="text-3xl font-bold text-[#1a3c34] dark:text-[#f0d082]">
-                  Announcements
+                  {t("branchDetail.announcements")}
                 </h2>
               </div>
               <div className="space-y-4">
@@ -288,7 +290,7 @@ export function BranchDetail() {
               className="bg-white dark:bg-gray-800 rounded-xl shadow-md border border-gray-100 dark:border-gray-700 p-8 transition-colors duration-300"
             >
               <h2 className="text-3xl font-bold text-[#1a3c34] dark:text-[#f0d082] mb-6">
-                Leadership
+                {t("branchDetail.leadership")}
               </h2>
               <div className="flex flex-col md:flex-row gap-6">
                 <div className="md:w-48 h-48 rounded-lg overflow-hidden flex-shrink-0">
@@ -323,7 +325,7 @@ export function BranchDetail() {
               <div className="flex items-center mb-6">
                 <Calendar className="w-6 h-6 text-[#d4af37] mr-3" />
                 <h2 className="text-3xl font-bold text-[#1a3c34] dark:text-[#f0d082]">
-                  Regular Events
+                  {t("branchDetail.regularEvents")}
                 </h2>
               </div>
               <div className="grid md:grid-cols-2 gap-6">
@@ -342,7 +344,7 @@ export function BranchDetail() {
               className="bg-white dark:bg-gray-800 rounded-xl shadow-md border border-gray-100 dark:border-gray-700 p-8 transition-colors duration-300"
             >
               <h2 className="text-3xl font-bold text-[#1a3c34] dark:text-[#f0d082] mb-6">
-                Get Involved
+                {t("branchDetail.getInvolved")}
               </h2>
               <div className="grid md:grid-cols-2 gap-6">
                 {branch.ministries.map((ministry) => {
@@ -382,19 +384,19 @@ export function BranchDetail() {
               <div className="flex items-center mb-6">
                 <MapPin className="w-6 h-6 text-[#d4af37] mr-3" />
                 <h2 className="text-3xl font-bold text-[#1a3c34] dark:text-[#f0d082]">
-                  Location & Contact
+                  {t("branchDetail.locationContact")}
                 </h2>
               </div>
               <div className="grid md:grid-cols-2 gap-8">
                 <div className="space-y-4">
                   <div>
                     <h3 className="font-semibold text-[#1a3c34] dark:text-[#f0d082] mb-2">
-                      Address
+                      {t("branchDetail.address")}
                     </h3>
                     <p className="text-gray-700 dark:text-gray-300">{branch.address}</p>
                   </div>
                   <div>
-                    <h3 className="font-semibold text-[#1a3c34] dark:text-[#f0d082] mb-2">Phone</h3>
+                    <h3 className="font-semibold text-[#1a3c34] dark:text-[#f0d082] mb-2">{t("branchDetail.phone")}</h3>
                     <a
                       href={`tel:${branch.phone}`}
                       className="text-[#d4af37] hover:underline"
@@ -403,7 +405,7 @@ export function BranchDetail() {
                     </a>
                   </div>
                   <div>
-                    <h3 className="font-semibold text-[#1a3c34] dark:text-[#f0d082] mb-2">Email</h3>
+                    <h3 className="font-semibold text-[#1a3c34] dark:text-[#f0d082] mb-2">{t("branchDetail.email")}</h3>
                     <a
                       href={`mailto:${branch.email}`}
                       className="text-[#d4af37] hover:underline"
@@ -418,7 +420,7 @@ export function BranchDetail() {
                     className="inline-flex items-center px-6 py-3 bg-[#d4af37] text-white font-semibold rounded-lg hover:bg-[#b8941f] transition-colors"
                   >
                     <Navigation className="w-5 h-5 mr-2" />
-                    Get Directions
+                    {t("branchDetail.getDirections")}
                   </a>
                 </div>
                 <div className="h-64 rounded-lg overflow-hidden">
@@ -445,7 +447,7 @@ export function BranchDetail() {
               className="bg-white dark:bg-gray-800 rounded-xl shadow-md border border-gray-100 dark:border-gray-700 p-8 transition-colors duration-300"
             >
               <h2 className="text-3xl font-bold text-[#1a3c34] dark:text-[#f0d082] mb-6">
-                Gallery
+                {t("branchDetail.gallery")}
               </h2>
               {galleryLoading && <LoadingState message="Loading gallery..." className="py-8" />}
 
@@ -492,7 +494,7 @@ export function BranchDetail() {
                 className="bg-white dark:bg-gray-800 rounded-xl shadow-md border border-gray-100 dark:border-gray-700 p-6 transition-colors duration-300"
               >
                 <h3 className="font-bold text-[#1a3c34] dark:text-[#f0d082] mb-4 text-lg">
-                  Quick Info
+                  {t("branchDetail.quickInfo")}
                 </h3>
                 <div className="space-y-3 text-sm">
                   <div className="flex items-start space-x-3">
@@ -528,17 +530,17 @@ export function BranchDetail() {
                 className="bg-white dark:bg-gray-800 rounded-xl shadow-md border border-gray-100 dark:border-gray-700 p-6 transition-colors duration-300"
               >
                 <h3 className="font-bold text-[#1a3c34] dark:text-[#f0d082] mb-4 text-lg">
-                  Quick Navigation
+                  {t("branchDetail.quickNavigation")}
                 </h3>
                 <nav className="space-y-2 text-sm">
                   {[
-                    { id: "service-times", label: "Service Times" },
-                    { id: "announcements", label: "Announcements" },
-                    { id: "leadership", label: "Leadership" },
-                    { id: "events", label: "Events" },
-                    { id: "ministries", label: "Ministries" },
-                    { id: "location", label: "Location" },
-                    { id: "gallery", label: "Gallery" },
+                    { id: "service-times", label: t("branchDetail.serviceTimes") },
+                    { id: "announcements", label: t("branchDetail.announcements") },
+                    { id: "leadership", label: t("branchDetail.leadership") },
+                    { id: "events", label: t("branchDetail.regularEvents") },
+                    { id: "ministries", label: t("branchDetail.getInvolved") },
+                    { id: "location", label: t("branchDetail.locationContact") },
+                    { id: "gallery", label: t("branchDetail.gallery") },
                   ].map((link) => (
                     <a
                       key={link.id}
@@ -558,9 +560,9 @@ export function BranchDetail() {
                 transition={{ delay: 0.5 }}
                 className="bg-gradient-to-br from-[#1a3c34] to-[#0f2620] rounded-xl shadow-md p-6 text-white"
               >
-                <h3 className="font-bold mb-2 text-xl">Plan Your Visit</h3>
+                <h3 className="font-bold mb-2 text-xl">{t("branchDetail.planVisit")}</h3>
                 <p className="text-white/80 text-sm mb-4">
-                  We'd love to have you join us! Everyone is welcome.
+                  {t("branchDetail.planVisitDesc")}
                 </p>
                 <a
                   href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(branch.address)}`}
@@ -568,7 +570,7 @@ export function BranchDetail() {
                   rel="noopener noreferrer"
                   className="block text-center px-6 py-3 bg-[#d4af37] text-white font-semibold rounded-lg hover:bg-[#b8941f] transition-colors"
                 >
-                  Get Directions
+                  {t("branchDetail.getDirections")}
                 </a>
               </motion.div>
             </div>

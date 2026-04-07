@@ -1,8 +1,10 @@
 import React from 'react';
 import { Facebook, Twitter, Instagram, Youtube, Mail, MapPin, Phone } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { useTranslation } from "react-i18next";
 
 export function Footer() {
+  const { t } = useTranslation();
   return (
     <footer className="bg-white dark:bg-gray-950 border-t border-gray-200 dark:border-gray-800 transition-colors duration-300 pt-16 pb-8">
       <div className="max-w-7xl mx-auto px-4 md:px-8">
@@ -18,24 +20,24 @@ export function Footer() {
               </span>
             </div>
             <p className="text-gray-600 dark:text-gray-400 text-sm leading-relaxed transition-colors">
-              Serving our community with faith, hope, and love. Join us in our mission to make a difference across the nation.
+              {t("footer.description")}
             </p>
           </div>
 
           {/* Quick Links */}
           <div>
-            <h4 className="text-gray-900 dark:text-white font-bold mb-6 uppercase tracking-wider text-sm">Quick Links</h4>
+            <h4 className="text-gray-900 dark:text-white font-bold mb-6 uppercase tracking-wider text-sm">{t("footer.quickLinks")}</h4>
             <ul className="space-y-3">
-              <li><Link to="/" className="text-gray-500 dark:text-gray-400 hover:text-[#d4af37] dark:hover:text-[#f0d082] transition-colors font-medium">Home</Link></li>
-              <li><Link to="/about" className="text-gray-500 dark:text-gray-400 hover:text-[#d4af37] dark:hover:text-[#f0d082] transition-colors font-medium">About Us</Link></li>
-              <li><Link to="/services" className="text-gray-500 dark:text-gray-400 hover:text-[#d4af37] dark:hover:text-[#f0d082] transition-colors font-medium">Services</Link></li>
-              <li><Link to="/give" className="text-gray-500 dark:text-gray-400 hover:text-[#d4af37] dark:hover:text-[#f0d082] transition-colors font-medium">Give</Link></li>
+              <li><Link to="/" className="text-gray-500 dark:text-gray-400 hover:text-[#d4af37] dark:hover:text-[#f0d082] transition-colors font-medium">{t("nav.home")}</Link></li>
+              <li><Link to="/about" className="text-gray-500 dark:text-gray-400 hover:text-[#d4af37] dark:hover:text-[#f0d082] transition-colors font-medium">{t("nav.about")}</Link></li>
+              <li><Link to="/services" className="text-gray-500 dark:text-gray-400 hover:text-[#d4af37] dark:hover:text-[#f0d082] transition-colors font-medium">{t("nav.services")}</Link></li>
+              <li><Link to="/gallery" className="text-gray-500 dark:text-gray-400 hover:text-[#d4af37] dark:hover:text-[#f0d082] transition-colors font-medium">{t("nav.gallery")}</Link></li>
             </ul>
           </div>
 
           {/* Contact */}
           <div>
-            <h4 className="text-gray-900 dark:text-white font-bold mb-6 uppercase tracking-wider text-sm">Contact Us</h4>
+            <h4 className="text-gray-900 dark:text-white font-bold mb-6 uppercase tracking-wider text-sm">{t("services.contact")}</h4>
             <ul className="space-y-4">
               <li className="flex items-start gap-3 text-gray-500 dark:text-gray-400 transition-colors">
                 <MapPin className="w-5 h-5 text-[#d4af37] flex-shrink-0" />
@@ -54,7 +56,7 @@ export function Footer() {
 
           {/* Social */}
           <div>
-            <h4 className="text-gray-900 dark:text-white font-bold mb-6 uppercase tracking-wider text-sm">Follow Us</h4>
+            <h4 className="text-gray-900 dark:text-white font-bold mb-6 uppercase tracking-wider text-sm">{t("footer.connect")}</h4>
             <div className="flex gap-4">
               <a href="#" className="w-10 h-10 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center text-gray-600 dark:text-gray-400 hover:bg-[#d4af37] hover:text-white dark:hover:bg-[#d4af37] dark:hover:text-gray-900 transition-all shadow-sm">
                 <Facebook className="w-5 h-5" />
@@ -70,7 +72,7 @@ export function Footer() {
         </div>
 
         <div className="border-t border-gray-200 dark:border-gray-800 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-gray-500 dark:text-gray-400 transition-colors">
-          <p className="font-medium">&copy; {new Date().getFullYear()} Mission For Nation. All rights reserved.</p>
+          <p className="font-medium">{t("footer.copyright")}</p>
           <div className="flex gap-6 font-medium">
             <a href="#" className="hover:text-[#d4af37] transition-colors">Privacy Policy</a>
             <a href="#" className="hover:text-[#d4af37] transition-colors">Terms of Service</a>

@@ -1,33 +1,36 @@
 import { Users, Heart, Globe, BookOpen } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 export default function Impact() {
+  const { t } = useTranslation();
+  
   const stats = [
     {
       id: 1,
       icon: Users,
-      value: "15,000+",
-      label: "Church Members",
+      value: "10,000+",
+      label: t("impact.churchMembers"),
       color: "blue",
     },
     {
       id: 2,
       icon: Heart,
-      value: "500+",
-      label: "Families Served",
+      value: "50,000+",
+      label: t("impact.familiesServed"),
       color: "red",
     },
     {
       id: 3,
       icon: Globe,
-      value: "25",
-      label: "Countries Reached",
+      value: "15+",
+      label: t("impact.countriesReached"),
       color: "green",
     },
     {
       id: 4,
       icon: BookOpen,
-      value: "1,200+",
-      label: "Bible Studies",
+      value: "500+",
+      label: t("impact.bibleStudies"),
       color: "purple",
     },
   ];
@@ -43,7 +46,9 @@ export default function Impact() {
     <section className="py-20 bg-gradient-to-b from-gray-50 to-white dark:from-gray-900 dark:to-gray-950 transition-colors duration-300">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
-          <h2 className="text-4xl font-bold text-gray-900 dark:text-gray-100 mb-4 transition-colors">Our Impact</h2>
+          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-gray-100 mb-4 transition-colors">
+            {t("impact.title")}
+          </h2>
           <p className="text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto transition-colors">
             Together, we're making a difference in our community and around the
             world

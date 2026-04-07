@@ -4,12 +4,14 @@ import { motion, AnimatePresence } from "motion/react";
 import { Menu, X, Sun, Moon } from "lucide-react";
 import { useTheme } from "next-themes";
 import { IconButton } from "@mui/material";
+import { useTranslation } from "react-i18next";
 
 export function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const { theme, setTheme } = useTheme();
   const location = useLocation();
+  const { t, i18n } = useTranslation();
 
   const isHomePage = location.pathname === "/";
   // The header should be transparent if we are on the homepage and haven't scrolled past the hero + quote (~700px)
@@ -59,11 +61,17 @@ export function Header() {
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-2">
-            <NavLink to="/" transparentMode={transparentMode}>Home</NavLink>
-            <NavLink to="/about" transparentMode={transparentMode}>About Us</NavLink>
-            <NavLink to="/services" transparentMode={transparentMode}>Services</NavLink>
-            <NavLink to="/gallery" transparentMode={transparentMode}>Gallery</NavLink>
-            <div className={`pl-4 ml-6 border-l ${transparentMode ? 'border-white/20' : 'border-gray-200 dark:border-gray-700'} transition-colors`}>
+            <NavLink to="/" transparentMode={transparentMode}>{t("nav.home")}</NavLink>
+            <NavLink to="/about" transparentMode={transparentMode}>{t("nav.about")}</NavLink>
+            <NavLink to="/services" transparentMode={transparentMode}>{t("nav.services")}</NavLink>
+            <NavLink to="/gallery" transparentMode={transparentMode}>{t("nav.gallery")}</NavLink>
+            <div className={`pl-4 ml-6 border-l ${transparentMode ? 'border-white/20' : 'border-gray-200 dark:border-gray-700'} transition-colors flex items-center gap-2`}>
+              <button
+                onClick={() => i18n.changeLanguage(i18n.language === 'am' ? 'en' : 'am')}
+                className={`text-sm font-semibold px-2 py-1 rounded transition-colors ${transparentMode ? 'text-white hover:bg-white/20' : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'}`}
+              >
+                {i18n.language === 'am' ? 'EN' : 'AM'}
+              </button>
               <IconButton 
                 onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
                 sx={{ 
@@ -79,6 +87,12 @@ export function Header() {
 
           {/* Mobile Menu Settings */}
           <div className="md:hidden flex items-center space-x-3">
+            <button
+              onClick={() => i18n.changeLanguage(i18n.language === 'am' ? 'en' : 'am')}
+              className={`text-sm font-bold px-2 py-1 rounded transition-colors ${transparentMode ? 'text-white' : 'text-gray-700 dark:text-gray-300'}`}
+            >
+              {i18n.language === 'am' ? 'EN' : 'AM'}
+            </button>
             <IconButton 
               onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
               sx={{ color: transparentMode ? 'white' : 'text.primary' }}
@@ -114,25 +128,25 @@ export function Header() {
                 to="/"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
-                Home
+                {t("nav.home")}
               </MobileNavLink>
               <MobileNavLink
                 to="/about"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
-                About Us
+                {t("nav.about")}
               </MobileNavLink>
               <MobileNavLink
                 to="/services"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
-                Services
+                {t("nav.services")}
               </MobileNavLink>
               <MobileNavLink
                 to="/gallery"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
-                Gallery
+                {t("nav.gallery")}
               </MobileNavLink>
             </div>
           </motion.div>

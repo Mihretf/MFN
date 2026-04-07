@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { motion, AnimatePresence } from "motion/react";
 import {
   MapPin,
@@ -18,6 +19,8 @@ import { LoadingState } from "../components/ui/LoadingState";
 import { ErrorState } from "../components/ui/ErrorState";
 
 export function Services() {
+  const { t } = useTranslation();
+
   interface RegionAPI {
     id: string;
     name: string;
@@ -242,12 +245,10 @@ export function Services() {
         {/* Header */}
         <div className="text-center mb-12">
           <h1 className="text-4xl md:text-5xl font-bold text-[#1a3c34] dark:text-gray-100 mb-4 transition-colors">
-            Our Church Locations
+            {t("services.heroTitle")}
           </h1>
           <p className="text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto transition-colors">
-            Find a branch near you and become part of our growing community.
-            Each location offers unique programs while sharing our common
-            mission.
+            {t("services.heroSubtitle")}
           </p>
         </div>
 
@@ -370,7 +371,7 @@ export function Services() {
           <div className="lg:col-span-3">
             <div className="bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-xl shadow-md p-6 sticky top-24 transition-colors duration-300">
               <h3 className="text-lg font-bold text-[#1a3c34] dark:text-[#d4af37] mb-4">
-                Select a Region
+                {t("services.selectRegion")}
               </h3>
 
               {loadingRegions && <LoadingState message="Loading regions..." className="py-8" />}
@@ -464,12 +465,12 @@ export function Services() {
                   <h2 className="text-2xl font-bold text-[#1a3c34] dark:text-gray-100 mb-2 transition-colors">
                     {selectedRegionId
                       ? regions.find((r) => r.id === selectedRegionId)?.name
-                      : "All Regions"}
+                      : t("services.allRegions")}
                   </h2>
                   <p className="text-gray-600 dark:text-gray-400 transition-colors">
                     {filteredBranches.length}{" "}
-                    {filteredBranches.length === 1 ? "location" : "locations"}{" "}
-                    {selectedRegionId ? "in this region" : "total"}
+                    {filteredBranches.length === 1 ? t("services.location") : t("services.locations")}{" "}
+                    {selectedRegionId ? t("services.inThisRegion") : t("services.total")}
                   </p>
                 </div>
 
@@ -531,7 +532,7 @@ export function Services() {
                                     <Clock className="w-4 h-4 text-[#d4af37] mt-1 flex-shrink-0" />
                                     <div>
                                       <p className="text-sm font-semibold text-[#1a3c34] dark:text-gray-200 transition-colors">
-                                        Service Times
+                                        {t("services.serviceTimes")}
                                       </p>
                                       <p className="text-xs text-gray-600 dark:text-gray-400 transition-colors">
                                         {branch.serviceTimes[0]?.day}{" "}
@@ -543,7 +544,7 @@ export function Services() {
                                     <Phone className="w-4 h-4 text-[#d4af37] mt-1 flex-shrink-0" />
                                     <div>
                                       <p className="text-sm font-semibold text-[#1a3c34] dark:text-gray-200 transition-colors">
-                                        Contact
+                                        {t("services.contact")}
                                       </p>
                                       <p className="text-xs text-gray-600 dark:text-gray-400 transition-colors">
                                         {branch.phone}
@@ -554,7 +555,7 @@ export function Services() {
                                     <Mail className="w-4 h-4 text-[#d4af37] mt-1 flex-shrink-0" />
                                     <div>
                                       <p className="text-sm font-semibold text-[#1a3c34] dark:text-gray-200 transition-colors">
-                                        Pastor
+                                        {t("services.pastor")}
                                       </p>
                                       <p className="text-xs text-gray-600 dark:text-gray-400 transition-colors">
                                         {branch.pastor.name}
@@ -565,7 +566,7 @@ export function Services() {
 
                                 {/* CTA Button */}
                                 <div className="flex items-center text-[#d4af37] font-semibold group-hover:gap-2 transition-all">
-                                  Learn More & Visit
+                                  {t("services.viewDetails")}
                                   <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
                                 </div>
                               </div>

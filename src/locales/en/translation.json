@@ -1,0 +1,114 @@
+{
+  "nav": {
+    "home": "Home",
+    "about": "About Us",
+    "services": "Services",
+    "gallery": "Gallery"
+  },
+  "hero": {
+    "welcome": "Welcome to Our Church",
+    "subtitle": "A community of faith, hope, and love. Join us as we worship together and grow in Christ.",
+    "joinUs": "Join Us This Sunday",
+    "watchLive": "Watch Live"
+  },
+  "bible": {
+    "quote": "\"For God so loved the world that he gave his one and only Son, that whoever believes in him shall not perish but have eternal life.\"",
+    "citation": "— John 3:16"
+  },
+  "impact": {
+    "title": "Serving the Community",
+    "churchMembers": "Church Members",
+    "familiesServed": "Families Served",
+    "countriesReached": "Countries Reached",
+    "bibleStudies": "Bible Studies"
+  },
+  "leader": {
+    "title": "Our Leadership"
+  },
+  "blogs": {
+    "highlights": "Highlights",
+    "highlightsDesc": "Key announcements, quotes, offers and community moments",
+    "highlightPill": "Highlight",
+    "quotePill": "Quote",
+    "offerPill": "Offer",
+    "newPill": "New",
+    "noContent": "(No content available)"
+  },
+  "footer": {
+    "description": "A community of faith, hope, and love. Join us for worship and fellowship.",
+    "quickLinks": "Quick Links",
+    "connect": "Connect With Us",
+    "copyright": "© 2026 Mission For Nation. All rights reserved."
+  },
+  "about": {
+    "header": "About Our Church",
+    "headerDesc": "Discover our mission, vision, and the journey that brought us here.",
+    "mission": "Our Mission",
+    "missionText": "To glorify God by making disciples of all nations, baptizing them in the name of the Father, Son, and Holy Spirit, and teaching them to obey everything Christ commanded.",
+    "vision": "Our Vision",
+    "visionText": "To see a world transformed by the love of Christ, where every community has a vibrant, multiplying church that reflects God's Kingdom on earth.",
+    "timelineTitle": "Our Journey",
+    "timelineDesc": "The milestones that have shaped our community over the years.",
+    "timelineCards": {
+      "t1_title": "Church Founded",
+      "t1_desc": "Started with a small group of 15 members gathering in a living room for prayer and worship.",
+      "t2_title": "First Building",
+      "t2_desc": "Moved into our first dedicated worship space to accommodate growing attendance.",
+      "t3_title": "Community Outreach Launch",
+      "t3_desc": "Began our first major community service initiative, serving over 500 local families.",
+      "t4_title": "Global Missions Start",
+      "t4_desc": "Sent out our first dedicated team of long-term missionaries overseas."
+    },
+    "founderTitle": "Our Founder",
+    "founderDesc": "Pastor Yohannes, visionary leader and faithful servant of Christ, planted this church with a heart for the city."
+  },
+  "services": {
+    "heroTitle": "Our Locations & Branches",
+    "heroSubtitle": "Find a church community near you to worship, serve, and grow together.",
+    "selectRegion": "Select a Region",
+    "allRegions": "All Regions",
+    "total": "total",
+    "locations": "locations",
+    "location": "location",
+    "inThisRegion": "in this region",
+    "serviceTimes": "Service Times",
+    "contact": "Contact",
+    "pastor": "Pastor",
+    "viewDetails": "View Details"
+  },
+  "branchDetail": {
+    "branchNotFound": "Branch Not Found",
+    "backToAll": "← Back to All Locations",
+    "serviceTimes": "Service Times",
+    "announcements": "Announcements",
+    "leadership": "Leadership",
+    "regularEvents": "Regular Events",
+    "getInvolved": "Get Involved",
+    "locationContact": "Location & Contact",
+    "address": "Address",
+    "phone": "Phone",
+    "email": "Email",
+    "getDirections": "Get Directions",
+    "gallery": "Gallery",
+    "quickInfo": "Quick Info",
+    "quickNavigation": "Quick Navigation",
+    "planVisit": "Plan Your Visit",
+    "planVisitDesc": "We'd love to have you join us! Everyone is welcome."
+  },
+  "gallery": {
+    "heroTitle": "Church Posts & Gallery",
+    "heroSubtitle": "Stay connected with what's happening in our community",
+    "recentPosts": "Recent Posts",
+    "allPosts": "All Posts",
+    "filterPosts": "Filter Posts",
+    "filterByRegion": "Filter by Region",
+    "filterByType": "Filter by Type",
+    "allTypes": "All Types",
+    "activeFilters": "Active filters:",
+    "noPosts": "No Posts Found",
+    "noPostsDesc": "No posts match your current filters. Try adjusting your selection.",
+    "clearFilters": "Clear All Filters",
+    "post": "post",
+    "posts": "posts"
+  }
+}

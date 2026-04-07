@@ -1,4 +1,5 @@
 import { useState, useMemo, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import { Sparkles, TrendingUp, Shuffle } from "lucide-react";
 import { Post } from "../types/gallery.type";
 import { FilterSection } from "../components/gallery/FilterSection";
@@ -49,6 +50,7 @@ function getHomepagePosts(posts: Post[]): Post[] {
 }
 
 export default function App() {
+  const { t } = useTranslation();
   const [selectedRegion, setSelectedRegion] = useState("all");
   const [selectedPostType, setSelectedPostType] = useState("all");
   const [currentPage, setCurrentPage] = useState(1);
@@ -152,10 +154,10 @@ export default function App() {
       <header className="bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700 transition-colors">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <h1 className="text-4xl text-gray-900 dark:text-gray-100 text-center mb-2 transition-colors">
-            Church Posts & Gallery
+            {t("gallery.heroTitle")}
           </h1>
           <p className="text-center text-gray-600 dark:text-gray-400 transition-colors">
-            Stay connected with what's happening in our community
+            {t("gallery.heroSubtitle")}
           </p>
         </div>
       </header>
@@ -177,7 +179,7 @@ export default function App() {
               <section className="mb-12">
                 <div className="flex items-center gap-2 mb-6">
                   <TrendingUp className="w-6 h-6 text-blue-600" />
-                  <h2 className="text-2xl text-gray-900">Recent Posts</h2>
+                  <h2 className="text-2xl text-gray-900 dark:text-gray-100">{t("gallery.recentPosts")}</h2>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                   {recentPosts.map((post, idx) => (
@@ -215,10 +217,10 @@ export default function App() {
               {filteredPosts.length > 0 && (
                 <div className="flex items-center gap-2 mb-6">
                   <Sparkles className="w-6 h-6 text-green-600" />
-                  <h2 className="text-2xl text-gray-900">All Posts</h2>
+                  <h2 className="text-2xl text-gray-900 dark:text-gray-100">{t("gallery.allPosts")}</h2>
                   <span className="text-sm text-gray-500">
                     ({filteredPosts.length}{" "}
-                    {filteredPosts.length === 1 ? "post" : "posts"})
+                    {filteredPosts.length === 1 ? t("gallery.post") : t("gallery.posts")})
                   </span>
                 </div>
               )}
@@ -250,11 +252,10 @@ export default function App() {
                       <Sparkles className="w-8 h-8 text-[#d4af37]" />
                     </div>
                     <h3 className="text-xl text-gray-900 dark:text-gray-100 mb-2 transition-colors">
-                      No Posts Found
+                      {t("gallery.noPosts")}
                     </h3>
                     <p className="text-gray-600 mb-6">
-                      No posts match your current filters. Try adjusting your
-                      selection.
+                      {t("gallery.noPostsDesc")}
                     </p>
                     <button
                       onClick={() => {
@@ -263,7 +264,7 @@ export default function App() {
                       }}
                       className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
                     >
-                      Clear All Filters
+                      {t("gallery.clearFilters")}
                     </button>
                   </div>
                 </div>
@@ -289,7 +290,7 @@ export default function App() {
       <footer className="bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 mt-16 transition-colors">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <p className="text-center text-gray-600 dark:text-gray-400 text-sm transition-colors">
-            © 2026 Church Posts Gallery. All rights reserved.
+            {t("footer.copyright")}
           </p>
         </div>
       </footer>

@@ -1,4 +1,5 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 import { motion } from "motion/react";
 import { Target, Eye, Users, Heart, ArrowRight } from "lucide-react";
 import Leaders from "../components/home/Leader";
@@ -13,26 +14,27 @@ const stagger = {
 };
 
 export function AboutUs() {
+  const { t } = useTranslation();
   const journeyItems = [
     {
       year: "2010",
-      title: "The Beginning",
-      desc: "MFN started in a small living room with just 12 people committed to prayer and service.",
+      title: t("about.timelineCards.t1_title"),
+      desc: t("about.timelineCards.t1_desc"),
     },
     {
       year: "2015",
-      title: "First Campus",
-      desc: "We opened our first physical location in the heart of the city, expanding our outreach programs.",
+      title: t("about.timelineCards.t2_title"),
+      desc: t("about.timelineCards.t2_desc"),
     },
     {
       year: "2020",
-      title: "Digital Expansion",
-      desc: "Launched online services and global community groups to stay connected during challenging times.",
+      title: t("about.timelineCards.t3_title"),
+      desc: t("about.timelineCards.t3_desc"),
     },
     {
       year: "2025",
-      title: "Nationwide Impact",
-      desc: "Now operating in 5 major cities with over 10,000 active members serving weekly.",
+      title: t("about.timelineCards.t4_title"),
+      desc: t("about.timelineCards.t4_desc"),
     },
   ];
 
@@ -52,8 +54,8 @@ export function AboutUs() {
             alt="Mission For Nation Building"
             className="w-full h-full object-cover"
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-[#1a3c34]/90 to-[#1a3c34]/60 mix-blend-multiply" />
-          <div className="absolute inset-0 bg-gradient-to-b from-transparent to-[#1a3c34]" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#1a3c34]/90 dark:from-gray-900/90 to-[#1a3c34]/60 dark:to-gray-900/70 mix-blend-multiply transition-colors duration-300" />
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent to-[#1a3c34] dark:to-gray-900 transition-colors duration-300" />
         </div>
 
         <div className="relative z-10 max-w-4xl mx-auto px-4 text-center text-white">
@@ -63,8 +65,7 @@ export function AboutUs() {
             transition={{ duration: 0.8, delay: 0.2 }}
             className="text-5xl md:text-6xl font-bold mb-6 tracking-tight"
           >
-            Building Faith.{" "}
-            <span className="text-[#d4af37]">Empowering Lives.</span>
+            {t("about.header")}
           </motion.h1>
           <motion.p
             initial={{ opacity: 0, y: 30 }}
@@ -72,8 +73,7 @@ export function AboutUs() {
             transition={{ duration: 0.8, delay: 0.4 }}
             className="text-xl md:text-2xl text-gray-200 mb-10 max-w-2xl mx-auto leading-relaxed"
           >
-            Mission For Nation is dedicated to transforming communities through
-            spiritual growth, service, and unwavering hope.
+            {t("about.headerDesc")}
           </motion.p>
           <motion.button
             initial={{ opacity: 0, scale: 0.9 }}
@@ -101,12 +101,9 @@ export function AboutUs() {
               <div className="w-16 h-16 bg-[#1a3c34]/5 rounded-2xl flex items-center justify-center">
                 <Target className="w-8 h-8 text-[#1a3c34]" />
               </div>
-              <h2 className="text-3xl font-bold text-[#1a3c34] dark:text-gray-100 transition-colors">Our Mission</h2>
+              <h2 className="text-3xl font-bold text-[#1a3c34] dark:text-gray-100 transition-colors">{t("about.mission")}</h2>
               <p className="text-gray-600 dark:text-gray-400 text-lg leading-relaxed transition-colors">
-                To reach the lost, disciple the found, and serve the hurting. We
-                exist to be a beacon of light in every city we plant our roots,
-                providing spiritual guidance and practical support to those in
-                need.
+                {t("about.missionText")}
               </p>
             </motion.div>
 
@@ -115,12 +112,9 @@ export function AboutUs() {
               <div className="w-16 h-16 bg-[#d4af37]/10 rounded-2xl flex items-center justify-center">
                 <Eye className="w-8 h-8 text-[#d4af37]" />
               </div>
-              <h2 className="text-3xl font-bold text-[#1a3c34] dark:text-gray-100 transition-colors">Our Vision</h2>
+              <h2 className="text-3xl font-bold text-[#1a3c34] dark:text-gray-100 transition-colors">{t("about.vision")}</h2>
               <p className="text-gray-600 dark:text-gray-400 text-lg leading-relaxed transition-colors">
-                A nation united in purpose and faith, where every individual has
-                the opportunity to experience the transformative power of
-                community and divine love. We see a future where no one walks
-                alone.
+                {t("about.visionText")}
               </p>
             </motion.div>
           </motion.div>
@@ -137,10 +131,10 @@ export function AboutUs() {
             className="text-center mb-16"
           >
             <h2 className="text-3xl md:text-4xl font-bold text-[#1a3c34] dark:text-white mb-4 transition-colors">
-              Our Journey
+              {t("about.timelineTitle")}
             </h2>
             <p className="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto transition-colors">
-              From humble beginnings to a nationwide movement.
+              {t("about.timelineDesc")}
             </p>
           </motion.div>
 
@@ -197,7 +191,7 @@ export function AboutUs() {
       </section>
 
       {/* Stats */}
-      <section className="py-20 bg-[#1a3c34] dark:bg-[#0c1f1a] transition-colors duration-300 text-white">
+      <section className="py-20 bg-[#1a3c34] dark:bg-gray-900 transition-colors duration-300 text-white">
         <div className="max-w-7xl mx-auto px-4 md:px-8">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
             {stats.length === 0 ? (
@@ -251,16 +245,13 @@ export function AboutUs() {
               className="w-full md:w-1/2 space-y-6"
             >
               <h4 className="text-[#d4af37] font-semibold uppercase tracking-wider">
-                Our Founder
+                {t("about.founderTitle")}
               </h4>
               <h2 className="text-4xl font-bold text-[#1a3c34] dark:text-gray-100 transition-colors">
                 Rev. Dr. John Doe
               </h2>
               <p className="text-gray-600 dark:text-gray-400 text-lg leading-relaxed transition-colors italic">
-                "Our mission isn't just about building churches; it's about
-                building people. When I started Mission For Nation, I dreamt of
-                a place where everyone—regardless of their background—could find
-                a home, a purpose, and a family."
+                {t("about.founderDesc")}
               </p>
               <div className="pt-4">
                 <img
@@ -276,7 +267,7 @@ export function AboutUs() {
       <Leaders />
 
       {/* CTA */}
-      <section className="py-24 bg-[#1a3c34] relative overflow-hidden text-center">
+      <section className="py-24 bg-[#1a3c34] dark:bg-gray-900 transition-colors duration-300 relative overflow-hidden text-center">
         <div className="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]"></div>
         <div className="relative z-10 max-w-3xl mx-auto px-4">
           <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
