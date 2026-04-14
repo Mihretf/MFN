@@ -44,18 +44,24 @@ export function Header() {
         <div className="flex items-center justify-between h-20">
           {/* Logo */}
           <Link to="/" className="flex items-center space-x-3 z-50 group">
-            <motion.div
-              whileHover={{ rotate: 180 }}
+            <motion.img
+              src="https://res.cloudinary.com/dj3wxiznw/image/upload/v1775806075/IMG_20250911_220600_711-removebg-preview_hesfjl.png"
+              onError={(e) => {
+                const target = e.currentTarget as HTMLImageElement;
+                if (target.src !== window.location.origin + "/IMG_20250911_220600_711-removebg-preview.png" && !target.src.endsWith("/IMG_20250911_220600_711-removebg-preview.png")) {
+                  target.src = "/IMG_20250911_220600_711-removebg-preview.png";
+                }
+              }}
+              alt="Mission For Nation Logo"
+              whileHover={{ scale: 1.05 }}
               transition={{ type: "spring", stiffness: 200, damping: 10 }}
-              className="w-10 h-10 bg-gradient-to-tr from-[#d4af37] to-[#f0d082] rounded-xl flex items-center justify-center shadow-lg group-hover:shadow-xl transition-all"
-            >
-              <span className="text-gray-900 font-extrabold text-xl">M</span>
-            </motion.div>
+              className="w-10 h-10 object-contain drop-shadow-lg"
+            />
             <span
               className={`font-extrabold text-xl tracking-tight bg-clip-text text-transparent group-hover:from-[#d4af37] group-hover:to-[#f0d082] transition-colors
               ${transparentMode ? "bg-gradient-to-r from-white to-gray-200" : "bg-gradient-to-r from-gray-900 to-gray-600 dark:from-white dark:to-gray-300"}`}
             >
-              MISSION FOR NATION
+              {i18n.language === 'am' ? 'ተልዕኮ ለትውልድ' : 'MISSION FOR NATION'}
             </span>
           </Link>
 

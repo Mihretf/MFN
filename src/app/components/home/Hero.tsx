@@ -21,8 +21,8 @@ export default function Hero() {
         <h1 className="text-5xl md:text-7xl text-white mb-6 animate-fade-in">
           {t("hero.welcome")}
         </h1>
-        <p className="text-xl md:text-2xl text-gray-200 mb-8 max-w-3xl mx-auto">
-          {t("hero.subtitle")}
+        <p className="text-xl md:text-2xl text-white mb-8 max-w-4xl mx-auto animate-fade-in delay-100 drop-shadow-md">
+          {t("hero.moto")}
         </p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <Link
@@ -32,21 +32,17 @@ export default function Hero() {
             {t("hero.joinUs")}
           </Link>
 
-          <Link
-            to="/live"
+          <a
+            href="https://www.youtube.com/@7spirits_tv"
+            target="_blank"
+            rel="noopener noreferrer"
             className="px-8 py-4 bg-white/10 backdrop-blur-md text-white font-semibold border border-white/30 rounded-lg hover:bg-white/20 transition-colors"
           >
             {t("hero.watchLive")}
-          </Link>
+          </a>
         </div>
       </div>
 
-      {/* Scroll Indicator */}
-      <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-10 animate-bounce text-gray-400 dark:text-gray-500">
-        <div className="w-6 h-10 border-2 border-current rounded-full flex items-start justify-center p-2">
-          <div className="w-1.5 h-3 bg-current rounded-full"></div>
-        </div>
-      </div>
     </section>
   );
 }

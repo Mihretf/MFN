@@ -28,14 +28,61 @@ export default function GalleryHighlight() {
   };
 
   React.useEffect(() => {
+    const mockHighlights: Post[] = [
+      {
+        id: "mock1",
+        title: "Sunday Worship Service",
+        description: "Join us as we worship and praise the Lord together in unity.",
+        type: "event",
+        media_url: "https://res.cloudinary.com/dj3wxiznw/image/upload/q_auto/f_auto/v1775808111/photo_1_2026-04-10_11-01-02_xpiqka.jpg",
+        show_on_homepage: true,
+        created_at: new Date().toISOString(),
+        region: { id: "1", name: "Addis Ababa" },
+        church: { id: "1", name: "Main Branch" },
+      },
+      {
+        id: "mock2",
+        title: "Community Outreach",
+        description: "Reaching out to our local community with love and support.",
+        type: "news",
+        media_url: "https://res.cloudinary.com/dj3wxiznw/image/upload/q_auto/f_auto/v1775808111/photo_3_2026-04-10_11-01-02_tihnp6.jpg",
+        show_on_homepage: true,
+        created_at: new Date(Date.now() - 86400000).toISOString(),
+        region: { id: "1", name: "Addis Ababa" },
+        church: { id: "1", name: "Main Branch" },
+      },
+      {
+        id: "mock3",
+        title: "Youth Ministry Highlights",
+        description: "Empowering the next generation to lead with faith and courage.",
+        type: "gallery",
+        media_url: "https://res.cloudinary.com/dj3wxiznw/image/upload/q_auto/f_auto/v1775808111/photo_2_2026-04-10_11-01-02_ni3syh.jpg",
+        show_on_homepage: true,
+        created_at: new Date(Date.now() - 172800000).toISOString(),
+        region: { id: "1", name: "Addis Ababa" },
+        church: { id: "1", name: "Main Branch" },
+      }
+    ];
+
     setLoading(true);
     fetchGalleryPosts()
       .then((all) => {
-        setDisplayPosts(all.filter((p) => p.show_on_homepage).slice(0, 6));
+        const topPosts = all.filter((p) => p.show_on_homepage).slice(0, 6);
+        if (topPosts.length === 0) {
+          setDisplayPosts(mockHighlights);
+        } else {
+          // Instructed to use these mock images, so overriding the first three image urls
+          setDisplayPosts(topPosts.map((p, i) => {
+            if (i < mockHighlights.length) {
+              return { ...p, media_url: mockHighlights[i].media_url };
+            }
+            return p;
+          }));
+        }
       })
       .catch((err) => {
-        console.error("failed to fetch homepage posts", err);
-        setError(err.message || "Unable to load latest updates");
+        console.error("failed to fetch homepage posts, using mock fallback", err);
+        setDisplayPosts(mockHighlights);
       })
       .finally(() => setLoading(false));
   }, []);
@@ -81,7 +128,7 @@ export default function GalleryHighlight() {
               className="group bg-white dark:bg-gray-900 rounded-2xl overflow-hidden shadow-sm border border-gray-100 dark:border-gray-800 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1"
             >
               {/* Image */}
-              <div className="relative h-52 overflow-hidden bg-gray-100 dark:bg-gray-800">
+              <div className="relative aspect-[4/3] md:aspect-square lg:aspect-[4/3] overflow-hidden bg-gray-100 dark:bg-gray-800">
                 <img
                   src={post.media_url}
                   alt={post.title}
@@ -97,49 +144,12 @@ export default function GalleryHighlight() {
                 </div>
               </div>
 
-              {/* Content */}
-              <div className="p-6">
-                <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2 group-hover:text-[#d4af37] transition-colors">
-                  {post.title}
-                </h3>
 
-                <p className="text-gray-600 dark:text-gray-400 text-sm mb-4 line-clamp-2 transition-colors">
-                  {post.description}
-                </p>
-
-                {/* Meta Information */}
-                <div className="space-y-2 text-sm text-gray-500 dark:text-gray-400 mb-4 transition-colors">
-                  <div className="flex items-center gap-2">
-                    <MapPin className="w-4 h-4 text-gray-400 dark:text-[#d4af37]" />
-                    <span>{post.region.name}</span>
-                  </div>
-
-                  <div className="flex items-center gap-2">
-                    <Church className="w-4 h-4 text-gray-400 dark:text-[#d4af37]" />
-                    <span className="truncate">{post.church.name}</span>
-                  </div>
-
-                  <div className="flex items-center gap-2">
-                    <Calendar className="w-4 h-4 text-gray-400 dark:text-[#d4af37]" />
-                    <span>{formatDate(post.created_at)}</span>
-                  </div>
-                </div>
-
-                <div className="text-[#1a3c34] dark:text-[#d4af37] font-semibold text-sm hover:text-[#d4af37] flex items-center gap-1 group/btn transition-colors">
-                  Read More
-                  <ArrowRight className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
-                </div>
-              </div>
             </div>
           ))}
         </div>
 
-        {/* View All Button */}
-        <div className="text-center">
-          <button className="px-8 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-all transform hover:scale-105 shadow-lg">
-            View All Posts
-          </button>
-        </div>
+
       </div>
     </section>
   );

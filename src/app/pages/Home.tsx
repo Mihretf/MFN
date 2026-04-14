@@ -78,8 +78,8 @@ export default function App() {
   return (
     <>
       <Hero />
-      <BibleVerse />
       <Blogs />
+      <BibleVerse />
       <Impact />
       <GalleryHighlight />
     </>

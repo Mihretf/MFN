@@ -7,9 +7,10 @@
   },
   "hero": {
     "welcome": "Welcome to Our Church",
+    "moto": "Our service is not new; like our forefathers, it is to serve our generation and pass it on.",
     "subtitle": "A community of faith, hope, and love. Join us as we worship together and grow in Christ.",
-    "joinUs": "Join Us This Sunday",
-    "watchLive": "Watch Live"
+    "joinUs": "Look Our Service",
+    "watchLive": "Subscribe"
   },
   "bible": {
     "quote": "\"For God so loved the world that he gave his one and only Son, that whoever believes in him shall not perish but have eternal life.\"",

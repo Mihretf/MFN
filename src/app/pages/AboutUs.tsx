@@ -58,7 +58,7 @@ export function AboutUs() {
           <div className="absolute inset-0 bg-gradient-to-b from-transparent to-[#1a3c34] dark:to-gray-900 transition-colors duration-300" />
         </div>
 
-        <div className="relative z-10 max-w-4xl mx-auto px-4 text-center text-white">
+        <div className="relative z-10 max-w-4xl mx-auto px-14 text-center text-white">
           <motion.h1
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
@@ -75,26 +75,18 @@ export function AboutUs() {
           >
             {t("about.headerDesc")}
           </motion.p>
-          <motion.button
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.5, delay: 0.6 }}
-            className="px-8 py-4 bg-[#d4af37] text-[#1a3c34] font-bold rounded-full hover:bg-[#f0d082] transition-colors shadow-lg flex items-center gap-2 mx-auto"
-          >
-            Join Our Mission <ArrowRight className="w-5 h-5" />
-          </motion.button>
         </div>
       </section>
 
       {/* Mission & Vision */}
-      <section className="py-24 bg-white dark:bg-gray-950 transition-colors duration-300">
-        <div className="max-w-7xl mx-auto px-4 md:px-8">
+      <section className="py-32 bg-white dark:bg-gray-950 transition-colors duration-300">
+        <div className="max-w-7xl mx-auto px-10 md:px-18 lg:px-32">
           <motion.div
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, margin: "-100px" }}
             variants={stagger}
-            className="grid md:grid-cols-2 gap-12 lg:gap-24"
+            className="grid md:grid-cols-2 gap-16 lg:gap-32"
           >
             {/* Mission */}
             <motion.div variants={fadeInUp} className="space-y-6">
@@ -163,7 +155,7 @@ export function AboutUs() {
                       >
                         {/* Decorative glow behind card */}
                         <div className="absolute inset-0 bg-gradient-to-r from-[#d4af37]/0 to-[#d4af37]/0 group-hover:from-[#d4af37]/5 group-hover:to-transparent rounded-2xl transition-colors duration-500 pointer-events-none" />
-                        
+
                         <span className="text-[#d4af37] font-extrabold text-2xl block mb-3 drop-shadow-sm">
                           {item.year}
                         </span>
@@ -195,9 +187,9 @@ export function AboutUs() {
         <div className="max-w-7xl mx-auto px-4 md:px-8">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
             {stats.length === 0 ? (
-               <div className="col-span-2 md:col-span-4 text-center py-6">
-                 <p className="text-gray-400 italic">Statistics will be updated.</p>
-               </div>
+              <div className="col-span-2 md:col-span-4 text-center py-6">
+                <p className="text-gray-400 italic">Statistics will be updated.</p>
+              </div>
             ) : (
               stats.map((stat, i) => (
                 <motion.div
