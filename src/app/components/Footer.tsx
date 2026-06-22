@@ -49,7 +49,14 @@ export function Footer() {
             <ul className="space-y-4">
               <li className="flex items-center gap-3 text-gray-500 dark:text-gray-400 transition-colors">
                 <Mail className="w-5 h-5 text-[#1a3c34] dark:text-[#d4af37] flex-shrink-0" />
-                <span className="font-medium">7spiritstv@gmail.com</span>
+                <a
+                  href="https://mail.google.com/mail/?view=cm&fs=1&to=7spiritstv@gmail.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-[#d4af37] transition-colors font-medium"
+                >
+                  7spiritstv@gmail.com
+                </a>
               </li>
             </ul>
           </div>
@@ -60,17 +67,25 @@ export function Footer() {
             <ul className="space-y-4">
               <li className="flex items-center gap-3 text-gray-500 dark:text-gray-400 transition-colors">
                 <Facebook className="w-5 h-5 text-[#1a3c34] dark:text-[#d4af37] flex-shrink-0" />
-                <span className="font-medium">7 spirits tv 2</span>
+                <a
+                  href="https://www.facebook.com/7spiritstv?mibextid=rS40aB7S9Ucbxw6v"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-[#d4af37] transition-colors font-medium"
+                >
+                  7 spirits tv 2
+                </a>
               </li>
               <li className="flex items-center gap-3 text-gray-500 dark:text-gray-400 transition-colors">
                 <Youtube className="w-5 h-5 text-[#1a3c34] dark:text-[#d4af37] flex-shrink-0" />
-                <span className="font-medium">7spirits tv</span>
-              </li>
-              <li className="flex items-center gap-3 text-gray-500 dark:text-gray-400 transition-colors">
-                <svg className="w-4 h-4 fill-[#1a3c34] dark:fill-[#d4af37] flex-shrink-0 ml-0.5" viewBox="0 0 448 512">
-                  <path d="M448,209.91a210.06,210.06,0,0,1-122.77-39.25V349.38A162.55,162.55,0,1,1,185,188.31V278.2a74.62,74.62,0,1,0,52.23,71.18V0l88,0a121.18,121.18,0,0,0,1.86,22.17h0A122.18,122.18,0,0,0,381,102.39a121.43,121.43,0,0,0,67,20.14Z"/>
-                </svg>
-                <span className="font-medium ml-0.5">@apostel_zelalem</span>
+                <a
+                  href="https://www.youtube.com/channel/UCFVGPq_UQ5ESFkmTQCSXeBQ"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-[#d4af37] transition-colors font-medium"
+                >
+                  7spirits tv
+                </a>
               </li>
             </ul>
           </div>
