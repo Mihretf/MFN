@@ -147,28 +147,27 @@ export default function Highlights() {
 
           <div
             className={`
-              w-full max-w-lg sm:max-w-xl md:max-w-3xl lg:max-w-4xl
-              mx-6 sm:mx-12 md:mx-16 
+              w-full max-w-sm sm:max-w-xl md:max-w-2xl lg:max-w-3xl
+              mx-4 sm:mx-8 md:mx-16 
               bg-white dark:bg-gray-900 rounded-3xl shadow-xl dark:shadow-2xl overflow-hidden
               transition-all duration-500 hover:shadow-2xl
               flex flex-col border border-gray-100 dark:border-gray-800
             `}
           >
             {(hasImage || hasVideo) && (
-              <div className="w-full relative overflow-hidden bg-gray-100 dark:bg-gray-800 h-[350px] md:h-[500px]">
-                <div className="absolute inset-0 bg-gradient-to-t from-gray-900/60 to-transparent z-10 transition-opacity" />
+              <div className="w-full relative overflow-hidden bg-transparent h-[250px] md:h-[380px] flex items-center justify-center">
                 {hasImage && current.image_url && (
                   <img
                     src={current.image_url || ""}
                     alt=""
-                    className="w-full h-full object-cover absolute inset-0 transform hover:scale-105 transition-transform duration-700"
+                    className="w-full h-full object-contain absolute inset-0 transform hover:scale-105 transition-transform duration-700 bg-transparent"
                     loading="lazy"
                   />
                 )}
                 {hasVideo && current.video_url && (
                   <video
                     controls
-                    className="w-full h-full object-cover absolute inset-0 z-20"
+                    className="w-full h-full object-contain absolute inset-0 z-20 bg-transparent"
                     poster={current.image_url || undefined}
                   >
                     <source src={current.video_url} />

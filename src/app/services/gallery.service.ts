@@ -20,6 +20,12 @@ const BASE_URL =
  * @returns Array of images formatted for the UI
  */
 export async function fetchGallery(regionId: string): Promise<GalleryImage[]> {
+  const cacheKey = `gallery:${regionId}`;
+  const cached = getCache<GalleryImage[]>(cacheKey);
+  if (cached) {
+    return cached;
+  }
+
   const url = `${BASE_URL}/api/galleries?region_id=${encodeURIComponent(regionId)}`;
   const res = await fetch(url);
   if (!res.ok) {
@@ -29,11 +35,14 @@ export async function fetchGallery(regionId: string): Promise<GalleryImage[]> {
   }
 
   const payload: GalleryApiResponse = await res.json();
-  return payload.galleries.map((g) => ({
+  const data = payload.galleries.map((g) => ({
     id: g.id,
     url: g.image_url,
     caption: g.caption,
   }));
+
+  setCache(cacheKey, data);
+  return data;
 }
 
 /**

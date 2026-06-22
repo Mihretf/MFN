@@ -6,7 +6,7 @@
     "gallery": "Gallery"
   },
   "hero": {
-    "welcome": "Welcome to Our Church",
+    "welcome": "Welcome to Mission for Nation International Page",
     "moto": "Our service is not new; like our forefathers, it is to serve our generation and pass it on.",
     "subtitle": "A community of faith, hope, and love. Join us as we worship together and grow in Christ.",
     "joinUs": "Look Our Service",
@@ -27,8 +27,8 @@
     "title": "Our Leadership"
   },
   "blogs": {
-    "highlights": "Highlights",
-    "highlightsDesc": "Key announcements, quotes, offers and community moments",
+    "highlights": "News",
+    "highlightsDesc": "Stay updated with our latest news and announcements",
     "highlightPill": "Highlight",
     "quotePill": "Quote",
     "offerPill": "Offer",

@@ -8,30 +8,23 @@ export default function Impact() {
     {
       id: 1,
       icon: Users,
-      value: "-",
+      value: "200k+",
       label: t("impact.churchMembers"),
       color: "blue",
     },
     {
       id: 2,
       icon: Heart,
-      value: "-",
+      value: "20k",
       label: t("impact.familiesServed"),
       color: "red",
     },
     {
       id: 3,
       icon: Globe,
-      value: "-",
+      value: "5",
       label: t("impact.countriesReached"),
       color: "green",
-    },
-    {
-      id: 4,
-      icon: BookOpen,
-      value: "-",
-      label: t("impact.bibleStudies"),
-      color: "purple",
     },
   ];
 
@@ -60,7 +53,7 @@ export default function Impact() {
             <p className="text-gray-500 dark:text-gray-400 italic">Impact metrics will be available soon.</p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {stats.map((stat) => {
               const Icon = stat.icon;
               return (
