@@ -66,15 +66,15 @@ export async function fetchGalleryPosts(): Promise<Post[]> {
       const payload: GalleryApiResponse = await res.json();
       apiPosts = payload.galleries.map((g) => ({
         id: g.id,
-        title: g.title ?? "",
-        description: g.description ?? "",
+        title: g.region_name,
+        description: g.caption ?? "",
         type: "gallery",
         media_url: g.image_url,
         show_on_homepage: false,
         created_at: g.created_at,
         region: {
           id: g.region_id,
-          name: g.region_name || "",
+          name: g.region_name,
         },
         church: {
           id: g.church_id ?? "",

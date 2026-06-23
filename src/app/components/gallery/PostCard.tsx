@@ -48,7 +48,9 @@ export function PostCard({ post, onClick }: PostCardProps) {
     const date = new Date(dateString);
     const now = new Date();
     const diffTime = Math.abs(now.getTime() - date.getTime());
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    const diffDays = Math.floor(
+      (now.getTime() - date.getTime()) / (1000 * 60 * 60 * 24)
+    );
 
     if (diffDays === 0) return "Today";
     if (diffDays === 1) return "Yesterday";
@@ -89,10 +91,6 @@ export function PostCard({ post, onClick }: PostCardProps) {
           {post.title}
         </h3>
 
-        <p className="text-gray-600 dark:text-gray-400 text-sm mb-4 line-clamp-3 transition-colors">
-          {truncateText(post.description, 120)}
-        </p>
-
         {/* Meta Information */}
         <div className="space-y-2 text-sm text-gray-500 dark:text-gray-400 transition-colors">
           <div className="flex items-center gap-2">
@@ -100,10 +98,10 @@ export function PostCard({ post, onClick }: PostCardProps) {
             <span>{post.region.name}</span>
           </div>
 
-          <div className="flex items-center gap-2">
+          {/* <div className="flex items-center gap-2">
             <Church className="w-4 h-4 text-gray-400 dark:text-[#d4af37]" />
             <span>{post.church.name}</span>
-          </div>
+          </div> */}
 
           <div className="flex items-center gap-2">
             <Calendar className="w-4 h-4 text-gray-400 dark:text-[#d4af37]" />
