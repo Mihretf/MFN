@@ -240,23 +240,22 @@ export function AboutUs() {
                 {t("about.founderTitle")}
               </h4>
               <h2 className="text-4xl font-bold text-[#1a3c34] dark:text-gray-100 transition-colors">
-                Rev. Dr. John Doe
+                Apostel Zelalem Getachew
               </h2>
               <p className="text-gray-600 dark:text-gray-400 text-lg leading-relaxed transition-colors italic">
                 {t("about.founderDesc")}
               </p>
-              <div className="pt-4">
+              {/* <div className="pt-4">
                 <img
                   src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/Signature_sample.svg/1200px-Signature_sample.svg.png"
                   alt="Signature"
                   className="h-12 opacity-60 dark:invert transition-all"
                 />
-              </div>
+              </div> */}
             </motion.div>
           </div>
         </div>
       </section>
-      <Leaders />
 
       {/* CTA */}
       <section className="py-24 bg-[#1a3c34] dark:bg-gray-900 transition-colors duration-300 relative overflow-hidden text-center">
@@ -269,14 +268,14 @@ export function AboutUs() {
             Join our community today and be part of something bigger than
             yourself.
           </p>
-          <div className="flex flex-col sm:flex-row justify-center gap-4">
+          {/* <div className="flex flex-col sm:flex-row justify-center gap-4">
             <button className="px-8 py-4 bg-[#d4af37] text-[#1a3c34] font-bold rounded-full hover:bg-[#f0d082] transition-colors shadow-lg">
               Visit a Campus
             </button>
             <button className="px-8 py-4 bg-transparent border-2 border-white text-white font-bold rounded-full hover:bg-white hover:text-[#1a3c34] transition-colors">
               Watch Online
             </button>
-          </div>
+          </div> */}
         </div>
       </section>
     </div>
