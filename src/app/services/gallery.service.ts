@@ -12,7 +12,7 @@ interface ImportMeta {
 
 const BASE_URL =
   ((import.meta as any).env?.VITE_API_BASE_URL as string) ||
-  "https://missionfornationbackend.onrender.com";
+  "https://api.mfni.church";
 
 /**
  * Fetches gallery images for a given region from the backend.
@@ -91,3 +91,4 @@ export async function fetchGalleryPosts(): Promise<Post[]> {
   setCache(cacheKey, apiPosts);
   return apiPosts;
 }
+
