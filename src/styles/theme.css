@@ -245,6 +245,15 @@ img {
   object-position: center 15%;
 }
 
+/* Text Shadow Utilities for Video Background */
+.text-shadow {
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.6), 0 1px 3px rgba(0, 0, 0, 0.4);
+}
+
+.text-shadow-lg {
+  text-shadow: 0 4px 16px rgba(0, 0, 0, 0.7), 0 2px 6px rgba(0, 0, 0, 0.5);
+}
+
 .object-top {
   object-position: center top !important;
 }
