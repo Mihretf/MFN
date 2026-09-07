@@ -1,29 +1,11 @@
-import React, { useEffect } from "react";
-import Lenis from "lenis";
+import React from "react";
 
+// Scroll-jacking removed: Lenis smooth scroll was causing viewport locking
+// and artificial scroll delays. Now uses native smooth scroll (set in CSS).
 interface LenisScrollProviderProps {
   children: React.ReactNode;
 }
 
 export const LenisScrollProvider: React.FC<LenisScrollProviderProps> = ({ children }) => {
-  useEffect(() => {
-    const lenis = new Lenis({
-      duration: 1.2,
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-      smoothWheel: true,
-    });
-
-    function raf(time: number) {
-      lenis.raf(time);
-      requestAnimationFrame(raf);
-    }
-
-    requestAnimationFrame(raf);
-
-    return () => {
-      lenis.destroy();
-    };
-  }, []);
-
   return <>{children}</>;
 };

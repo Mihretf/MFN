@@ -2,21 +2,10 @@ import React, { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { ArrowRight, Download, BookOpen } from "lucide-react";
-import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { animateTextReveal, animateOnScrollTextMotion, animateRotating3D, initAnimations, killAllAnimations, prefersReducedMotion } from "../../lib/animations";
-
-gsap.registerPlugin(ScrollTrigger);
 
 export default function Hero() {
   const { t, i18n } = useTranslation();
   const isAm = i18n.language === "am";
-  const heroRef = useRef<HTMLElement>(null);
-  const videoRef = useRef<HTMLVideoElement>(null);
-  const badgeRef = useRef<HTMLSpanElement>(null);
-  const titleRef = useRef<HTMLHeadingElement>(null);
-  const mottoRef = useRef<HTMLParagraphElement>(null);
-  const descRef = useRef<HTMLParagraphElement>(null);
   const [typewriterText, setTypewriterText] = useState("");
   const [typewriterIndex, setTypewriterIndex] = useState(0);
   const [showCursor, setShowCursor] = useState(true);
@@ -29,9 +18,9 @@ export default function Hero() {
   useEffect(() => {
     setTypewriterText("");
     setTypewriterIndex(0);
-    
+
     const interval = setInterval(() => {
-      setTypewriterIndex(prev => {
+      setTypewriterIndex((prev) => {
         if (prev >= fullText.length) {
           clearInterval(interval);
           setShowCursor(false);
@@ -48,47 +37,14 @@ export default function Hero() {
   // Blinking cursor
   useEffect(() => {
     if (typewriterIndex >= fullText.length) return;
-    const interval = setInterval(() => setShowCursor(prev => !prev), 530);
+    const interval = setInterval(() => setShowCursor((prev) => !prev), 530);
     return () => clearInterval(interval);
   }, [typewriterIndex, fullText.length]);
 
-  useEffect(() => {
-    initAnimations();
-    if (prefersReducedMotion()) return;
-
-    const ctx = gsap.context(() => {
-      animateTextReveal("[data-hero-badge]", { type: "chars", stagger: 0.02, duration: 0.8, y: 20 });
-      animateOnScrollTextMotion("[data-hero-title]", { type: "chars", stagger: 0.015, y: 40, rotateX: 20, blur: 8, scrub: 1, start: "top 90%", end: "top 10%" });
-      animateTextReveal("[data-hero-motto]", { type: "words", stagger: 0.03, duration: 0.9, y: 30 });
-      animateTextReveal("[data-hero-desc]", { type: "lines", stagger: 0.05, duration: 0.8, y: 25 });
-
-      if (videoRef.current) {
-        gsap.set(videoRef.current, { perspective: 1000, transformStyle: "preserve-3d" });
-        gsap.to(videoRef.current, {
-          rotateY: 15,
-          rotateX: 5,
-          ease: "none",
-          scrollTrigger: {
-            trigger: heroRef.current,
-            start: "top bottom",
-            end: "bottom top",
-            scrub: 1,
-          },
-        });
-      }
-    }, heroRef);
-
-    return () => {
-      ctx.revert();
-      killAllAnimations();
-    };
-  }, []);
-
   return (
-    <section ref={heroRef} className="bg-alabaster relative overflow-hidden min-h-screen">
+    <section className="relative overflow-hidden min-h-screen w-full">
       {/* Background Video - covers entire hero section */}
       <video
-        ref={videoRef}
         autoPlay
         loop
         muted
@@ -100,43 +56,66 @@ export default function Hero() {
           type="video/mp4"
         />
       </video>
-      {/* Semi-transparent dark overlay - lighter for brightness */}
-      <div className="absolute inset-0 bg-black/20 z-10" />
 
-      {/* Content Overlay - sits on top of video and overlay */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-20 flex flex-col justify-center min-h-screen">
-        <div className="max-w-4xl mx-auto space-y-6 text-center">
-          <span 
-            ref={badgeRef}
-            data-hero-badge
-            className="inline-block px-4 py-1.5 rounded-full bg-[#F7E7CE]/90 backdrop-blur-sm text-sacred-gold text-xs font-extrabold tracking-wider uppercase border border-[#AE8F05]/30 shadow-lg"
-          >
+      {/* Deep navy-to-black gradient overlay for legibility (Stripe-style) */}
+      <div className="absolute inset-0 z-10" style={{
+        background: "linear-gradient(to bottom, rgba(2,4,18,0.72) 0%, rgba(4,8,28,0.55) 40%, rgba(2,4,18,0.80) 100%)"
+      }} />
+
+      {/* Content Overlay */}
+      <div className="w-full px-4 sm:px-6 lg:px-12 relative z-20 flex flex-col justify-center min-h-screen">
+        <div className="max-w-5xl mx-auto space-y-7 text-center">
+
+          {/* Typewriter Badge */}
+          <span className="inline-block px-4 py-1.5 rounded-full bg-white/10 backdrop-blur-md text-[#F7E7CE] text-xs font-semibold tracking-widest uppercase border border-white/20 shadow-lg">
             <span className="font-mono">
               {typewriterText}
-              {showCursor && <span className="animate-pulse text-sacred-gold">|</span>}
+              {showCursor && <span className="animate-pulse text-[#D4AF37]">|</span>}
             </span>
           </span>
 
-          <h1 
-            ref={titleRef}
-            data-hero-title
-            className="font-serif text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold text-white tracking-tight leading-[1.1] text-shadow-lg"
+          {/* Stripe-style headline: thin weight, tight tracking */}
+          <h1
+            className="font-sans text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-white leading-[1.08]"
+            style={{
+              fontWeight: 300,
+              letterSpacing: "-0.02em",
+              fontFamily: "'Inter', 'Helvetica Neue', Arial, sans-serif",
+              textShadow: "0 2px 24px rgba(0,0,0,0.45)",
+              wordSpacing: "0.04em",
+            }}
           >
-            {t("hero.welcome") || (isAm ? "እንኳን ወደ ተልዕኮ ለትውልድ ዓለም አቀፍ በደህና መጡ" : "Welcome to Mission For Nation International")}
+            {isAm
+              ? "እንኳን ወደ ተልዕኮ ለትውልድ ዓለም አቀፍ በደህና መጡ"
+              : <>
+                  Welcome to{" "}
+                  <span style={{ fontWeight: 700, color: "#D4AF37" }}>
+                    Mission For Nation
+                  </span>{" "}
+                  International
+                </>
+            }
           </h1>
 
-          <p 
-            ref={mottoRef}
-            data-hero-motto
-            className="text-lg sm:text-xl lg:text-2xl text-white/90 max-w-3xl mx-auto font-sans leading-relaxed font-medium text-shadow"
+          {/* Subtitle / motto */}
+          <p
+            className="text-lg sm:text-xl lg:text-2xl text-white/85 max-w-3xl mx-auto leading-relaxed"
+            style={{
+              fontWeight: 300,
+              fontFamily: "'Inter', 'Helvetica Neue', Arial, sans-serif",
+              textShadow: "0 1px 12px rgba(0,0,0,0.35)",
+            }}
           >
-            {t("hero.moto") || "Building lives, reaching nations, and establishing God's kingdom across the globe."}
+            {t("hero.moto") ||
+              "Building lives, reaching nations, and establishing God's kingdom across the globe."}
           </p>
 
+          {/* CTA Buttons */}
           <div className="pt-4 flex flex-wrap gap-4 justify-center">
             <Link
               to="/services"
-              className="px-8 py-4 rounded-xl bg-gradient-to-r from-[#D4AF37] via-[#AE8F05] to-[#7E6503] text-white font-bold shadow-xl hover:shadow-2xl hover:scale-105 transition-all duration-300 flex items-center justify-center space-x-2"
+              className="px-8 py-4 rounded-xl bg-gradient-to-r from-[#D4AF37] via-[#AE8F05] to-[#7E6503] text-white font-semibold shadow-xl hover:shadow-2xl hover:scale-105 transition-all duration-300 flex items-center justify-center space-x-2"
+              style={{ letterSpacing: "0.01em" }}
             >
               <span>{t("hero.joinUs") || "Join Our Services"}</span>
               <ArrowRight className="w-5 h-5" />
@@ -146,29 +125,35 @@ export default function Hero() {
               href="https://mfni.church/apk"
               target="_blank"
               rel="noopener noreferrer"
-              className="px-8 py-4 rounded-xl bg-white/10 backdrop-blur-md border border-white/30 text-white font-bold hover:bg-white/20 transition-all duration-300 shadow-md flex items-center justify-center space-x-2"
+              className="px-8 py-4 rounded-xl bg-white/10 backdrop-blur-md border border-white/25 text-white font-semibold hover:bg-white/20 transition-all duration-300 shadow-md flex items-center justify-center space-x-2"
             >
               <Download className="w-5 h-5 text-[#D4AF37]" />
               <span>Mobile App</span>
             </a>
-            
+
             <a
               href="https://mfni.church/members/home"
               target="_blank"
               rel="noopener noreferrer"
-              className="px-8 py-4 rounded-xl bg-white/10 backdrop-blur-md border border-white/30 text-white font-bold hover:bg-white/20 transition-all duration-300 shadow-md flex items-center justify-center space-x-2"
+              className="px-8 py-4 rounded-xl bg-white/10 backdrop-blur-md border border-white/25 text-white font-semibold hover:bg-white/20 transition-all duration-300 shadow-md flex items-center justify-center space-x-2"
             >
               <BookOpen className="w-5 h-5 text-[#D4AF37]" />
               <span>Digital Library</span>
             </a>
           </div>
 
-          <p 
-            ref={descRef}
-            data-hero-desc
-            className="text-base sm:text-lg text-white/80 max-w-2xl mx-auto font-bold leading-relaxed text-shadow"
+          {/* Description */}
+          <p
+            className="text-base sm:text-lg text-white/70 max-w-2xl mx-auto leading-relaxed"
+            style={{
+              fontWeight: 300,
+              fontFamily: "'Inter', 'Helvetica Neue', Arial, sans-serif",
+              textShadow: "0 1px 8px rgba(0,0,0,0.3)",
+            }}
           >
-            This is a mobile app and website where you can listen to sermons, discover powerful teachings, and get new sermons every week. Download sermons with the audio player, read books and buy online.
+            Listen to sermons, discover powerful teachings, and get new sermons
+            every week. Download audio, read books, and connect with the global
+            Mission For Nation community.
           </p>
         </div>
       </div>

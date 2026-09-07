@@ -14,7 +14,9 @@ import { Services } from "./pages/Services";
 import { BranchDetail } from "./pages/BranchDetail";
 import Gallery from "./pages/Gallery";
 import { ThemeProvider } from "./providers/ThemeProvider";
-import { LenisScrollProvider } from "./components/ui/LenisScrollProvider";
+
+// LenisScrollProvider removed — it caused scroll-jacking. Native smooth scroll
+// is configured via CSS `scroll-behavior: smooth` in globals.css.
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -29,28 +31,27 @@ function ScrollToTop() {
 export default function App() {
   return (
     <ThemeProvider>
-      <LenisScrollProvider>
-        <Router>
-          <ScrollToTop />
-          <div className="min-h-screen bg-alabaster text-warm-slate font-sans selection:bg-[#AE8F05]/20 selection:text-sacred-gold">
-            <Header />
+      <Router>
+        <ScrollToTop />
+        {/* Light theme only — no dark: class to prevent theme mismatch */}
+        <div className="min-h-screen bg-alabaster text-warm-slate font-sans selection:bg-[#AE8F05]/20 selection:text-sacred-gold w-full">
+          <Header />
 
-            <main>
-              <Routes>
-                <Route path="/" element={<Home />} />
-                <Route path="/about" element={<AboutUs />} />
-                <Route path="/services" element={<Services />} />
-                <Route path="/services/:branchId" element={<BranchDetail />} />
-                <Route path="/gallery" element={<Gallery />} />
-                {/* Fallback route */}
-                <Route path="*" element={<Home />} />
-              </Routes>
-            </main>
+          <main className="w-full">
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/about" element={<AboutUs />} />
+              <Route path="/services" element={<Services />} />
+              <Route path="/services/:branchId" element={<BranchDetail />} />
+              <Route path="/gallery" element={<Gallery />} />
+              {/* Catch-all: redirect to home */}
+              <Route path="*" element={<Home />} />
+            </Routes>
+          </main>
 
-            <Footer />
-          </div>
-        </Router>
-      </LenisScrollProvider>
+          <Footer />
+        </div>
+      </Router>
     </ThemeProvider>
   );
 }

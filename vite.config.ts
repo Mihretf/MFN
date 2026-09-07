@@ -17,6 +17,14 @@ export default defineConfig({
     },
   },
 
+  // SPA routing fix: serve index.html for all routes (fixes /gallery 404 on refresh)
+  server: {
+    historyApiFallback: true,
+  },
+  preview: {
+    historyApiFallback: true,
+  },
+
   // File types to support raw imports. Never add .css, .tsx, or .ts files to this.
   assetsInclude: ['**/*.svg', '**/*.csv'],
 })
