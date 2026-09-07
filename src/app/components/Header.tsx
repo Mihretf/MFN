@@ -15,7 +15,7 @@ export function Header() {
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
+      setIsScrolled(window.scrollY > 10);
     };
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
@@ -26,13 +26,11 @@ export function Header() {
     setIsMobileMenuOpen(false);
   }, [location.pathname]);
 
-  const headerStyles = isScrolled
-    ? "bg-[#FFFFF0]/95 backdrop-blur-xl border-b border-[#AE8F05]/20 shadow-md py-3"
-    : "bg-transparent py-5";
+  const headerStyles = "bg-[#FFFFF0] border-b border-[#AE8F05]/30 shadow-md py-3.5";
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ease-in-out ${headerStyles}`}
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ease-in-out ${headerStyles}`}
     >
       <div className="w-full max-w-7xl mx-auto px-4 md:px-8">
         <div className="flex items-center justify-between">
@@ -55,14 +53,14 @@ export function Header() {
 
             <div className="flex flex-col">
               <div className="flex items-center space-x-2">
-                <span className="font-serif font-extrabold text-lg sm:text-xl tracking-tight text-warm-slate group-hover:text-sacred-gold transition-colors"
-                  style={{ color: isScrolled ? undefined : "white", transition: "color 0.3s" }}>
+                <span
+                  className="font-serif font-extrabold text-lg sm:text-xl tracking-tight text-[#2C2A28] group-hover:text-[#AE8F05] transition-colors"
+                >
                   {i18n.language === "am" ? "ተልዕኮ ለትውልድ" : "MISSION FOR NATION"}
                 </span>
               </div>
               <span
-                className="text-[10px] tracking-widest uppercase font-semibold"
-                style={{ color: isScrolled ? "#5C5854" : "rgba(255,255,255,0.75)" }}
+                className="text-[10px] tracking-widest uppercase font-semibold text-[#5C5854]"
               >
                 Church &amp; Ministry
               </span>
@@ -71,16 +69,16 @@ export function Header() {
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-1">
-            <NavLink to="/" isActive={location.pathname === "/"} isScrolled={isScrolled}>
+            <NavLink to="/" isActive={location.pathname === "/"}>
               {t("nav.home")}
             </NavLink>
-            <NavLink to="/about" isActive={location.pathname === "/about"} isScrolled={isScrolled}>
+            <NavLink to="/about" isActive={location.pathname === "/about"}>
               {t("nav.about")}
             </NavLink>
-            <NavLink to="/services" isActive={location.pathname === "/services"} isScrolled={isScrolled}>
+            <NavLink to="/services" isActive={location.pathname === "/services"}>
               {t("nav.services")}
             </NavLink>
-            <NavLink to="/gallery" isActive={location.pathname === "/gallery"} isScrolled={isScrolled}>
+            <NavLink to="/gallery" isActive={location.pathname === "/gallery"}>
               {t("nav.gallery")}
             </NavLink>
 
@@ -89,7 +87,7 @@ export function Header() {
                 onClick={() =>
                   i18n.changeLanguage(i18n.language === "am" ? "en" : "am")
                 }
-                className="text-xs font-bold px-3 py-1.5 rounded-full bg-[#F7E7CE] text-warm-slate hover:bg-[#AE8F05] hover:text-white transition-all shadow-sm"
+                className="text-xs font-bold px-3 py-1.5 rounded-full bg-[#F7E7CE] text-[#2C2A28] hover:bg-[#AE8F05] hover:text-white transition-all shadow-sm"
               >
                 {i18n.language === "am" ? "EN" : "አማ"}
               </button>
@@ -102,7 +100,7 @@ export function Header() {
               onClick={() =>
                 i18n.changeLanguage(i18n.language === "am" ? "en" : "am")
               }
-              className="text-xs font-bold px-2.5 py-1 rounded-full bg-[#F7E7CE] text-warm-slate"
+              className="text-xs font-bold px-2.5 py-1 rounded-full bg-[#F7E7CE] text-[#2C2A28]"
             >
               {i18n.language === "am" ? "EN" : "አማ"}
             </button>
@@ -110,8 +108,7 @@ export function Header() {
             <motion.button
               whileTap={{ scale: 0.9 }}
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="p-2 rounded-full transition-colors"
-              style={{ color: isScrolled ? "#2C2A28" : "white" }}
+              className="p-2 rounded-full text-[#2C2A28] hover:bg-[#F7E7CE]/60 transition-colors"
               aria-label="Toggle mobile menu"
             >
               {isMobileMenuOpen ? (
@@ -158,35 +155,25 @@ export function Header() {
 function NavLink({
   to,
   isActive,
-  isScrolled,
   children,
 }: {
   to: string;
   isActive: boolean;
-  isScrolled: boolean;
   children: React.ReactNode;
 }) {
   return (
     <Link to={to} className="relative group px-4 py-2 rounded-xl transition-all">
       <span
-        className={`relative z-10 font-medium text-sm transition-colors ${
-          isActive ? "text-sacred-gold font-bold" : "hover:text-sacred-gold"
+        className={`relative z-10 font-bold text-sm transition-colors ${
+          isActive ? "text-[#AE8F05]" : "text-[#2C2A28] hover:text-[#AE8F05]"
         }`}
-        style={{
-          color: isActive
-            ? "#AE8F05"
-            : isScrolled
-            ? "#2C2A28"
-            : "rgba(255,255,255,0.9)",
-        }}
       >
         {children}
       </span>
       {isActive && (
         <motion.div
           layoutId="activePill"
-          className="absolute inset-0 rounded-xl border border-[#AE8F05]/20"
-          style={{ background: isScrolled ? "rgba(247,231,206,0.7)" : "rgba(255,255,255,0.12)" }}
+          className="absolute inset-0 rounded-xl border border-[#AE8F05]/30 bg-[#F7E7CE]/70"
           transition={{ type: "spring", stiffness: 350, damping: 30 }}
         />
       )}
@@ -207,9 +194,9 @@ function MobileNavLink({
     <Link
       to={to}
       onClick={onClick}
-      className="text-warm-slate text-lg font-semibold hover:text-sacred-gold transition-colors flex items-center space-x-3 p-2 rounded-lg"
+      className="text-[#2C2A28] text-lg font-semibold hover:text-[#AE8F05] transition-colors flex items-center space-x-3 p-2 rounded-lg"
     >
-      <div className="w-1.5 h-6 bg-sacred-gold rounded-full" />
+      <div className="w-1.5 h-6 bg-[#AE8F05] rounded-full" />
       <span>{children}</span>
     </Link>
   );

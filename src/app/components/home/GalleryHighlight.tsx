@@ -32,7 +32,7 @@ export default function GalleryHighlight() {
         const mappedCards: GalleryCard[] = list.slice(0, 6).map((post, idx) => ({
           id: post.id || `gallery-${idx}`,
           title: post.title || "30th Anniversary Celebration",
-          category: post.region_name || "Mission for Nation",
+          category: post.church?.name || "Mission for Nation Church",
           imageUrl: post.media_url,
           description: post.content || "Glorious worship and gathering in His presence.",
         }));

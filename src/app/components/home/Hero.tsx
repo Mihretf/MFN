@@ -57,31 +57,35 @@ export default function Hero() {
         />
       </video>
 
-      {/* Deep navy-to-black gradient overlay for legibility (Stripe-style) */}
-      <div className="absolute inset-0 z-10" style={{
-        background: "linear-gradient(to bottom, rgba(2,4,18,0.72) 0%, rgba(4,8,28,0.55) 40%, rgba(2,4,18,0.80) 100%)"
-      }} />
+      {/* Minimal transparent overlay to keep real video colors fully visible */}
+      <div
+        className="absolute inset-0 z-10 pointer-events-none"
+        style={{
+          background:
+            "linear-gradient(to bottom, rgba(0,0,0,0.35) 0%, rgba(0,0,0,0.12) 45%, rgba(0,0,0,0.45) 100%)",
+        }}
+      />
 
       {/* Content Overlay */}
-      <div className="w-full px-4 sm:px-6 lg:px-12 relative z-20 flex flex-col justify-center min-h-screen">
+      <div className="w-full px-4 sm:px-6 lg:px-12 relative z-20 flex flex-col justify-center min-h-screen pt-20">
         <div className="max-w-5xl mx-auto space-y-7 text-center">
 
           {/* Typewriter Badge */}
-          <span className="inline-block px-4 py-1.5 rounded-full bg-white/10 backdrop-blur-md text-[#F7E7CE] text-xs font-semibold tracking-widest uppercase border border-white/20 shadow-lg">
+          <span className="inline-block px-4 py-1.5 rounded-full bg-black/40 backdrop-blur-md text-[#F7E7CE] text-xs font-semibold tracking-widest uppercase border border-white/20 shadow-lg">
             <span className="font-mono">
               {typewriterText}
               {showCursor && <span className="animate-pulse text-[#D4AF37]">|</span>}
             </span>
           </span>
 
-          {/* Stripe-style headline: thin weight, tight tracking */}
+          {/* Headline */}
           <h1
             className="font-sans text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-white leading-[1.08]"
             style={{
-              fontWeight: 300,
+              fontWeight: 800,
               letterSpacing: "-0.02em",
               fontFamily: "'Inter', 'Helvetica Neue', Arial, sans-serif",
-              textShadow: "0 2px 24px rgba(0,0,0,0.45)",
+              textShadow: "0 3px 20px rgba(0,0,0,0.75)",
               wordSpacing: "0.04em",
             }}
           >
@@ -89,7 +93,7 @@ export default function Hero() {
               ? "እንኳን ወደ ተልዕኮ ለትውልድ ዓለም አቀፍ በደህና መጡ"
               : <>
                   Welcome to{" "}
-                  <span style={{ fontWeight: 700, color: "#D4AF37" }}>
+                  <span className="text-[#D4AF37] font-extrabold">
                     Mission For Nation
                   </span>{" "}
                   International
@@ -99,11 +103,10 @@ export default function Hero() {
 
           {/* Subtitle / motto */}
           <p
-            className="text-lg sm:text-xl lg:text-2xl text-white/85 max-w-3xl mx-auto leading-relaxed"
+            className="text-lg sm:text-xl lg:text-2xl text-white/90 max-w-3xl mx-auto leading-relaxed font-medium"
             style={{
-              fontWeight: 300,
               fontFamily: "'Inter', 'Helvetica Neue', Arial, sans-serif",
-              textShadow: "0 1px 12px rgba(0,0,0,0.35)",
+              textShadow: "0 2px 10px rgba(0,0,0,0.7)",
             }}
           >
             {t("hero.moto") ||
@@ -125,7 +128,7 @@ export default function Hero() {
               href="https://mfni.church/apk"
               target="_blank"
               rel="noopener noreferrer"
-              className="px-8 py-4 rounded-xl bg-white/10 backdrop-blur-md border border-white/25 text-white font-semibold hover:bg-white/20 transition-all duration-300 shadow-md flex items-center justify-center space-x-2"
+              className="px-8 py-4 rounded-xl bg-black/40 backdrop-blur-md border border-white/30 text-white font-semibold hover:bg-black/60 transition-all duration-300 shadow-md flex items-center justify-center space-x-2"
             >
               <Download className="w-5 h-5 text-[#D4AF37]" />
               <span>Mobile App</span>
@@ -135,7 +138,7 @@ export default function Hero() {
               href="https://mfni.church/members/home"
               target="_blank"
               rel="noopener noreferrer"
-              className="px-8 py-4 rounded-xl bg-white/10 backdrop-blur-md border border-white/25 text-white font-semibold hover:bg-white/20 transition-all duration-300 shadow-md flex items-center justify-center space-x-2"
+              className="px-8 py-4 rounded-xl bg-black/40 backdrop-blur-md border border-white/30 text-white font-semibold hover:bg-black/60 transition-all duration-300 shadow-md flex items-center justify-center space-x-2"
             >
               <BookOpen className="w-5 h-5 text-[#D4AF37]" />
               <span>Digital Library</span>
@@ -144,11 +147,10 @@ export default function Hero() {
 
           {/* Description */}
           <p
-            className="text-base sm:text-lg text-white/70 max-w-2xl mx-auto leading-relaxed"
+            className="text-base sm:text-lg text-white/80 max-w-2xl mx-auto leading-relaxed font-normal"
             style={{
-              fontWeight: 300,
               fontFamily: "'Inter', 'Helvetica Neue', Arial, sans-serif",
-              textShadow: "0 1px 8px rgba(0,0,0,0.3)",
+              textShadow: "0 1px 8px rgba(0,0,0,0.6)",
             }}
           >
             Listen to sermons, discover powerful teachings, and get new sermons
