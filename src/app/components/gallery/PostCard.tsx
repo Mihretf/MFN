@@ -1,4 +1,4 @@
-import { Calendar, MapPin, Church } from "lucide-react";
+import { Calendar, MapPin } from "lucide-react";
 import { ImageWithFallback } from "../figma/ImageWithFallback";
 
 export type PostType = "event" | "news" | "sermon" | "announcement" | "gallery";
@@ -11,7 +11,6 @@ export interface Post {
   type: PostType;
   show_on_homepage: boolean;
   created_at: string;
-  // optional deadline added for events
   deadline?: string | null;
   region: {
     id: string;
@@ -29,25 +28,17 @@ interface PostCardProps {
 }
 
 const postTypeBadgeColors: Record<PostType, string> = {
-  event: "bg-blue-100 text-blue-700 border-blue-200",
-  news: "bg-green-100 text-green-700 border-green-200",
-  sermon: "bg-purple-100 text-purple-700 border-purple-200",
-  announcement: "bg-amber-100 text-amber-700 border-amber-200",
-  gallery: "bg-gray-100 text-gray-700 border-gray-200",
+  event: "bg-[#F7E7CE] text-[#AE8F05] border-[#AE8F05]/30",
+  news: "bg-[#F7E7CE] text-[#AE8F05] border-[#AE8F05]/30",
+  sermon: "bg-[#F7E7CE] text-[#AE8F05] border-[#AE8F05]/30",
+  announcement: "bg-[#F7E7CE] text-[#AE8F05] border-[#AE8F05]/30",
+  gallery: "bg-[#F7E7CE] text-[#AE8F05] border-[#AE8F05]/30",
 };
 
 export function PostCard({ post, onClick }: PostCardProps) {
-  const truncateText = (text: string, maxLength: number) => {
-    return text.length > maxLength
-      ? text.substring(0, maxLength) + "..."
-      : text;
-  };
-  console.log("rendering post card for post", post);
-
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
     const now = new Date();
-    const diffTime = Math.abs(now.getTime() - date.getTime());
     const diffDays = Math.floor(
       (now.getTime() - date.getTime()) / (1000 * 60 * 60 * 24)
     );
@@ -64,21 +55,21 @@ export function PostCard({ post, onClick }: PostCardProps) {
   };
 
   return (
-    <div className="group bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1 border border-gray-100 dark:border-gray-700">
-      {/* Image */}
+    <div className="group bg-[#FFFFF0] rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1 border border-[#AE8F05]/20">
+      {/* Image — fixed aspect ratio with object-top to preserve heads */}
       <div
-        className="relative h-48 overflow-hidden bg-gray-100 dark:bg-gray-900 cursor-pointer"
+        className="relative aspect-square overflow-hidden bg-[#F2F0EB] cursor-pointer"
         onClick={onClick}
       >
         <ImageWithFallback
           src={post.media_url}
           alt={post.title}
-          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+          className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500"
         />
         {/* Post Type Badge */}
-        <div className="absolute top-3 right-3">
+        <div className="absolute top-2 right-2">
           <span
-            className={`px-3 py-1 rounded-full text-xs uppercase tracking-wide border ${postTypeBadgeColors[post.type]}`}
+            className={`px-2.5 py-0.5 rounded-full text-[10px] uppercase tracking-wider border font-semibold ${postTypeBadgeColors[post.type]}`}
           >
             {post.type}
           </span>
@@ -86,36 +77,21 @@ export function PostCard({ post, onClick }: PostCardProps) {
       </div>
 
       {/* Content */}
-      <div className="p-5">
-        <h3 className="text-xl mb-2 text-gray-900 dark:text-gray-100 group-hover:text-blue-600 dark:group-hover:text-[#d4af37] transition-colors">
+      <div className="p-3">
+        <h3 className="text-sm font-bold mb-1 text-[#2C2A28] group-hover:text-[#AE8F05] transition-colors line-clamp-1">
           {post.title}
         </h3>
 
-        {/* Meta Information */}
-        <div className="space-y-2 text-sm text-gray-500 dark:text-gray-400 transition-colors">
-          <div className="flex items-center gap-2">
-            <MapPin className="w-4 h-4 text-gray-400 dark:text-[#d4af37]" />
-            <span>{post.region.name}</span>
+        <div className="space-y-1 text-xs text-[#5C5854]">
+          <div className="flex items-center gap-1.5">
+            <MapPin className="w-3 h-3 text-[#AE8F05]" />
+            <span className="line-clamp-1">{post.region.name}</span>
           </div>
 
-          {/* <div className="flex items-center gap-2">
-            <Church className="w-4 h-4 text-gray-400 dark:text-[#d4af37]" />
-            <span>{post.church.name}</span>
-          </div> */}
-
-          <div className="flex items-center gap-2">
-            <Calendar className="w-4 h-4 text-gray-400 dark:text-[#d4af37]" />
+          <div className="flex items-center gap-1.5">
+            <Calendar className="w-3 h-3 text-[#AE8F05]" />
             <span>{formatDate(post.created_at)}</span>
           </div>
-
-          {post.type === "event" && post.deadline && (
-            <div className="flex items-center gap-2">
-              <Calendar className="w-4 h-4 text-gray-400 dark:text-[#d4af37]" />
-              <span className="font-semibold text-gray-700 dark:text-gray-300">
-                Deadline: {formatDate(post.deadline)}
-              </span>
-            </div>
-          )}
         </div>
       </div>
     </div>

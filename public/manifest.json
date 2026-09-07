@@ -1,0 +1,27 @@
+{
+  "name": "Mission for Nation International",
+  "short_name": "MFN Church",
+  "description": "A global ministry founded by Apostle Dr. Zelalem Getachew. 30+ years of divine vision, 130+ churches worldwide, Bible colleges, 7 Spirit TV broadcast.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#F2F0EB",
+  "theme_color": "#AE8F05",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/IMG_20250911_220600_711-removebg-preview.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/IMG_20250911_220600_711-removebg-preview.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["religion", "education", "lifestyle"],
+  "lang": "en",
+  "dir": "ltr"
+}

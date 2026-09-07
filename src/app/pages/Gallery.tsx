@@ -1,9 +1,8 @@
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo, useEffect, useCallback, useRef } from "react";
 import { useTranslation } from "react-i18next";
-import { Sparkles, TrendingUp, Shuffle } from "lucide-react";
+import { Sparkles, TrendingUp } from "lucide-react";
 import { Post } from "../types/gallery.type";
 import { FilterSection } from "../components/gallery/FilterSection";
-import { Pagination } from "../components/gallery/Pagination";
 import { PostCard } from "../components/gallery/PostCard";
 import { GalleryViewer } from "../components/gallery/GalleryViewer";
 import { fetchGalleryPosts } from "../services/gallery.service";
@@ -11,13 +10,11 @@ import { regionService } from "../services/app.service";
 import { LoadingState } from "../components/ui/LoadingState";
 import { ErrorState } from "../components/ui/ErrorState";
 
-// regions list is fetched from backend instead of hardcoded
 interface RegionAPI {
   id: string;
   name: string;
 }
 
-// Utility functions
 function getRecentPosts(posts: Post[], limit: number = 5): Post[] {
   return [...posts]
     .sort(
@@ -25,11 +22,6 @@ function getRecentPosts(posts: Post[], limit: number = 5): Post[] {
         new Date(b.created_at).getTime() - new Date(a.created_at).getTime(),
     )
     .slice(0, limit);
-}
-
-function getRandomPosts(posts: Post[], limit: number = 3): Post[] {
-  const shuffled = [...posts].sort(() => 0.5 - Math.random());
-  return shuffled.slice(0, limit);
 }
 
 function filterPosts(
@@ -44,17 +36,15 @@ function filterPosts(
   });
 }
 
-function getHomepagePosts(posts: Post[]): Post[] {
-  // Get posts where show_on_homepage is true
-  return posts.filter((post) => post.show_on_homepage);
-}
-
-export default function App() {
+export default function GalleryPage() {
   const { t } = useTranslation();
   const [selectedRegion, setSelectedRegion] = useState("all");
   const [selectedPostType, setSelectedPostType] = useState("all");
-  const [currentPage, setCurrentPage] = useState(1);
-  const postsPerPage = 6;
+
+  // Infinite scroll: number of posts visible grows as user scrolls
+  const BATCH_SIZE = 20;
+  const [visibleCount, setVisibleCount] = useState(BATCH_SIZE);
+  const sentinelRef = useRef<HTMLDivElement>(null);
 
   const [posts, setPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState(true);
@@ -64,8 +54,6 @@ export default function App() {
   const [viewerOpen, setViewerOpen] = useState(false);
   const [viewerSection, setViewerSection] = useState<"all" | "recent">("all");
   const [viewerIndex, setViewerIndex] = useState(0);
-
-  // arrays passed to viewer to navigate; defaults updated when opening
   const [viewerAllPosts, setViewerAllPosts] = useState<Post[]>([]);
   const [viewerRecentPosts, setViewerRecentPosts] = useState<Post[]>([]);
 
@@ -82,12 +70,10 @@ export default function App() {
     setViewerOpen(true);
   };
 
-  // region state
   const [regions, setRegions] = useState<RegionAPI[]>([]);
   const [loadingRegions, setLoadingRegions] = useState(false);
   const [errorRegions, setErrorRegions] = useState<string | null>(null);
 
-  // load region list from service
   useEffect(() => {
     setLoadingRegions(true);
     regionService
@@ -103,7 +89,6 @@ export default function App() {
       .finally(() => setLoadingRegions(false));
   }, []);
 
-  // fetch posts once on mount
   useEffect(() => {
     setLoading(true);
     fetchGalleryPosts()
@@ -112,52 +97,62 @@ export default function App() {
       .finally(() => setLoading(false));
   }, []);
 
-  // Get filtered posts
   const filteredPosts = useMemo(() => {
     return filterPosts(posts, selectedRegion, selectedPostType);
   }, [posts, selectedRegion, selectedPostType]);
 
-  // if filter set changes while viewer is open close it to avoid stale index
   useEffect(() => {
     if (viewerOpen) {
       setViewerOpen(false);
     }
   }, [filteredPosts]);
 
-  // Get recent posts
-  const recentPosts = useMemo(() => getRecentPosts(posts, 3), [posts]);
+  const recentPosts = useMemo(() => getRecentPosts(posts, 5), [posts]);
 
-  // Get random posts
+  // Reset visible count when filters change
+  useEffect(() => {
+    setVisibleCount(BATCH_SIZE);
+  }, [selectedRegion, selectedPostType]);
 
-  // Pagination calculations
-  const totalPages = Math.ceil(filteredPosts.length / postsPerPage);
-  const startIndex = (currentPage - 1) * postsPerPage;
-  const paginatedPosts = filteredPosts.slice(
-    startIndex,
-    startIndex + postsPerPage,
-  );
+  // The posts currently shown
+  const displayedPosts = filteredPosts.slice(0, visibleCount);
+  const hasMore = visibleCount < filteredPosts.length;
 
-  // Reset to page 1 when filters change
+  // Infinite scroll observer
+  useEffect(() => {
+    if (!sentinelRef.current || !hasMore) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          setVisibleCount((prev) => Math.min(prev + BATCH_SIZE, filteredPosts.length));
+        }
+      },
+      { rootMargin: "200px" }
+    );
+
+    observer.observe(sentinelRef.current);
+    return () => observer.disconnect();
+  }, [hasMore, filteredPosts.length]);
+
   const handleRegionChange = (regionId: string) => {
     setSelectedRegion(regionId);
-    setCurrentPage(1);
   };
 
   const handlePostTypeChange = (postType: string) => {
     setSelectedPostType(postType);
-    setCurrentPage(1);
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 mt-16 transition-colors duration-300">
+    <div className="min-h-screen bg-alabaster mt-16">
       {/* Header */}
-      <header className="bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700 transition-colors">
+      <header className="bg-[#FFFFF0] border-b border-[#AE8F05]/20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <h1 className="text-4xl text-gray-900 dark:text-gray-100 text-center mb-2 transition-colors">
-            {t("gallery.heroTitle")}
+          <h1 className="text-4xl font-serif font-extrabold text-warm-slate text-center mb-2">
+            {t("gallery.heroTitle") || "Gallery"}
           </h1>
-          <p className="text-center text-gray-600 dark:text-gray-400 transition-colors">
-            {t("gallery.heroSubtitle")}
+          <p className="text-center text-[#5C5854]">
+            {t("gallery.heroSubtitle") || "Browse photos and media from our ministry"}
           </p>
         </div>
       </header>
@@ -174,26 +169,7 @@ export default function App() {
         )}
         {!loading && !error && (
           <>
-            {/* Recent Posts Section */}
-            {recentPosts.length > 0 && (
-              <section className="mb-12">
-                <div className="flex items-center gap-2 mb-6">
-                  <TrendingUp className="w-6 h-6 text-blue-600" />
-                  <h2 className="text-2xl text-gray-900 dark:text-gray-100">{t("gallery.recentPosts")}</h2>
-                </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {recentPosts.map((post, idx) => (
-                    <PostCard
-                      key={post.id}
-                      post={post}
-                      onClick={() => openViewer("recent", idx)}
-                    />
-                  ))}
-                </div>
-              </section>
-            )}
-
-            {/* Filters */}
+            {/* Circular Pill Filters at the top */}
             {loadingRegions && (
               <LoadingState message="Loading regions..." className="py-8" />
             )}
@@ -212,59 +188,66 @@ export default function App() {
               onPostTypeChange={handlePostTypeChange}
             />
 
-            {/* All Posts Grid */}
+            {/* All Posts Grid — 4-5 columns, compact cards */}
             <section>
               {filteredPosts.length > 0 && (
-                <div className="flex items-center gap-2 mb-6">
-                  <Sparkles className="w-6 h-6 text-green-600" />
-                  <h2 className="text-2xl text-gray-900 dark:text-gray-100">{t("gallery.allPosts")}</h2>
-                  <span className="text-sm text-gray-500">
+                <div className="flex items-center gap-2 mb-4">
+                  <Sparkles className="w-5 h-5 text-sacred-gold" />
+                  <h2 className="text-xl font-serif font-bold text-warm-slate">
+                    {t("gallery.allPosts") || "All Posts"}
+                  </h2>
+                  <span className="text-sm text-[#5C5854]">
                     ({filteredPosts.length}{" "}
-                    {filteredPosts.length === 1 ? t("gallery.post") : t("gallery.posts")})
+                    {filteredPosts.length === 1 ? t("gallery.post") || "post" : t("gallery.posts") || "posts"})
                   </span>
                 </div>
               )}
 
-              {paginatedPosts.length > 0 ? (
+              {displayedPosts.length > 0 ? (
                 <>
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {paginatedPosts.map((post, idx) => (
+                  <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
+                    {displayedPosts.map((post, idx) => (
                       <PostCard
                         key={post.id}
                         post={post}
-                        onClick={() => openViewer("all", startIndex + idx)}
+                        onClick={() => openViewer("all", idx)}
                       />
                     ))}
                   </div>
 
-                  {/* Pagination */}
-                  <Pagination
-                    currentPage={currentPage}
-                    totalPages={totalPages}
-                    onPageChange={setCurrentPage}
-                  />
+                  {/* Infinite Scroll Sentinel */}
+                  {hasMore && (
+                    <div ref={sentinelRef} className="flex justify-center py-8">
+                      <div className="w-8 h-8 border-3 border-[#AE8F05]/40 border-t-[#AE8F05] rounded-full animate-spin" />
+                    </div>
+                  )}
+
+                  {!hasMore && filteredPosts.length > BATCH_SIZE && (
+                    <p className="text-center text-sm text-[#5C5854] py-6">
+                      Showing all {filteredPosts.length} posts
+                    </p>
+                  )}
                 </>
               ) : (
-                // No Results State
-                <div className="text-center py-16 bg-white dark:bg-gray-900 rounded-xl shadow-sm border border-gray-100 dark:border-gray-800 transition-colors">
+                <div className="text-center py-16 bg-[#FFFFF0] rounded-xl border border-[#AE8F05]/20">
                   <div className="max-w-md mx-auto">
-                    <div className="w-16 h-16 bg-gray-100 dark:bg-gray-800 rounded-full flex items-center justify-center mx-auto mb-4 transition-colors">
-                      <Sparkles className="w-8 h-8 text-[#d4af37]" />
+                    <div className="w-16 h-16 bg-[#F7E7CE] rounded-full flex items-center justify-center mx-auto mb-4">
+                      <Sparkles className="w-8 h-8 text-sacred-gold" />
                     </div>
-                    <h3 className="text-xl text-gray-900 dark:text-gray-100 mb-2 transition-colors">
-                      {t("gallery.noPosts")}
+                    <h3 className="text-xl font-serif text-warm-slate mb-2">
+                      {t("gallery.noPosts") || "No posts found"}
                     </h3>
-                    <p className="text-gray-600 mb-6">
-                      {t("gallery.noPostsDesc")}
+                    <p className="text-[#5C5854] mb-6">
+                      {t("gallery.noPostsDesc") || "Try adjusting your filters."}
                     </p>
                     <button
                       onClick={() => {
                         setSelectedRegion("all");
                         setSelectedPostType("all");
                       }}
-                      className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                      className="px-6 py-2 bg-[#AE8F05] text-[#FFFFF0] rounded-full font-semibold hover:bg-[#7E6503] transition-colors"
                     >
-                      {t("gallery.clearFilters")}
+                      {t("gallery.clearFilters") || "Clear Filters"}
                     </button>
                   </div>
                 </div>
@@ -274,9 +257,7 @@ export default function App() {
         )}
       </main>
 
-      {/* Footer */}
-
-      {/* gallery viewer modal */}
+      {/* Gallery Viewer Modal */}
       {viewerOpen && (
         <GalleryViewer
           allPosts={viewerAllPosts}
@@ -286,14 +267,6 @@ export default function App() {
           onClose={() => setViewerOpen(false)}
         />
       )}
-      {/* Footer */}
-      <footer className="bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 mt-16 transition-colors">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <p className="text-center text-gray-600 dark:text-gray-400 text-sm transition-colors">
-            {t("footer.copyright")}
-          </p>
-        </div>
-      </footer>
     </div>
   );
 }

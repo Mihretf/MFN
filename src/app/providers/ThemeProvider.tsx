@@ -2,6 +2,8 @@ import React from "react";
 import { ThemeProvider as NextThemesProvider, useTheme as useNextTheme } from "next-themes";
 import { ThemeProvider as MuiThemeProvider, createTheme, CssBaseline } from "@mui/material";
 
+export { useTheme } from "next-themes";
+
 // Inner component to consume next-themes state and provide it to MUI
 function MuiThemeWrapper({ children }: { children: React.ReactNode }) {
   const { resolvedTheme } = useNextTheme();
@@ -10,20 +12,20 @@ function MuiThemeWrapper({ children }: { children: React.ReactNode }) {
     () =>
       createTheme({
         palette: {
-          mode: resolvedTheme === "dark" ? "dark" : "light",
+          mode: "light",
           primary: {
-            main: resolvedTheme === "dark" ? "#f0d082" : "#1a3c34", // Using the project's elegant gold/green
+            main: "#AE8F05",
           },
           secondary: {
-            main: "#d4af37",
+            main: "#AE8F05",
           },
           background: {
-            default: resolvedTheme === "dark" ? "#111827" : "#f5f5f5", // Tailwind gray-900 / gray-50
-            paper: resolvedTheme === "dark" ? "#1f2937" : "#ffffff", // Tailwind gray-800 / white
+            default: "#F2F0EB",
+            paper: "#FFFFF0",
           },
         },
         typography: {
-          fontFamily: "inherit", // Blend seamlessly with Tailwind fonts
+          fontFamily: "inherit",
           h1: { fontWeight: 700 },
           h2: { fontWeight: 700 },
           h3: { fontWeight: 700 },
@@ -33,7 +35,7 @@ function MuiThemeWrapper({ children }: { children: React.ReactNode }) {
             styleOverrides: {
               root: {
                 textTransform: "none",
-                borderRadius: "0.5rem",
+                borderRadius: "0.75rem",
                 fontWeight: 600,
               },
             },
@@ -54,7 +56,7 @@ function MuiThemeWrapper({ children }: { children: React.ReactNode }) {
 // Wrapper for entire app
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
   return (
-    <NextThemesProvider attribute="class" defaultTheme="system" enableSystem>
+    <NextThemesProvider attribute="class" defaultTheme="light" enableSystem={false}>
       <MuiThemeWrapper>{children}</MuiThemeWrapper>
     </NextThemesProvider>
   );

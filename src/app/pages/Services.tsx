@@ -1,3 +1,4 @@
+import { ImageWithFallback } from '../components/figma/ImageWithFallback';
 import React, { useState, useEffect, useMemo } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
@@ -499,12 +500,8 @@ export function Services() {
                           <div className="bg-white dark:bg-gray-900 rounded-xl shadow-md border border-gray-100 dark:border-gray-800 hover:shadow-xl transition-all duration-300 overflow-hidden group">
                             <div className="flex flex-col md:flex-row">
                               {/* Image */}
-                              <div className="md:w-2/5 h-64 md:h-auto relative overflow-hidden">
-                                <img
-                                  src={branch.heroImage}
-                                  alt={branch.name}
-                                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                                />
+                              <div className="w-full md:w-2/5 h-64 md:h-72 flex-shrink-0 relative overflow-hidden bg-gray-100 dark:bg-gray-800">
+                                <ImageWithFallback src={branch.heroImage || "https://images.unsplash.com/photo-1548625149-fc4a29cf7092?auto=format&fit=crop&q=80&w=1080"} alt={branch.name} className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500" />
                                 <div className="absolute inset-0 bg-gradient-to-t from-[#1a3c34]/80 to-transparent" />
                               </div>
 

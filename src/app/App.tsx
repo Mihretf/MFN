@@ -14,6 +14,7 @@ import { Services } from "./pages/Services";
 import { BranchDetail } from "./pages/BranchDetail";
 import Gallery from "./pages/Gallery";
 import { ThemeProvider } from "./providers/ThemeProvider";
+import { LenisScrollProvider } from "./components/ui/LenisScrollProvider";
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -28,26 +29,28 @@ function ScrollToTop() {
 export default function App() {
   return (
     <ThemeProvider>
-      <Router>
-        <ScrollToTop />
-        <div className="min-h-screen bg-[#f5f5f5] dark:bg-gray-900 font-sans text-[#1a3c34] dark:text-gray-100 transition-colors duration-300">
-          <Header />
+      <LenisScrollProvider>
+        <Router>
+          <ScrollToTop />
+          <div className="min-h-screen bg-alabaster text-warm-slate font-sans selection:bg-[#AE8F05]/20 selection:text-sacred-gold">
+            <Header />
 
-        <main>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/about" element={<AboutUs />} />
-            <Route path="/services" element={<Services />} />
-            <Route path="/services/:branchId" element={<BranchDetail />} />
-            <Route path="/gallery" element={<Gallery />} />
-            {/* Fallback route */}
-            <Route path="*" element={<Home />} />
-          </Routes>
-        </main>
+            <main>
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/about" element={<AboutUs />} />
+                <Route path="/services" element={<Services />} />
+                <Route path="/services/:branchId" element={<BranchDetail />} />
+                <Route path="/gallery" element={<Gallery />} />
+                {/* Fallback route */}
+                <Route path="*" element={<Home />} />
+              </Routes>
+            </main>
 
-        <Footer />
-      </div>
-    </Router>
+            <Footer />
+          </div>
+        </Router>
+      </LenisScrollProvider>
     </ThemeProvider>
   );
 }
