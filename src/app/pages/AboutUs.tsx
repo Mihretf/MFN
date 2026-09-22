@@ -89,19 +89,13 @@ export function AboutUs() {
             {/* Right Photos & Media Highlights */}
             <div className="lg:col-span-5 space-y-6">
               
-              {/* Photo 1: Starting at 19 */}
-              <div className="bg-white rounded-3xl p-4 border border-[#EAE6DE] shadow-lg group">
-                <div className="rounded-2xl overflow-hidden min-h-[300px] sm:min-h-[350px] bg-[#16211d] relative flex items-center justify-center">
-                  <img
-                    src="https://res.cloudinary.com/droslno9i/image/upload/v1788691829/9b6cf1d4-9c00-42d8-8709-c52067bd319d_auqtmk.jpg"
-                    alt=""
-                    aria-hidden="true"
-                    className="absolute inset-0 w-full h-full object-cover blur-xl opacity-30 scale-110 pointer-events-none"
-                  />
+              {/* Photo 1: Starting at 19 - Clean Standalone Photo */}
+              <div className="bg-white rounded-3xl p-4 border border-[#EAE6DE] shadow-md hover:shadow-xl transition-all duration-300 group">
+                <div className="rounded-2xl overflow-hidden min-h-[300px] sm:min-h-[350px] bg-stone-50 dark:bg-gray-900 border border-[#e5dfd0]/80 shadow-sm relative flex items-center justify-center">
                   <ImageWithFallback
                     src="https://res.cloudinary.com/droslno9i/image/upload/v1788691829/9b6cf1d4-9c00-42d8-8709-c52067bd319d_auqtmk.jpg"
                     alt="Apostle starting ministry at age 19"
-                    className="relative z-10 w-full h-full max-h-[380px] object-contain p-2 group-hover:scale-[1.02] transition-transform duration-500"
+                    className="w-full h-full max-h-[380px] object-contain p-2.5 transition-transform duration-500 group-hover:scale-105"
                   />
                   <div className="absolute bottom-0 inset-x-0 z-20 bg-gradient-to-t from-black/80 via-black/40 to-transparent p-3 text-white text-xs font-semibold">
                     {isAm ? "ሐዋርያው በ19 ዓመቱ አገልግሎቱን ሲጀምሩ (Bus Station Area)" : "Apostle Dr. Zelalem Getachew at age 19 starting the vision"}
@@ -109,45 +103,27 @@ export function AboutUs() {
                 </div>
               </div>
 
-              {/* Photos Grid: Graduation & PHD */}
+              {/* Photos Grid: Graduation & PHD - Clean Standalone Photos */}
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                <div className="rounded-2xl overflow-hidden min-h-[190px] bg-[#16211d] relative flex items-center justify-center border border-[#AE8F05]/30 shadow-md group">
-                  <img
-                    src="https://res.cloudinary.com/droslno9i/image/upload/v1788694065/FB_IMG_1788680250348_fjuyj6.jpg"
-                    alt=""
-                    aria-hidden="true"
-                    className="absolute inset-0 w-full h-full object-cover blur-xl opacity-30 scale-110 pointer-events-none"
-                  />
+                <div className="rounded-2xl overflow-hidden min-h-[190px] bg-stone-50 dark:bg-gray-900 relative flex items-center justify-center border border-[#AE8F05]/30 shadow-sm hover:shadow-md hover:border-[#AE8F05] transition-all duration-300 group">
                   <ImageWithFallback
                     src="https://res.cloudinary.com/droslno9i/image/upload/v1788694065/FB_IMG_1788680250348_fjuyj6.jpg"
                     alt="Apostle Graduation 1"
-                    className="relative z-10 w-full h-full max-h-[220px] object-contain p-1.5 group-hover:scale-105 transition-transform duration-500"
+                    className="w-full h-full max-h-[220px] object-contain p-2 transition-transform duration-500 group-hover:scale-105"
                   />
                 </div>
-                <div className="rounded-2xl overflow-hidden min-h-[190px] bg-[#16211d] relative flex items-center justify-center border border-[#AE8F05]/30 shadow-md group">
-                  <img
-                    src="https://res.cloudinary.com/droslno9i/image/upload/v1788694065/FB_IMG_1788680484395_fq0qp2.jpg"
-                    alt=""
-                    aria-hidden="true"
-                    className="absolute inset-0 w-full h-full object-cover blur-xl opacity-30 scale-110 pointer-events-none"
-                  />
+                <div className="rounded-2xl overflow-hidden min-h-[190px] bg-stone-50 dark:bg-gray-900 relative flex items-center justify-center border border-[#AE8F05]/30 shadow-sm hover:shadow-md hover:border-[#AE8F05] transition-all duration-300 group">
                   <ImageWithFallback
                     src="https://res.cloudinary.com/droslno9i/image/upload/v1788694065/FB_IMG_1788680484395_fq0qp2.jpg"
                     alt="Apostle Graduation 2"
-                    className="relative z-10 w-full h-full max-h-[220px] object-contain p-1.5 group-hover:scale-105 transition-transform duration-500"
+                    className="w-full h-full max-h-[220px] object-contain p-2 transition-transform duration-500 group-hover:scale-105"
                   />
                 </div>
-                <div className="rounded-2xl overflow-hidden min-h-[190px] bg-[#16211d] relative flex items-center justify-center border border-[#AE8F05]/30 shadow-md group">
-                  <img
-                    src="https://res.cloudinary.com/droslno9i/image/upload/v1788694065/FB_IMG_1788680275136_hm9znx.jpg"
-                    alt=""
-                    aria-hidden="true"
-                    className="absolute inset-0 w-full h-full object-cover blur-xl opacity-30 scale-110 pointer-events-none"
-                  />
+                <div className="rounded-2xl overflow-hidden min-h-[190px] bg-stone-50 dark:bg-gray-900 relative flex items-center justify-center border border-[#AE8F05]/30 shadow-sm hover:shadow-md hover:border-[#AE8F05] transition-all duration-300 group">
                   <ImageWithFallback
                     src="https://res.cloudinary.com/droslno9i/image/upload/v1788694065/FB_IMG_1788680275136_hm9znx.jpg"
                     alt="Apostle Graduation 3"
-                    className="relative z-10 w-full h-full max-h-[220px] object-contain p-1.5 group-hover:scale-105 transition-transform duration-500"
+                    className="w-full h-full max-h-[220px] object-contain p-2 transition-transform duration-500 group-hover:scale-105"
                   />
                 </div>
               </div>

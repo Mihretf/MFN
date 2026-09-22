@@ -79,37 +79,30 @@ export function EventCard({ event }: EventCardProps) {
         transition={{ duration: 0.2 }}
         className="w-full bg-white dark:bg-gray-800 rounded-2xl shadow-sm hover:shadow-xl border border-[#e5dfd0] dark:border-gray-700 overflow-hidden flex flex-col group transition-all duration-300"
       >
-        {/* Full Flyer Photo Container */}
+        {/* Event Portrait Photo Container - Clean Standalone Photo */}
         <div
           onClick={() => hasImage && setModalOpen(true)}
-          className={`relative w-full h-72 sm:h-80 bg-[#16211d] overflow-hidden flex items-center justify-center ${
+          className={`relative w-full aspect-[3/4] sm:h-80 rounded-2xl overflow-hidden bg-stone-50 dark:bg-gray-900 border border-[#e5dfd0]/80 shadow-md flex items-center justify-center group-hover:shadow-2xl group-hover:border-[#ae8f05] group-hover:ring-2 group-hover:ring-[#ae8f05]/30 transition-all duration-300 ${
             hasImage ? "cursor-pointer" : ""
           }`}
           title="Click to view full photo"
         >
           {hasImage ? (
             <>
-              {/* Blurred atmospheric glow */}
-              <img
-                src={event.image}
-                alt=""
-                aria-hidden="true"
-                className="absolute inset-0 w-full h-full object-cover blur-xl opacity-35 scale-110 pointer-events-none"
-              />
-              {/* Full uncropped photo */}
+              {/* Standalone uncropped photo */}
               <img
                 src={event.image}
                 alt={title}
-                className="relative z-10 w-full h-full max-h-80 object-contain p-2.5 drop-shadow-md group-hover:scale-[1.03] transition-transform duration-300"
+                className="w-full h-full object-contain p-2.5 transition-transform duration-500 group-hover:scale-105"
                 loading="lazy"
               />
-              <div className="absolute bottom-3 right-3 z-20 flex items-center gap-1.5 px-3 py-1.5 bg-black/70 hover:bg-black/90 text-white text-xs font-semibold rounded-lg backdrop-blur-md shadow-sm">
-                <Maximize2 className="w-3.5 h-3.5 text-[#e5dfd0]" />
+              <div className="absolute bottom-3 right-3 z-10 flex items-center gap-1.5 px-2.5 py-1 bg-black/75 hover:bg-black text-white text-[11px] font-semibold rounded-lg backdrop-blur-sm opacity-90 group-hover:opacity-100 transition-opacity shadow-sm">
+                <Maximize2 className="w-3 h-3 text-[#f0d082]" />
                 <span>Full Poster</span>
               </div>
             </>
           ) : (
-            <div className="text-center p-8 text-white/60">
+            <div className="text-center p-8 text-stone-400">
               <Sparkles className="w-12 h-12 mx-auto mb-2 text-[#ae8f05]" />
               <p className="text-sm font-medium">Regular Church Event</p>
             </div>
@@ -204,22 +197,14 @@ export function EventCard({ event }: EventCardProps) {
               <X className="w-5 h-5" />
             </button>
 
-            {/* Modal Image */}
-            <div className="w-full md:w-3/5 bg-stone-950 flex items-center justify-center p-3 relative min-h-[280px] md:min-h-[480px]">
+            {/* Modal Image (Clean Standalone Photo) */}
+            <div className="w-full md:w-3/5 bg-stone-950 flex items-center justify-center p-4 relative min-h-[280px] md:min-h-[480px]">
               {hasImage ? (
-                <>
-                  <img
-                    src={event.image}
-                    alt=""
-                    aria-hidden="true"
-                    className="absolute inset-0 w-full h-full object-cover blur-2xl opacity-25 scale-110 pointer-events-none"
-                  />
-                  <img
-                    src={event.image}
-                    alt={title}
-                    className="relative z-10 max-h-[75vh] max-w-full object-contain rounded-lg shadow-xl"
-                  />
-                </>
+                <img
+                  src={event.image}
+                  alt={title}
+                  className="max-h-[78vh] max-w-full object-contain rounded-xl shadow-xl"
+                />
               ) : (
                 <div className="text-center text-white/60 p-8">
                   <Sparkles className="w-16 h-16 mx-auto mb-2 text-[#ae8f05]" />
