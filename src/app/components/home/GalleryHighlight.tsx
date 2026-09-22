@@ -82,13 +82,6 @@ export default function GalleryHighlight() {
       <div className="w-full px-4 sm:px-6 lg:px-12 relative z-10">
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-12">
-          <div className="inline-flex items-center space-x-2 px-4 py-1.5 rounded-full bg-[#FFFFF0] border border-[#AE8F05]/30 shadow-sm mb-4">
-            <Sparkles className="w-4 h-4 text-sacred-gold" />
-            <span className="text-xs font-semibold uppercase tracking-wider text-sacred-gold">
-              Gallery Highlights
-            </span>
-          </div>
-
           <h2 className="font-serif text-3xl sm:text-5xl font-extrabold text-warm-slate tracking-tight">
             {t("nav.gallery") || "Church Life & Jubilee Moments"}
           </h2>

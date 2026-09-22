@@ -40,8 +40,8 @@ export function Services() {
     name: String(church?.name ?? "Unnamed Church"),
     externalId:
       church?.external_id != null ? String(church.external_id) : undefined,
-    location: String(church?.location ?? "Location unavailable"),
-    address: String(church?.address ?? ""),
+    location: String(church?.location || church?.address || "Location unavailable"),
+    address: String(church?.address || church?.location || ""),
     phone: String(church?.phone ?? ""),
     email: String(church?.email ?? ""),
     description: String(church?.description ?? ""),
@@ -68,6 +68,7 @@ export function Services() {
     ministries: Array.isArray(church?.ministries) ? church.ministries : [],
     gallery: Array.isArray(church?.gallery) ? church.gallery : [],
     mapUrl: String(church?.map_url ?? ""),
+    locationLink: church?.location_link ? String(church.location_link) : undefined,
     regionId: String(church?.region_id ?? ""),
   });
 
@@ -79,10 +80,24 @@ export function Services() {
     return [];
   };
 
-  const [regions, setRegions] = useState<RegionAPI[]>([]);
-  const [churches, setChurches] = useState<Branch[]>([]);
-  const [loadingRegions, setLoadingRegions] = useState(false);
-  const [loadingChurches, setLoadingChurches] = useState(false);
+  const [regions, setRegions] = useState<RegionAPI[]>(() => {
+    const cached = getCache<RegionAPI[]>("regions");
+    return cached || [];
+  });
+  const [churches, setChurches] = useState<Branch[]>(() => {
+    const cached = getCache<any>("churches:all");
+    if (cached) {
+      const raw: any[] = extractArrayPayload(cached, [
+        "churches",
+        "data",
+        "results",
+      ]);
+      return raw.map((c, i) => normalizeChurch(c, i));
+    }
+    return [];
+  });
+  const [loadingRegions, setLoadingRegions] = useState(() => !getCache("regions"));
+  const [loadingChurches, setLoadingChurches] = useState(() => !getCache("churches:all"));
   const [errorRegions, setErrorRegions] = useState<string | null>(null);
   const [errorChurches, setErrorChurches] = useState<string | null>(null);
 
@@ -475,9 +490,6 @@ export function Services() {
                   </p>
                 </div>
 
-                {loadingChurches && (
-                  <LoadingState message="Loading locations..." className="py-12" />
-                )}
                 {errorChurches && (
                   <ErrorState 
                     message={errorChurches} 
@@ -486,8 +498,12 @@ export function Services() {
                   />
                 )}
 
-                {/* Branch Listings */}
-                {filteredBranches.length > 0 ? (
+                {/* Branch Listings or Loading State */}
+                {loadingChurches ? (
+                  <div className="py-16">
+                    <LoadingState message="Loading church locations..." className="py-12" />
+                  </div>
+                ) : filteredBranches.length > 0 ? (
                   <div className="space-y-6">
                     {filteredBranches.map((branch, index) => (
                       <motion.div
@@ -500,9 +516,12 @@ export function Services() {
                           <div className="bg-white dark:bg-gray-900 rounded-xl shadow-md border border-gray-100 dark:border-gray-800 hover:shadow-xl transition-all duration-300 overflow-hidden group">
                             <div className="flex flex-col md:flex-row">
                               {/* Image */}
-                              <div className="w-full md:w-2/5 h-64 md:h-72 flex-shrink-0 relative overflow-hidden bg-gray-100 dark:bg-gray-800">
-                                <ImageWithFallback src={branch.heroImage || "https://images.unsplash.com/photo-1548625149-fc4a29cf7092?auto=format&fit=crop&q=80&w=1080"} alt={branch.name} className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500" />
-                                <div className="absolute inset-0 bg-gradient-to-t from-[#1a3c34]/80 to-transparent" />
+                              <div className="w-full md:w-2/5 h-64 md:h-72 flex-shrink-0 relative overflow-hidden bg-gray-50 dark:bg-gray-800">
+                                <ImageWithFallback 
+                                  src={branch.heroImage || "https://images.unsplash.com/photo-1548625149-fc4a29cf7092?auto=format&fit=crop&q=80&w=1080"} 
+                                  alt={branch.name} 
+                                  className="w-full h-full object-cover object-top brightness-105 contrast-[1.02] group-hover:scale-105 transition-transform duration-500" 
+                                />
                               </div>
 
                               {/* Content */}
@@ -544,7 +563,7 @@ export function Services() {
                                         {t("services.contact")}
                                       </p>
                                       <p className="text-xs text-gray-600 dark:text-gray-400 transition-colors">
-                                        {branch.phone}
+                                        {branch.phone || "N/A"}
                                       </p>
                                     </div>
                                   </div>
@@ -574,7 +593,7 @@ export function Services() {
                     ))}
                   </div>
                 ) : (
-                  <div className="text-center py-20 bg-white rounded-xl shadow-md">
+                  <div className="text-center py-20 bg-white rounded-xl shadow-md border border-[#EAE6DE]">
                     <div className="max-w-md mx-auto">
                       <div className="w-16 h-16 bg-[#d4af37]/20 rounded-full flex items-center justify-center mx-auto mb-4">
                         <MapPin className="w-8 h-8 text-[#d4af37]" />
@@ -583,8 +602,9 @@ export function Services() {
                         No Locations Yet
                       </h3>
                       <p className="text-gray-600">
-                        We're currently expanding to this region. Check back
-                        soon for updates on new church locations!
+                        {selectedRegionId
+                          ? "No church locations found in this region. Please select another region or view all."
+                          : "We're currently expanding. Check back soon for updates on new church locations!"}
                       </p>
                     </div>
                   </div>

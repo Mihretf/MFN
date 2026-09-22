@@ -18,6 +18,7 @@ export interface Branch {
   ministries: Ministry[];
   gallery: GalleryImage[];
   mapUrl: string;
+  locationLink?: string;
   regionId: string;
 }
 

@@ -33,7 +33,7 @@ const MAIN_LEADERS = [
     photoUrl: "https://res.cloudinary.com/droslno9i/image/upload/v1788753339/photo_5832592152800727193_y_1_wmqcmx.jpg",
   },
   {
-    nameEn: "Sister Aynalem Merse",
+    nameEn: "Sir Aynalem Merse",
     nameAm: "ሲር አይናለም መርሴ",
     roleEn: "Council Member & Burayu Network Leader",
     roleAm: "የካውንስል አባልና የቡራዩ ኔትወርክ መሪ",
@@ -191,13 +191,10 @@ function TimelineItem({
         transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
         className="flex-1 space-y-3"
       >
-        <span className="inline-block px-3 py-1 rounded-full text-xs font-bold bg-[#D4AF37]/15 text-[#AE8F05] border border-[#D4AF37]/30 uppercase tracking-widest" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
-          {year}
-        </span>
-        <h3 className="text-xl font-bold text-[#2C2A28]" style={{ fontFamily: "'Cinzel', serif" }}>
+        <h3 className="text-xl sm:text-2xl font-bold text-[#2C2A28]" style={{ fontFamily: "'Cinzel', serif" }}>
           {title}
         </h3>
-        <p className="text-[#5C5854] leading-relaxed" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+        <p className="text-[#5C5854] leading-relaxed text-sm sm:text-base" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
           {text}
         </p>
       </motion.div>
@@ -229,25 +226,28 @@ export default function AboutSection() {
 
   const historyItems = [
     {
-      year: "1994",
-      title: "A Vision Ignited",
-      text: "A 19-year-old national table-tennis player received a divine vision in the Bus Station area of Addis Ababa. He was Apostle Dr. Zelalem Getachew, and the name given was Mission For Nation—\"ተልዕኮ ለትውልድ.\"",
-      imgSrc: "https://res.cloudinary.com/droslno9i/image/upload/v1788691829/9b6cf1d4-9c00-42d8-8709-c52067bd319d_auqtmk.jpg",
-      imgAlt: "Apostle Dr. Zelalem Getachew starting the vision",
+      title: isAm ? "የመለኮት ራዕይ መነሻ" : "A Vision Ignited",
+      text: isAm
+        ? "በአዲስ አበባ አውቶቡስ ተራ አካባቢ የ19 ዓመቱ ብሔራዊ የቴብል ቴኒስ ተጫዋች ሐዋርያ ዶ/ር ዘላለም ጌታቸው መለኮታዊ ራዕይ ተቀበሉ፡፡ አገልግሎቱም በወላጆቻቸው ኩሽና ውስጥ 6 ወጣቶችን በማስተማር በትንሽ ጅምር ተጀመረ፡፡"
+        : "A 19-year-old national table-tennis player received a divine vision in the Bus Station area of Addis Ababa. He was Apostle Dr. Zelalem Getachew, starting by teaching six young people in his parents' kitchen—a humble beginning that would grow into a global movement.",
+      imgSrc: "https://res.cloudinary.com/di5zfjqlt/image/upload/v1788873485/cad621ab3e3e47c099c8e5c1514de684_rha1cq.jpg",
+      imgAlt: "Apostle Dr. Zelalem Getachew in his early days at age 19",
     },
     {
-      year: "Early Years",
-      title: "Kitchen Fellowship of Six",
-      text: "The church began by teaching a group of no more than six young people in the kitchen of the Apostle's parents—a humble beginning that would grow into a global movement.",
-      imgSrc: "https://res.cloudinary.com/droslno9i/image/upload/v1788694065/FB_IMG_1788680250348_fjuyj6.jpg",
-      imgAlt: "Early fellowship gathering",
+      title: isAm ? "የPhD ዶክተሬት በላቀ ማዕረግ (Distinction) ምረቃ" : "Graduated PhD with Distinction",
+      text: isAm
+        ? "ሐዋርያ ዶ/ር ዘላለም ጌታቸው በደቡብ አፍሪካ ከሚገኘው የሄሪቴጅ ኦፍ ፌዝ ባይብል ኢንስቲትዩት (Heritage of Faith Bible Institute) የPhD ዶክተሬት ዲግሪያቸውን በላቀ ውጤትና ማዕረግ (Distinction) አጠናቀዋል፡፡"
+        : "Apostle Dr. Zelalem Getachew earned his Doctorate (PhD) degree with Distinction from Heritage of Faith Bible Institute in South Africa, honoring his profound biblical scholarship, visionary leadership, and decadal ministry dedication.",
+      imgSrc: "https://res.cloudinary.com/di5zfjqlt/image/upload/v1788873291/dee0cdd2ac884619ba2eb3680d79fb81_1_xzrfxq.jpg",
+      imgAlt: "Apostle Dr. Zelalem Getachew PhD Graduation with Distinction",
     },
     {
-      year: "1995 E.C.",
-      title: "Legal Recognition",
-      text: "After extremely challenging early years, the church obtained legal registration—becoming the 912th organization registered by the Ministry of Justice of FDRE. Services were first held in a rented basement for just 70 Birr.",
-      imgSrc: "https://res.cloudinary.com/droslno9i/image/upload/v1788694065/FB_IMG_1788680484395_fq0qp2.jpg",
-      imgAlt: "Church legal registration",
+      title: isAm ? "የ30+ ዓመታት የሐዋርያው አበይት ስኬቶችና ፍሬዎች" : "30+ Years of Ministry Success & Global Impact",
+      text: isAm
+        ? "በ30+ ዓመታት ባለራዕይ አመራራቸው አገልግሎቱ ከአንድ አጥቢያ ወደ 130+ አጥቢያዎች በኢትዮጵያ፣ አፍሪካ፣ አውሮፓ፣ መካከለኛው ምስራቅና አሜሪካ ተስፋፍቷል፡፡ በአዳማና ነቀምቴ የባይብል ኮሌጆች፣ በ24 ሰዓት የቲቪ ስርጭትና ከ350 በላይ የሙሉ ጊዜ አገልጋዮችን አፍርቷል፡፡"
+        : "Under his anointed leadership, Mission for Nation expanded from one local fellowship to over 130 local churches worldwide, established Bible Colleges in Adama and Nekemte, launched 24/7 global television broadcasts, and empowered 350+ full-time ministers.",
+      imgSrc: "https://res.cloudinary.com/di5zfjqlt/image/upload/v1788873289/c4f95a373e294d5b865927ccdef593e9_isecmu.jpg",
+      imgAlt: "Apostle Dr. Zelalem Getachew PhD Graduation Ceremony",
     },
   ];
 
@@ -275,24 +275,12 @@ export default function AboutSection() {
         <div className="space-y-14">
           {/* Section header */}
           <div className="text-center max-w-3xl mx-auto">
-            <motion.div
-              initial={{ opacity: 0, y: -10 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5 }}
-              className="inline-flex items-center space-x-2 px-4 py-1.5 rounded-full bg-[#FFFFF0] border border-[#AE8F05]/30 shadow-sm mb-4"
-            >
-              <Sparkles className="w-4 h-4 text-[#AE8F05]" />
-              <span className="text-xs font-semibold uppercase tracking-wider text-[#AE8F05]" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
-                {isAm ? "አጭር ታሪክ" : "A Brief History"}
-              </span>
-            </motion.div>
             <motion.h2
               initial={{ opacity: 0, y: 10 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: 0.1, duration: 0.6 }}
-              className="text-3xl sm:text-4xl font-extrabold text-[#2C2A28] tracking-tight"
+              className="text-3xl sm:text-4xl font-extrabold text-[#2C2A28] tracking-tight mb-4"
               style={{ fontFamily: "'Cinzel', serif" }}
             >
               {isAm ? "የተልዕኮ ለትውልድ ቤተክርስቲያን ታሪክ" : "A Brief History of Mission for Nation Church"}
@@ -343,24 +331,12 @@ export default function AboutSection() {
         {/* ── Key Leaders ──────────────────────────────────────── */}
         <div className="space-y-12">
           <div className="text-center max-w-3xl mx-auto">
-            <motion.div
-              initial={{ opacity: 0, y: -10 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5 }}
-              className="inline-flex items-center space-x-2 px-4 py-1.5 rounded-full bg-[#FFFFF0] border border-[#AE8F05]/30 shadow-sm mb-4"
-            >
-              <Users className="w-4 h-4 text-[#AE8F05]" />
-              <span className="text-xs font-semibold uppercase tracking-wider text-[#AE8F05]" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
-                {isAm ? "ዋና መሪዎች" : "Key Leaders"}
-              </span>
-            </motion.div>
             <motion.h2
               initial={{ opacity: 0, y: 10 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: 0.1, duration: 0.6 }}
-              className="text-3xl sm:text-4xl font-extrabold text-[#2C2A28] tracking-tight"
+              className="text-3xl sm:text-4xl font-extrabold text-[#2C2A28] tracking-tight mb-4"
               style={{ fontFamily: "'Cinzel', serif" }}
             >
               {isAm ? "የተልዕኮ ለትውልድ ዋና መሪዎች" : "Mission for Nation Key Leaders"}

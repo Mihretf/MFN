@@ -65,19 +65,20 @@ export function BranchDetail() {
         setBranch({
           id: c.external_id || c.id,
           name: c.name,
-          location: c.location,
-          address: c.address,
-          phone: c.phone,
-          email: c.email,
-          description: c.description,
-          heroImage: c.hero_image,
-          serviceTimes: c.service_times,
-          announcements: c.announcements,
+          location: c.location || c.address || "Location available",
+          address: c.address || c.location || "",
+          phone: c.phone || "",
+          email: c.email || "",
+          description: c.description || "",
+          heroImage: c.hero_image || "",
+          serviceTimes: c.service_times || [],
+          announcements: c.announcements || [],
           pastor: c.pastor,
-          events: c.events,
-          ministries: c.ministries,
-          gallery: c.gallery,
-          mapUrl: c.map_url,
+          events: c.events || [],
+          ministries: c.ministries || [],
+          gallery: c.gallery || [],
+          mapUrl: c.map_url || "",
+          locationLink: c.location_link || "",
           regionId: c.region_id,
         } as any);
       })
@@ -87,6 +88,31 @@ export function BranchDetail() {
       })
       .finally(() => setBranchLoading(false));
   }, [branchId]);
+
+  const getDirectionsUrl = () => {
+    if (!branch) return "#";
+    if (branch.locationLink && branch.locationLink.trim()) {
+      return branch.locationLink;
+    }
+    if (branch.mapUrl && !branch.mapUrl.includes("/embed")) {
+      return branch.mapUrl;
+    }
+    const query = [branch.name, branch.address, branch.location, "Ethiopia"]
+      .filter(Boolean)
+      .join(", ");
+    return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query)}`;
+  };
+
+  const getEmbedMapUrl = () => {
+    if (!branch) return "";
+    if (branch.mapUrl && branch.mapUrl.includes("/embed")) {
+      return branch.mapUrl;
+    }
+    const query = [branch.name, branch.address, branch.location, "Ethiopia"]
+      .filter(Boolean)
+      .join(", ");
+    return `https://maps.google.com/maps?q=${encodeURIComponent(query)}&t=&z=14&ie=UTF8&iwloc=&output=embed`;
+  };
 
   // gallery state will start with whatever is present on the branch object;
   // once the real API responds we overwrite it.
@@ -393,7 +419,9 @@ export function BranchDetail() {
                     <h3 className="font-semibold text-[#1a3c34] dark:text-[#f0d082] mb-2">
                       {t("branchDetail.address")}
                     </h3>
-                    <p className="text-gray-700 dark:text-gray-300">{branch.address}</p>
+                    <p className="text-gray-700 dark:text-gray-300">
+                      {branch.address || branch.location || "Addis Ababa, Ethiopia"}
+                    </p>
                   </div>
                   <div>
                     <h3 className="font-semibold text-[#1a3c34] dark:text-[#f0d082] mb-2">{t("branchDetail.phone")}</h3>
@@ -401,7 +429,7 @@ export function BranchDetail() {
                       href={`tel:${branch.phone}`}
                       className="text-[#d4af37] hover:underline"
                     >
-                      {branch.phone}
+                      {branch.phone || "Phone not listed"}
                     </a>
                   </div>
                   <div>
@@ -410,11 +438,11 @@ export function BranchDetail() {
                       href={`mailto:${branch.email}`}
                       className="text-[#d4af37] hover:underline"
                     >
-                      {branch.email}
+                      {branch.email || "info@mfni.church"}
                     </a>
                   </div>
                   <a
-                    href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(branch.address)}`}
+                    href={getDirectionsUrl()}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="inline-flex items-center px-6 py-3 bg-[#d4af37] text-white font-semibold rounded-lg hover:bg-[#b8941f] transition-colors"
@@ -423,9 +451,9 @@ export function BranchDetail() {
                     {t("branchDetail.getDirections")}
                   </a>
                 </div>
-                <div className="h-64 rounded-lg overflow-hidden">
+                <div className="h-64 rounded-lg overflow-hidden border border-gray-200 dark:border-gray-700 shadow-inner">
                   <iframe
-                    src={branch.mapUrl}
+                    src={getEmbedMapUrl()}
                     width="100%"
                     height="100%"
                     style={{ border: 0 }}
@@ -565,7 +593,7 @@ export function BranchDetail() {
                   {t("branchDetail.planVisitDesc")}
                 </p>
                 <a
-                  href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(branch.address)}`}
+                  href={getDirectionsUrl()}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="block text-center px-6 py-3 bg-[#d4af37] text-white font-semibold rounded-lg hover:bg-[#b8941f] transition-colors"

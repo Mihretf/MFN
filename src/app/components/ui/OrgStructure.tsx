@@ -1,4 +1,4 @@
-﻿import React, { useState } from "react";
+import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
 import {
@@ -74,7 +74,7 @@ const LEADERS_DIRECTORY: LeaderMember[] = [
   },
   {
     id: "l6",
-    nameEn: "Sister Aynalem Merse",
+    nameEn: "Sir Aynalem Merse",
     nameAm: "ሲር አይናለም መርሴ",
     roleEn: "Council Member & Burayu Network Leader",
     roleAm: "የካውንስል አባልና የቡራዩ ኔትወርክ መሪ",
@@ -307,11 +307,24 @@ const LEADERS_DIRECTORY: LeaderMember[] = [
 ];
 
 const LOCAL_NETWORKS = [
-  { en: "Eyerusalem Center", am: "ኢየሩሳሌም ማዕከል" },
-  { en: "Nazerate Center", am: "ናዝሬት ማዕከል" },
-  { en: "Burayu", am: "ቡራዩ" },
-  { en: "Nikemete", am: "ነቀምቴ" },
-  { en: "Hawasa", am: "ሐዋሳ" },
+  { en: "Addis Ababa Jerusalem Branch (Main Church)", am: "አዲስ አበባ ኢየሩሳሌም አጥቢያ (ዋናው ቤተ ክርስቲያን)" },
+  { en: "Adama (Nazreth) Network Center", am: "አዳማ (ናዝሬት) ኔትወርክ ማዕከል" },
+  { en: "Debre Zeit (Bishoftu) Network Center", am: "ደብረ ዘይት (ቢሾፍቱ) ኔትወርክ ማዕከል" },
+  { en: "Ayat Network Center", am: "አያት ኔትወርክ ማዕከል" },
+  { en: "Bethel Network Center", am: "ቤቴል ኔትወርክ ማዕከል" },
+  { en: "Burayu Network Center", am: "ቡራዩ ኔትወርክ ማዕከል" },
+  { en: "Shashemene Network Center", am: "ሻሸመኔ ኔትወርክ ማዕከል" },
+  { en: "Hossana Network Center", am: "ሆሳዕና ኔትወርክ ማዕከል" },
+  { en: "Dila Network Center", am: "ዲላ ኔትወርክ ማዕከል" },
+  { en: "Sawla Network Center", am: "ሳውላ ኔትወርክ ማዕከል" },
+  { en: "Jinka Network Center", am: "ጂንካ ኔትወርክ ማዕከል" },
+  { en: "Jimma Network Center", am: "ጅማ ኔትወርክ ማዕከል" },
+  { en: "Wolaita Sodo Network Center", am: "ወላይታ ሶዶ ኔትወርክ ማዕከል" },
+  { en: "Arbaminch Network Center", am: "አርባ ምንጭ ኔትወርክ ማዕከል" },
+  { en: "Tepi Network Center", am: "ቴፒ ኔትወርክ ማዕከል" },
+  { en: "Saylem Network Center", am: "ሳይለም ኔትወርክ ማዕከል" },
+  { en: "Dire Dawa Network Center", am: "ድሬዳዋ ኔትወርክ ማዕከል" },
+  { en: "Nekemte Network Center", am: "ነቀምቴ ኔትወርክ ማዕከል" },
 ];
 
 const INT_CHURCHES = [
@@ -349,56 +362,31 @@ const MINISTRY_TEAMS = [
 
 export function OrgStructure() {
   const { i18n } = useTranslation();
-  const [lang, setLang] = useState(i18n.language === "am" ? "am" : "en");
-  const isAm = lang === "am";
+  const isAm = i18n.language === "am";
 
   return (
-    <section className="py-20 bg-alabaster dark:bg-gray-950 text-warm-slate dark:text-gray-100 relative overflow-hidden transition-colors">
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[800px] bg-champagne-pearl/40 dark:bg-[#D4AF37]/5 rounded-full blur-[140px] pointer-events-none" />
+    <section className="py-20 bg-[#FAF8F5] text-[#2C2A28] relative overflow-hidden transition-colors">
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[800px] bg-[#F7E7CE]/40 rounded-full blur-[140px] pointer-events-none" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         
-        {/* Header & Language Toggle */}
+        {/* Header */}
         <div className="flex flex-col md:flex-row items-center justify-between gap-6 mb-16 pb-8 border-b border-[#AE8F05]/20">
           <div className="text-center md:text-left">
-            <div className="inline-flex items-center space-x-2 px-4 py-1.5 rounded-full bg-[#FFFFF0] dark:bg-gray-900 border border-[#AE8F05]/30 shadow-sm mb-3">
-              <Sparkles className="w-4 h-4 text-sacred-gold" />
-              <span className="text-xs font-semibold uppercase tracking-wider text-sacred-gold">
+            <div className="inline-flex items-center space-x-2 px-4 py-1.5 rounded-full bg-white border border-[#AE8F05]/30 shadow-sm mb-3">
+              <Sparkles className="w-4 h-4 text-[#AE8F05]" />
+              <span className="text-xs font-semibold uppercase tracking-wider text-[#AE8F05]">
                 {isAm ? "የተቋማዊ መዋቅር እና የአገልግሎት ማዕከላት" : "Institutional Structure & Global Directory"}
               </span>
             </div>
-            <h2 className="font-serif text-3xl sm:text-5xl font-extrabold tracking-tight text-warm-slate dark:text-white">
+            <h2 className="font-serif text-3xl sm:text-5xl font-extrabold tracking-tight text-[#2C2A28]">
               {isAm ? "የተልዕኮ ለትውልድ ቤተ ክርስቲያን መዋቅር" : "Organizational Structure & Governance"}
             </h2>
-            <p className="mt-2 text-sm sm:text-base text-[#5C5854] dark:text-gray-400 max-w-2xl">
+            <p className="mt-2 text-sm sm:text-base text-[#5C5854] max-w-2xl">
               {isAm 
                 ? "ከሐዋርያዊ አመራር እስከ 130+ አጥቢያዎች እና ዓለም አቀፍ ማዕከላት ያለዉ የተቀናጀ የመዋቅር ፍሰት" 
                 : "Sequential flow from Divine Vision & Apostolic Leadership to 130+ Global Local Assemblies and Specialized Ministries."}
             </p>
-          </div>
-
-          {/* Bilingual Switcher */}
-          <div className="flex items-center bg-[#F7E7CE] dark:bg-gray-800 p-1.5 rounded-2xl border border-[#AE8F05]/30 shadow-md">
-            <button
-              onClick={() => { setLang("en"); i18n.changeLanguage("en"); }}
-              className={`px-5 py-2.5 rounded-xl font-bold text-xs transition-all ${
-                !isAm 
-                  ? "bg-gradient-to-r from-[#D4AF37] to-[#AE8F05] text-white shadow-lg scale-105" 
-                  : "text-warm-slate dark:text-gray-300 hover:text-sacred-gold"
-              }`}
-            >
-              ENGLISH
-            </button>
-            <button
-              onClick={() => { setLang("am"); i18n.changeLanguage("am"); }}
-              className={`px-5 py-2.5 rounded-xl font-bold text-xs transition-all ${
-                isAm 
-                  ? "bg-gradient-to-r from-[#D4AF37] to-[#AE8F05] text-white shadow-lg scale-105" 
-                  : "text-warm-slate dark:text-gray-300 hover:text-sacred-gold"
-              }`}
-            >
-              አማርኛ
-            </button>
           </div>
         </div>
 
@@ -424,21 +412,21 @@ export function OrgStructure() {
               transition={{ duration: 0.6 }}
               className="relative z-10 max-w-md mx-auto"
             >
-              <div className="ivory-glass-card dark:bg-[#1F1D1A]/90 rounded-3xl p-6 text-center border-2 border-[#D4AF37] shadow-2xl hover:scale-[1.02] transition-transform">
-                <div className="w-14 h-14 rounded-2xl bg-gradient-to-tr from-[#D4AF37] to-[#AE8F05] text-white flex items-center justify-center mx-auto mb-3 shadow-lg">
+              <div className="bg-white rounded-3xl p-6 text-center border-2 border-[#D4AF37] shadow-xl hover:scale-[1.02] transition-transform">
+                <div className="w-14 h-14 rounded-2xl bg-gradient-to-tr from-[#D4AF37] to-[#AE8F05] text-white flex items-center justify-center mx-auto mb-3 shadow-md">
                   <Crown className="w-8 h-8" />
                 </div>
-                <span className="text-[11px] font-extrabold uppercase tracking-widest text-sacred-gold block">DIVINE AUTHORITY</span>
-                <h4 className="font-serif text-2xl font-black text-warm-slate dark:text-white mt-1">
+                <span className="text-[11px] font-extrabold uppercase tracking-widest text-[#AE8F05] block">DIVINE AUTHORITY</span>
+                <h4 className="font-serif text-2xl font-black text-[#2C2A28] mt-1">
                   {isAm ? "እግዚአብሔር (የመለኮት ጥሪ እና ራዕይ)" : "GOD (Divine Calling and Vision)"}
                 </h4>
-                <p className="text-xs text-[#5C5854] dark:text-gray-400 mt-2 font-medium">
+                <p className="text-xs text-[#5C5854] mt-2 font-medium">
                   {isAm ? "የአገልግሎቱ ባለቤት፣ ምንጭ እና መሪ" : "The Supreme Sovereign Head and Vision Giver of Mission for Nation"}
                 </p>
               </div>
             </motion.div>
 
-            <div className="flex justify-center text-sacred-gold">
+            <div className="flex justify-center text-[#AE8F05]">
               <ChevronDown className="w-6 h-6 animate-bounce" />
             </div>
 
@@ -450,7 +438,7 @@ export function OrgStructure() {
               transition={{ duration: 0.6, delay: 0.1 }}
               className="relative z-10 max-w-lg mx-auto"
             >
-              <div className="ivory-glass-card dark:bg-[#1F1D1A]/90 rounded-3xl p-6 md:p-8 text-center border border-[#AE8F05]/40 shadow-xl hover:scale-[1.02] transition-transform">
+              <div className="bg-white rounded-3xl p-6 md:p-8 text-center border border-[#AE8F05]/30 shadow-xl hover:scale-[1.02] transition-transform">
                 <div className="w-20 h-20 rounded-full overflow-hidden mx-auto mb-4 border-2 border-[#D4AF37] shadow-md">
                   <ImageWithFallback
                     src="https://res.cloudinary.com/di5zfjqlt/image/upload/v1773571945/photo_2026-03-15_13-51-33_rus4x4.jpg"
@@ -458,19 +446,19 @@ export function OrgStructure() {
                     className="w-full h-full object-cover object-top"
                   />
                 </div>
-                <span className="text-[11px] font-bold uppercase tracking-widest text-sacred-gold px-3 py-1 rounded-full bg-[#F7E7CE] dark:bg-gray-800">
+                <span className="text-[11px] font-bold uppercase tracking-widest text-[#AE8F05] px-3 py-1 rounded-full bg-[#FAF5E6] border border-[#AE8F05]/20 inline-block">
                   FOUNDER & VISIONARY APOSTLE
                 </span>
-                <h4 className="font-serif text-2xl font-extrabold text-warm-slate dark:text-white mt-3">
+                <h4 className="font-serif text-2xl font-extrabold text-[#2C2A28] mt-3">
                   {isAm ? "ባለራዕይ ሐዋርያ (ሐዋርያ ዶ/ር ዘለአለም ጌታቸው)" : "Apostle Dr. Zelalem Getachew"}
                 </h4>
-                <p className="text-xs text-[#5C5854] dark:text-gray-300 mt-2 font-medium">
+                <p className="text-xs text-[#5C5854] mt-2 font-medium">
                   {isAm ? "የተልዕኮ ለትውልድ መሥራች እና ዋና መሪ (President of EVCF, ECGBC Exec)" : "Founder & General Overseer (President of EVCF, Executive Member of ECGBC)"}
                 </p>
               </div>
             </motion.div>
 
-            <div className="flex justify-center text-sacred-gold">
+            <div className="flex justify-center text-[#AE8F05]">
               <ChevronDown className="w-6 h-6 animate-bounce" />
             </div>
 
@@ -482,21 +470,21 @@ export function OrgStructure() {
               transition={{ duration: 0.6, delay: 0.2 }}
               className="relative z-10 max-w-xl mx-auto"
             >
-              <div className="ivory-glass-card dark:bg-[#1F1D1A]/90 rounded-3xl p-6 text-center border border-[#AE8F05]/30 shadow-lg hover:scale-[1.02] transition-transform">
-                <div className="w-12 h-12 rounded-2xl bg-champagne-pearl dark:bg-gray-800 text-sacred-gold flex items-center justify-center mx-auto mb-3">
+              <div className="bg-white rounded-3xl p-6 text-center border border-[#AE8F05]/30 shadow-lg hover:scale-[1.02] transition-transform">
+                <div className="w-12 h-12 rounded-2xl bg-[#FAF5E6] text-[#AE8F05] border border-[#AE8F05]/20 flex items-center justify-center mx-auto mb-3 shadow-sm">
                   <Shield className="w-6 h-6" />
                 </div>
-                <span className="text-[10px] font-bold uppercase tracking-wider text-sacred-gold">HIGHEST GOVERNING BODY</span>
-                <h4 className="font-serif text-xl font-bold text-warm-slate dark:text-white mt-1">
+                <span className="text-[10px] font-bold uppercase tracking-wider text-[#AE8F05]">HIGHEST GOVERNING BODY</span>
+                <h4 className="font-serif text-xl font-bold text-[#2C2A28] mt-1">
                   {isAm ? "ሐዋርያዊ ቡድን / ካውንስል (12 አባላት)" : "Apostolic Council (12 Key Executive Members)"}
                 </h4>
-                <p className="text-xs text-[#5C5854] dark:text-gray-400 mt-1">
+                <p className="text-xs text-[#5C5854] mt-1">
                   {isAm ? "ስልታዊ መምሪያ፣ የዶክትሪንና የፖሊሲ ውሳኔ ሰጪ አካል" : "Strategic Directive Body overseeing Doctrine, Global Missions & Governance"}
                 </p>
               </div>
             </motion.div>
 
-            <div className="flex justify-center text-sacred-gold">
+            <div className="flex justify-center text-[#AE8F05]">
               <ChevronDown className="w-6 h-6" />
             </div>
 
@@ -508,42 +496,42 @@ export function OrgStructure() {
               transition={{ duration: 0.6, delay: 0.3 }}
               className="relative z-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"
             >
-              <div className="ivory-glass-card dark:bg-[#1F1D1A]/90 rounded-2xl p-5 text-center border border-[#AE8F05]/30 hover:border-[#D4AF37] hover:scale-[1.02] transition-all">
-                <Building2 className="w-8 h-8 text-sacred-gold mx-auto mb-3" />
-                <h5 className="font-serif font-bold text-base text-warm-slate dark:text-white">
+              <div className="bg-white rounded-2xl p-5 text-center border border-[#EAE6DE] hover:border-[#D4AF37] hover:scale-[1.02] transition-all shadow-sm">
+                <Building2 className="w-8 h-8 text-[#AE8F05] mx-auto mb-3" />
+                <h5 className="font-serif font-bold text-base text-[#2C2A28]">
                   {isAm ? "ቤተክርስቲያን ማዕከል" : "Church Ministry Center"}
                 </h5>
-                <p className="text-[11px] text-[#5C5854] dark:text-gray-400 mt-2">
+                <p className="text-[11px] text-[#5C5854] mt-2">
                   {isAm ? "የአምልኮ፣ የቃል እና የምእመናን እረኝነት ማዕከል" : "Local Assemblies, Worship & Pastoral Care"}
                 </p>
               </div>
 
-              <div className="ivory-glass-card dark:bg-[#1F1D1A]/90 rounded-2xl p-5 text-center border border-[#AE8F05]/30 hover:border-[#D4AF37] hover:scale-[1.02] transition-all">
-                <BookOpen className="w-8 h-8 text-sacred-gold mx-auto mb-3" />
-                <h5 className="font-serif font-bold text-base text-warm-slate dark:text-white">
+              <div className="bg-white rounded-2xl p-5 text-center border border-[#EAE6DE] hover:border-[#D4AF37] hover:scale-[1.02] transition-all shadow-sm">
+                <BookOpen className="w-8 h-8 text-[#AE8F05] mx-auto mb-3" />
+                <h5 className="font-serif font-bold text-base text-[#2C2A28]">
                   {isAm ? "የመጽሐፍ ቅዱስ ኮሌጅ" : "Bible College"}
                 </h5>
-                <p className="text-[11px] text-[#5C5854] dark:text-gray-400 mt-2">
+                <p className="text-[11px] text-[#5C5854] mt-2">
                   {isAm ? "የአዳማ እና ነቀምቴ ሁለገብ ኮሌጆች" : "Adama & Nekemte Multipurpose Theological Colleges"}
                 </p>
               </div>
 
-              <div className="ivory-glass-card dark:bg-[#1F1D1A]/90 rounded-2xl p-5 text-center border border-[#AE8F05]/30 hover:border-[#D4AF37] hover:scale-[1.02] transition-all">
-                <Compass className="w-8 h-8 text-sacred-gold mx-auto mb-3" />
-                <h5 className="font-serif font-bold text-base text-warm-slate dark:text-white">
+              <div className="bg-white rounded-2xl p-5 text-center border border-[#EAE6DE] hover:border-[#D4AF37] hover:scale-[1.02] transition-all shadow-sm">
+                <Compass className="w-8 h-8 text-[#AE8F05] mx-auto mb-3" />
+                <h5 className="font-serif font-bold text-base text-[#2C2A28]">
                   {isAm ? "የጀማ ወንጌል እና የነብያት ማሰልጠኛ" : "Gospel Outreach & Prophetic Training"}
                 </h5>
-                <p className="text-[11px] text-[#5C5854] dark:text-gray-400 mt-2">
+                <p className="text-[11px] text-[#5C5854] mt-2">
                   {isAm ? "ወንጌል ስርጭት እና የነብያት ትምህርት ቤት" : "Evangelistic Campaigns & Prophetic School"}
                 </p>
               </div>
 
-              <div className="ivory-glass-card dark:bg-[#1F1D1A]/90 rounded-2xl p-5 text-center border border-[#AE8F05]/30 hover:border-[#D4AF37] hover:scale-[1.02] transition-all">
-                <Briefcase className="w-8 h-8 text-sacred-gold mx-auto mb-3" />
-                <h5 className="font-serif font-bold text-base text-warm-slate dark:text-white">
+              <div className="bg-white rounded-2xl p-5 text-center border border-[#EAE6DE] hover:border-[#D4AF37] hover:scale-[1.02] transition-all shadow-sm">
+                <Briefcase className="w-8 h-8 text-[#AE8F05] mx-auto mb-3" />
+                <h5 className="font-serif font-bold text-base text-[#2C2A28]">
                   {isAm ? "የቢዝነስ ማዕከል" : "Business Center"}
                 </h5>
-                <p className="text-[11px] text-[#5C5854] dark:text-gray-400 mt-2">
+                <p className="text-[11px] text-[#5C5854] mt-2">
                   {isAm ? "ፋይናንስ፣ ልማት እና ዘበንዊ ፕሮጀክቶች" : "Financial Systems, Assets & Development"}
                 </p>
               </div>
@@ -555,21 +543,21 @@ export function OrgStructure() {
               initial={{ opacity: 0, y: 30 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: 0.4 }}
-              className="relative z-10 bg-[#FFFFF0]/80 dark:bg-gray-900/80 backdrop-blur-md rounded-3xl p-6 md:p-8 border border-[#AE8F05]/30 shadow-lg text-center"
+              className="relative z-10 bg-white rounded-3xl p-6 md:p-8 border border-[#EAE6DE] shadow-lg text-center"
             >
-              <h4 className="font-serif text-lg font-bold text-warm-slate dark:text-white mb-4">
+              <h4 className="font-serif text-lg font-bold text-[#2C2A28] mb-4">
                 {isAm ? "የኔትወርክ ማዕከላት አስተዳደር ፍሰት (Cascade Flow)" : "Operational Cascade Flow"}
               </h4>
               <div className="flex flex-col sm:flex-row items-center justify-center gap-4 text-xs font-semibold">
-                <div className="px-4 py-2 rounded-xl bg-champagne-pearl dark:bg-gray-800 text-sacred-gold border border-[#AE8F05]/20">
+                <div className="px-4 py-2 rounded-xl bg-[#FAF8F5] text-[#AE8F05] border border-[#AE8F05]/20">
                   {isAm ? "1. የኔትወርክ ማዕከላት ማስተባበሪያ ቢሮ" : "1. Network Centers Coordination Office"}
                 </div>
-                <span className="text-sacred-gold font-bold">→</span>
-                <div className="px-4 py-2 rounded-xl bg-champagne-pearl dark:bg-gray-800 text-sacred-gold border border-[#AE8F05]/20">
+                <span className="text-[#AE8F05] font-bold">→</span>
+                <div className="px-4 py-2 rounded-xl bg-[#FAF8F5] text-[#AE8F05] border border-[#AE8F05]/20">
                   {isAm ? "2. የኔትወርክ ማዕከላት መሪዎች" : "2. Network Center Leaders"}
                 </div>
-                <span className="text-sacred-gold font-bold">→</span>
-                <div className="px-4 py-2 rounded-xl bg-champagne-pearl dark:bg-gray-800 text-sacred-gold border border-[#AE8F05]/20">
+                <span className="text-[#AE8F05] font-bold">→</span>
+                <div className="px-4 py-2 rounded-xl bg-[#FAF8F5] text-[#AE8F05] border border-[#AE8F05]/20">
                   {isAm ? "3. የአጥቢያ መሪዎችና መጋቢዎች" : "3. Branch Pastors & Local Leaders"}
                 </div>
               </div>
@@ -608,20 +596,20 @@ export function OrgStructure() {
           {/* Grid Layout: Local Networks & International Churches */}
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-16">
             
-            {/* Subsection A: Local Network Centers */}
-            <div className="lg:col-span-7 ivory-glass-card dark:bg-[#1F1D1A]/90 rounded-3xl p-6 md:p-8 border border-[#AE8F05]/30 shadow-xl">
+            {/* Subsection A: Local Network Centers (All 18) */}
+            <div className="lg:col-span-7 bg-white rounded-3xl p-6 md:p-8 border border-[#EAE6DE] shadow-xl">
               <div className="flex items-center space-x-3 mb-6 pb-4 border-b border-[#AE8F05]/20">
-                <Network className="w-6 h-6 text-sacred-gold" />
-                <h4 className="font-serif text-xl font-bold text-warm-slate dark:text-white">
-                  {isAm ? "ሀገር ውስጥ የኔትወርክ ማዕከላት (17+)" : "Local Regional Network Centers (17+)"}
+                <Network className="w-6 h-6 text-[#AE8F05]" />
+                <h4 className="font-serif text-xl font-bold text-[#2C2A28]">
+                  {isAm ? "ሀገር ውስጥ የኔትወርክ ማዕከላት (18)" : "Local Regional Network Centers (18)"}
                 </h4>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 {LOCAL_NETWORKS.map((loc, idx) => (
-                  <div key={idx} className="flex items-center space-x-2.5 p-3 rounded-xl bg-alabaster/70 dark:bg-gray-900/60 border border-[#AE8F05]/15 hover:border-[#D4AF37] transition-colors">
-                    <MapPin className="w-4 h-4 text-sacred-gold flex-shrink-0" />
-                    <span className="text-xs font-semibold text-warm-slate dark:text-gray-200">
+                  <div key={idx} className="flex items-center space-x-2.5 p-3 rounded-xl bg-[#FAF8F5] border border-[#EAE6DE] hover:border-[#D4AF37] hover:bg-white hover:shadow-sm transition-all">
+                    <MapPin className="w-4 h-4 text-[#AE8F05] flex-shrink-0" />
+                    <span className="text-xs font-semibold text-[#2C2A28]">
                       {isAm ? loc.am : loc.en}
                     </span>
                   </div>
@@ -630,25 +618,25 @@ export function OrgStructure() {
             </div>
 
             {/* Subsection B: International Churches */}
-            <div className="lg:col-span-5 ivory-glass-card dark:bg-[#1F1D1A]/90 rounded-3xl p-6 md:p-8 border border-[#AE8F05]/30 shadow-xl flex flex-col justify-between">
+            <div className="lg:col-span-5 bg-white rounded-3xl p-6 md:p-8 border border-[#EAE6DE] shadow-xl flex flex-col justify-between">
               <div>
                 <div className="flex items-center space-x-3 mb-6 pb-4 border-b border-[#AE8F05]/20">
-                  <Globe2 className="w-6 h-6 text-sacred-gold" />
-                  <h4 className="font-serif text-xl font-bold text-warm-slate dark:text-white">
+                  <Globe2 className="w-6 h-6 text-[#AE8F05]" />
+                  <h4 className="font-serif text-xl font-bold text-[#2C2A28]">
                     {isAm ? "ዓለም አቀፍ አጥቢያዎች" : "International Branches"}
                   </h4>
                 </div>
 
                 <div className="space-y-3">
                   {INT_CHURCHES.map((ch, idx) => (
-                    <div key={idx} className="flex items-center justify-between p-3.5 rounded-xl bg-alabaster/70 dark:bg-gray-900/60 border border-[#AE8F05]/15 hover:border-[#D4AF37] transition-colors">
+                    <div key={idx} className="flex items-center justify-between p-3.5 rounded-xl bg-[#FAF8F5] border border-[#EAE6DE] hover:border-[#D4AF37] hover:bg-white transition-colors">
                       <div className="flex items-center space-x-3">
-                        <Globe2 className="w-4 h-4 text-sacred-gold" />
-                        <span className="text-xs font-bold text-warm-slate dark:text-gray-100">
+                        <Globe2 className="w-4 h-4 text-[#AE8F05]" />
+                        <span className="text-xs font-bold text-[#2C2A28]">
                           {isAm ? ch.am : ch.en}
                         </span>
                       </div>
-                      <span className="text-[10px] uppercase font-semibold px-2 py-0.5 rounded-full bg-[#F7E7CE] dark:bg-gray-800 text-sacred-gold">
+                      <span className="text-[10px] uppercase font-semibold px-2.5 py-0.5 rounded-full bg-[#FAF5E6] text-[#AE8F05] border border-[#AE8F05]/20">
                         Active Branch
                       </span>
                     </div>
@@ -657,12 +645,12 @@ export function OrgStructure() {
               </div>
 
               {/* Subsection E: Final Assembly */}
-              <div className="mt-8 pt-6 border-t border-[#AE8F05]/20 bg-[#F7E7CE]/40 dark:bg-gray-900/80 p-4 rounded-2xl text-center">
-                <Users className="w-6 h-6 text-sacred-gold mx-auto mb-1" />
-                <h5 className="font-serif font-bold text-sm text-warm-slate dark:text-white">
+              <div className="mt-8 pt-6 border-t border-[#AE8F05]/20 bg-[#FAF8F5] p-4 rounded-2xl text-center border border-[#EAE6DE]">
+                <Users className="w-6 h-6 text-[#AE8F05] mx-auto mb-1" />
+                <h5 className="font-serif font-bold text-sm text-[#2C2A28]">
                   {isAm ? "ጉባኤ (ምዕመናን - እስራኤል)" : "General Assembly (\"Gubaé\" / Israel)"}
                 </h5>
-                <p className="text-[11px] text-[#5C5854] dark:text-gray-400 mt-1">
+                <p className="text-[11px] text-[#5C5854] mt-1">
                   {isAm ? "የመላው ምዕመናን እና የክርስቶስ አካል የመጨረሻ መሰብሰቢያ" : "The Collective Congregation & Sovereign Body of Believers"}
                 </p>
               </div>
@@ -670,14 +658,14 @@ export function OrgStructure() {
           </div>
 
           {/* Subsection D: Excellence & Ministry Teams */}
-          <div className="ivory-glass-card dark:bg-[#1F1D1A]/90 rounded-3xl p-6 md:p-10 border border-[#AE8F05]/30 shadow-xl mb-16">
+          <div className="bg-white rounded-3xl p-6 md:p-10 border border-[#EAE6DE] shadow-xl mb-16">
             <div className="flex items-center space-x-3 mb-8 pb-4 border-b border-[#AE8F05]/20">
-              <Layers className="w-7 h-7 text-sacred-gold" />
+              <Layers className="w-7 h-7 text-[#AE8F05]" />
               <div>
-                <h4 className="font-serif text-2xl font-bold text-warm-slate dark:text-white">
+                <h4 className="font-serif text-2xl font-bold text-[#2C2A28]">
                   {isAm ? "የልህቀት ማዕከላት እና የአገልግሎት ክፍል ቡድኖች" : "Excellence Teams & Ministry Departments"}
                 </h4>
-                <p className="text-xs text-[#5C5854] dark:text-gray-400 mt-1">
+                <p className="text-xs text-[#5C5854] mt-1">
                   {isAm ? "በየዘርፉ የተሰማሩ የልህቀት ማዕከላትና የበጎ ፈቃድ ባለሙያዎች" : "Over 20 Specialized Ministerial Teams & 150+ Volunteer Professionals"}
                 </p>
               </div>
@@ -685,9 +673,9 @@ export function OrgStructure() {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
               {MINISTRY_TEAMS.map((team, idx) => (
-                <div key={idx} className="p-4 rounded-2xl bg-alabaster/60 dark:bg-gray-900/60 border border-[#AE8F05]/20 hover:border-[#D4AF37] hover:scale-[1.02] transition-all flex items-center space-x-3">
-                  <div className="w-2.5 h-2.5 rounded-full bg-sacred-gold flex-shrink-0" />
-                  <span className="text-xs font-bold text-warm-slate dark:text-gray-200">
+                <div key={idx} className="p-4 rounded-2xl bg-[#FAF8F5] border border-[#EAE6DE] hover:border-[#D4AF37] hover:bg-white hover:scale-[1.02] transition-all flex items-center space-x-3">
+                  <div className="w-2.5 h-2.5 rounded-full bg-[#AE8F05] flex-shrink-0" />
+                  <span className="text-xs font-bold text-[#2C2A28]">
                     {isAm ? team.am : team.en}
                   </span>
                 </div>
@@ -698,10 +686,10 @@ export function OrgStructure() {
           {/* FULL DIRECTORY: Leaders Cards */}
           <div className="mt-16">
             <div className="text-center mb-10">
-              <h4 className="font-serif text-2xl sm:text-3xl font-bold text-warm-slate dark:text-white">
+              <h4 className="font-serif text-2xl sm:text-3xl font-bold text-[#2C2A28]">
                 {isAm ? "የካውንስል አባላት፣ የኔትወርክና የዲፓርትመንት መሪዎች ማውጫ" : "Council Members, Network Leaders & Section Heads Directory"}
               </h4>
-              <p className="text-xs sm:text-sm text-[#5C5854] dark:text-gray-400 mt-2 max-w-xl mx-auto">
+              <p className="text-xs sm:text-sm text-[#5C5854] mt-2 max-w-xl mx-auto">
                 {isAm ? "የተልዕኮ ለትውልድ አገልግሎትን በታማኝነት የሚመሩ መሪዎች" : "Faithful Leaders & Ministers guiding the vision across all local and national networks."}
               </p>
             </div>
@@ -713,9 +701,9 @@ export function OrgStructure() {
                   whileInView={{ opacity: 1, y: 0 }}
                   initial={{ opacity: 0, y: 20 }}
                   viewport={{ once: true }}
-                  className="ivory-glass-card dark:bg-[#1F1D1A]/95 rounded-2xl p-5 border border-[#AE8F05]/30 hover:border-[#D4AF37] hover:scale-[1.02] transition-all flex items-start space-x-4 shadow-md"
+                  className="bg-white rounded-2xl p-5 border border-[#EAE6DE] hover:border-[#D4AF37] hover:shadow-lg hover:scale-[1.02] transition-all flex items-start space-x-4 shadow-sm"
                 >
-                  <div className="w-14 h-14 rounded-2xl overflow-hidden bg-champagne-pearl dark:bg-gray-800 border border-[#AE8F05]/40 flex-shrink-0 flex items-center justify-center shadow-sm">
+                  <div className="w-14 h-14 rounded-2xl overflow-hidden bg-[#FAF8F5] border border-[#AE8F05]/30 flex-shrink-0 flex items-center justify-center shadow-sm">
                     {leader.photoUrl ? (
                       <ImageWithFallback
                         src={leader.photoUrl}
@@ -723,18 +711,18 @@ export function OrgStructure() {
                         className="w-full h-full object-cover object-top"
                       />
                     ) : (
-                      <UserCheck className="w-7 h-7 text-sacred-gold" />
+                      <UserCheck className="w-7 h-7 text-[#AE8F05]" />
                     )}
                   </div>
 
                   <div className="flex-1 min-w-0">
-                    <span className="text-[9px] font-extrabold uppercase tracking-widest text-sacred-gold px-2 py-0.5 rounded-md bg-[#F7E7CE]/60 dark:bg-gray-800 inline-block mb-1">
+                    <span className="text-[9px] font-extrabold uppercase tracking-widest text-[#AE8F05] px-2 py-0.5 rounded-md bg-[#FAF5E6] inline-block mb-1 border border-[#AE8F05]/20">
                       {leader.category === "council" ? "COUNCIL MEMBER" : leader.category === "network" ? "NETWORK LEADER" : "DEPARTMENT HEAD"}
                     </span>
-                    <h5 className="font-serif font-bold text-sm text-warm-slate dark:text-white truncate">
+                    <h5 className="font-serif font-bold text-sm text-[#2C2A28] truncate">
                       {isAm ? leader.nameAm : leader.nameEn}
                     </h5>
-                    <p className="text-xs text-[#5C5854] dark:text-gray-300 font-medium leading-tight mt-1">
+                    <p className="text-xs text-[#5C5854] font-medium leading-tight mt-1">
                       {isAm ? leader.roleAm : leader.roleEn}
                     </p>
                   </div>
