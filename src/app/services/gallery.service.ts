@@ -51,7 +51,7 @@ export async function fetchGallery(regionId: string): Promise<GalleryImage[]> {
  * can continue to use the existing filtering/pagination logic.
  */
 export async function fetchGalleryPosts(): Promise<Post[]> {
-  const cacheKey = "galleryPosts:v2";
+  const cacheKey = "galleryPosts:v3";
   const cached = getCache<Post[]>(cacheKey);
   if (cached) {
     return cached;
@@ -60,11 +60,40 @@ export async function fetchGalleryPosts(): Promise<Post[]> {
   let apiPosts: Post[] = [];
 
   try {
-    const url = `${BASE_URL}/api/galleries/all`;
-    const res = await fetch(url);
-    if (res.ok) {
-      const payload: GalleryApiResponse = await res.json();
-      apiPosts = payload.galleries.map((g) => ({
+    const [galleryResponse, churchesResponse] = await Promise.all([
+      fetch(`${BASE_URL}/api/galleries/all`),
+      fetch(`${BASE_URL}/api/churches`),
+    ]);
+
+    const ownershipByImage = new Map<string, { id: string; name: string }>();
+    if (churchesResponse.ok) {
+      const churchesPayload = await churchesResponse.json();
+      const churches = Array.isArray(churchesPayload)
+        ? churchesPayload
+        : churchesPayload.churches || churchesPayload.data || [];
+
+      churches.forEach((church: any) => {
+        (Array.isArray(church.gallery) ? church.gallery : []).forEach(
+          (galleryImage: any) => {
+            if (galleryImage?.url && church?.id) {
+              ownershipByImage.set(galleryImage.url, {
+                id: String(church.id),
+                name: String(church.name || "Mission for Nation Church"),
+              });
+            }
+          },
+        );
+      });
+    }
+
+    if (galleryResponse.ok) {
+      const payload: GalleryApiResponse = await galleryResponse.json();
+      apiPosts = payload.galleries.map((g) => {
+        const owner = ownershipByImage.get(g.image_url);
+        const churchId = g.church_id ?? owner?.id ?? "";
+        const churchName = g.church_name ?? owner?.name ?? "";
+
+        return {
         id: g.id,
         title: g.title ?? g.region_name,
         description: g.description ?? g.caption ?? "",
@@ -77,10 +106,11 @@ export async function fetchGalleryPosts(): Promise<Post[]> {
           name: g.region_name,
         },
         church: {
-          id: g.church_id ?? "",
-          name: g.church_name ?? "",
+          id: churchId,
+          name: churchName,
         },
-      }));
+        };
+      });
     }
   } catch (error) {
     console.error("Failed to fetch gallery posts from API:", error);

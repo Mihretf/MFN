@@ -212,7 +212,7 @@ export function BranchDetail() {
         <img
           src={branch.heroImage}
           alt={branch.name}
-          className="w-full h-full object-cover"
+          className="w-full h-full object-contain bg-[#1a3c34]"
         />
         <div className="absolute inset-0 bg-gradient-to-r from-[#1a3c34]/90 to-[#1a3c34]/50" />
         <div className="absolute inset-0 flex items-center">

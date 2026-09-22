@@ -34,7 +34,6 @@ export default function GalleryHighlight() {
           title: post.title || "30th Anniversary Celebration",
           category: post.church?.name || "Mission for Nation Church",
           imageUrl: post.media_url,
-          description: post.content || "Glorious worship and gathering in His presence.",
         }));
 
         setCards(mappedCards);
@@ -127,11 +126,6 @@ export default function GalleryHighlight() {
                 <h3 className="font-serif text-base font-bold text-warm-slate mt-1 group-hover:text-[#AE8F05] transition-colors line-clamp-1">
                   {card.title}
                 </h3>
-                {card.description && (
-                  <p className="text-sm text-[#5C5854] mt-1 line-clamp-2">
-                    {card.description}
-                  </p>
-                )}
               </div>
             </button>
           ))}

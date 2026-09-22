@@ -42,9 +42,16 @@ export function Services() {
       typeof region?.description === "string" ? region.description : "",
   });
 
-  const normalizeChurch = (church: any, index: number): Branch => ({
+  const normalizeChurch = (church: any, index: number): Branch => {
+    const gallery = Array.isArray(church?.gallery) ? church.gallery : [];
+    const galleryImage = gallery.find((image: any) => image?.url)?.url || "";
+    const name = String(church?.name ?? "Unnamed Church");
+    const useGalleryHero = /asela|aleta\s*wendo/i.test(name);
+    const useGalleryEvent = /asela|hawassa/i.test(name);
+
+    return {
     id: String(church?.id ?? church?.external_id ?? `church-${index}`),
-    name: String(church?.name ?? "Unnamed Church"),
+    name,
     externalId:
       church?.external_id != null ? String(church.external_id) : undefined,
     location: String(
@@ -54,7 +61,9 @@ export function Services() {
     phone: String(church?.phone ?? ""),
     email: String(church?.email ?? ""),
     description: String(church?.description ?? ""),
-    heroImage: String(church?.hero_image ?? ""),
+    heroImage: String(
+      (useGalleryHero ? galleryImage : church?.hero_image) || galleryImage || "",
+    ),
     serviceTimes: Array.isArray(church?.service_times)
       ? church.service_times
       : [],
@@ -77,15 +86,21 @@ export function Services() {
             image: "",
             bio: "",
           },
-    events: Array.isArray(church?.events) ? church.events : [],
+    events: Array.isArray(church?.events)
+      ? church.events.map((event: any) => ({
+          ...event,
+          image: useGalleryEvent && galleryImage ? galleryImage : event.image,
+        }))
+      : [],
     ministries: Array.isArray(church?.ministries) ? church.ministries : [],
-    gallery: Array.isArray(church?.gallery) ? church.gallery : [],
+    gallery,
     mapUrl: String(church?.map_url ?? ""),
     locationLink: church?.location_link
       ? String(church.location_link)
       : undefined,
     regionId: String(church?.region_id ?? ""),
-  });
+    };
+  };
 
   const extractArrayPayload = (payload: any, candidates: string[]): any[] => {
     if (Array.isArray(payload)) return payload;
