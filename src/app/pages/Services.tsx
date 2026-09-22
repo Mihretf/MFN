@@ -81,8 +81,9 @@ export function Services() {
   };
 
   const [regions, setRegions] = useState<RegionAPI[]>(() => {
-    const cached = getCache<RegionAPI[]>("regions");
-    return cached || [];
+    const cached = getCache<any>("regions");
+    const raw = extractArrayPayload(cached, ["regions", "data", "results"]);
+    return raw.map((region, index) => normalizeRegion(region, index));
   });
   const [churches, setChurches] = useState<Branch[]>(() => {
     const cached = getCache<any>("churches:all");
@@ -173,9 +174,14 @@ export function Services() {
   useEffect(() => {
     setLoadingRegions(true);
     const cacheKey = "regions";
-    const cached = getCache<RegionAPI[]>(cacheKey);
+    const cached = getCache<any>(cacheKey);
     if (cached) {
-      setRegions(cached);
+      const rawList = extractArrayPayload(cached, [
+        "regions",
+        "data",
+        "results",
+      ]);
+      setRegions(rawList.map((region, index) => normalizeRegion(region, index)));
       setLoadingRegions(false);
       return;
     }
@@ -301,6 +307,7 @@ export function Services() {
               {/* card */}
               {(() => {
                 const current = sortedAnnouncements[currentAnnIndex];
+                if (!current) return null;
                 const hasText =
                   current.description && current.description.trim().length > 0;
                 const hasImage =
@@ -516,11 +523,11 @@ export function Services() {
                           <div className="bg-white dark:bg-gray-900 rounded-xl shadow-md border border-gray-100 dark:border-gray-800 hover:shadow-xl transition-all duration-300 overflow-hidden group">
                             <div className="flex flex-col md:flex-row">
                               {/* Image */}
-                              <div className="w-full md:w-2/5 h-64 md:h-72 flex-shrink-0 relative overflow-hidden bg-gray-50 dark:bg-gray-800">
+                              <div className="w-full md:w-2/5 min-h-64 md:min-h-72 flex-shrink-0 relative overflow-hidden bg-gray-50 dark:bg-gray-800 flex items-center justify-center">
                                 <ImageWithFallback 
                                   src={branch.heroImage || "https://images.unsplash.com/photo-1548625149-fc4a29cf7092?auto=format&fit=crop&q=80&w=1080"} 
                                   alt={branch.name} 
-                                  className="w-full h-full object-cover object-top brightness-105 contrast-[1.02] group-hover:scale-105 transition-transform duration-500" 
+                                  className="w-full h-auto max-h-72 object-contain object-center brightness-105 contrast-[1.02] group-hover:scale-[1.02] transition-transform duration-500" 
                                 />
                               </div>
 

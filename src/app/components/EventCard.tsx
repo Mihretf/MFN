@@ -16,13 +16,12 @@ export function EventCard({ event }: { event: Event }) {
       whileHover={{ y: -5, scale: 1.02 }}
       className="flex-shrink-0 w-80 bg-white rounded-xl shadow-md overflow-hidden cursor-pointer group snap-start"
     >
-      <div className="relative aspect-video overflow-hidden">
+      <div className="relative aspect-video overflow-hidden bg-gray-100">
         <img 
           src={event.image} 
           alt={event.title}
-          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+          className="w-full h-full object-contain object-center"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
       </div>
       
       <div className="p-5">

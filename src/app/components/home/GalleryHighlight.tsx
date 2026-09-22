@@ -106,7 +106,7 @@ export default function GalleryHighlight() {
                 <img
                   src={card.imageUrl}
                   alt={card.title}
-                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-108"
+                  className="w-full h-full object-contain object-center transition-transform duration-500"
                   style={{ transition: "transform 0.5s ease" }}
                   onMouseEnter={(e) => (e.currentTarget.style.transform = "scale(1.08)")}
                   onMouseLeave={(e) => (e.currentTarget.style.transform = "scale(1)")}

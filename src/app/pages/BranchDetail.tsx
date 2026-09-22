@@ -323,7 +323,7 @@ export function BranchDetail() {
                   <img
                     src={branch.pastor.image}
                     alt={branch.pastor.name}
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-contain object-center"
                   />
                 </div>
                 <div className="flex-1">
@@ -497,7 +497,7 @@ export function BranchDetail() {
                       <img
                         src={image.url}
                         alt={image.caption ?? ""}
-                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                        className="w-full h-full object-contain object-center transition-transform duration-300"
                       />
                       <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-colors flex items-end">
                         <p className="text-white text-sm p-3 opacity-0 group-hover:opacity-100 transition-opacity">

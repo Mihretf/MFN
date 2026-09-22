@@ -133,9 +133,10 @@ export function AboutUs() {
                 href="https://www.youtube.com/watch?si=pvq5IHwD9SAM3gbs&v=ZSQ6_PLRGWQ&feature=youtu.be"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="block bg-white rounded-3xl p-5 border border-[#AE8F05]/40 shadow-xl hover:border-[#D4AF37] hover:scale-[1.02] transition-all group"
+                aria-label="Watch the PHD with Distinction Ceremony on YouTube"
+                className="block bg-white rounded-3xl p-5 border border-[#AE8F05]/40 shadow-xl hover:border-[#D4AF37] hover:scale-[1.02] transition-all group cursor-pointer"
               >
-                <div className="flex items-center space-x-4">
+                <div className="flex items-center gap-4">
                   <div className="w-12 h-12 rounded-2xl bg-red-600 text-white flex items-center justify-center shadow-md group-hover:scale-110 transition-transform">
                     <Play className="w-6 h-6 fill-current" />
                   </div>
@@ -149,8 +150,11 @@ export function AboutUs() {
                     <p className="text-xs text-[#5C5854]">
                       #heritage_of_faith #PHD_with_distinction #Apostle_Zelalem_Getachew
                     </p>
+                    <span className="inline-flex items-center gap-1 mt-3 text-xs font-bold text-red-600">
+                      Watch on YouTube
+                      <ExternalLink className="w-3.5 h-3.5" />
+                    </span>
                   </div>
-                  <ExternalLink className="w-4 h-4 text-sacred-gold" />
                 </div>
               </a>
 
@@ -314,31 +318,33 @@ export function AboutUs() {
               </p>
             </div>
 
-            {/* Point 9 & 10 */}
+            {/* Points 9 & 10 */}
             <div className="bg-[#FAF8F5] rounded-3xl p-6 md:p-8 border border-[#EAE6DE] shadow-[0_4px_20px_rgba(0,0,0,0.03)] hover:shadow-[0_10px_30px_rgba(212,175,55,0.12)] hover:border-[#D4AF37]/60 hover:scale-[1.01] transition-all md:col-span-2">
-              <div className="flex items-center space-x-3 mb-4">
-                <div className="w-10 h-10 rounded-2xl bg-white text-[#AE8F05] font-serif font-bold text-lg flex items-center justify-center border border-[#AE8F05]/30 shadow-sm">
-                  9 & 10
-                </div>
-                <h3 className="font-serif text-xl font-bold text-[#1A1918]">
-                  {isAm ? "9 & 10. የክርስቲያን ህብረት ማደግ እና ዘመናዊ የተቋም አስተዳደር" : "9 & 10. Evangelical Church Fellowships & Management Manuals"}
-                </h3>
-              </div>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 text-xs sm:text-sm text-[#4A4744] leading-relaxed">
-                <div>
-                  <h4 className="font-bold text-[#1A1918] mb-1">
-                    {isAm ? "9. የወንጌል አማኞች ሕብረት ማደግ" : "9. Contribution to Church Fellowships"}
-                  </h4>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 text-xs sm:text-sm text-[#4A4744] leading-relaxed">
+                <div className="border-b md:border-b-0 md:border-r border-[#AE8F05]/20 pb-6 md:pb-0 md:pr-8">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="w-10 h-10 shrink-0 rounded-2xl bg-white text-[#AE8F05] font-serif font-bold text-lg flex items-center justify-center border border-[#AE8F05]/30 shadow-sm">
+                      9
+                    </div>
+                    <h3 className="font-serif text-xl font-bold text-[#1A1918]">
+                      {isAm ? "የወንጌል አማኞች ሕብረት ማደግ" : "Contribution to Church Fellowships"}
+                    </h3>
+                  </div>
                   <p>
                     {isAm 
                       ? "በአገር አቀፍ ደረጃ ከነበረው አንድ ሕብረት ባለፈ በርካታ አማራጭ ሕብረቶች ከመቋቋማቸውም በላይ ወንጌል አማኙ ማህበረሰብ እንደ አንደ ሃይማኖት በአዋጅ የጸደቀ ሕጋዊ እውቅና ባገኘበት ሂደት ውስጥ የተልዕኮ ለትውልድ ድርሻ ከፍተኛ ነው፡፡"
                       : "Played a pivotal role in establishing alternative evangelical fellowships and securing official legal recognition for evangelical Christians through government proclamation."}
                   </p>
                 </div>
-                <div>
-                  <h4 className="font-bold text-[#1A1918] mb-1">
-                    {isAm ? "10. የተቋም አስተዳደር ስርዓቶች" : "10. Institutional Management Systems"}
-                  </h4>
+                <div className="md:pl-0">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="w-10 h-10 shrink-0 rounded-2xl bg-white text-[#AE8F05] font-serif font-bold text-lg flex items-center justify-center border border-[#AE8F05]/30 shadow-sm">
+                      10
+                    </div>
+                    <h3 className="font-serif text-xl font-bold text-[#1A1918]">
+                      {isAm ? "የተቋም አስተዳደር ስርዓቶች" : "Institutional Management Systems"}
+                    </h3>
+                  </div>
                   <p>
                     {isAm 
                       ? "የሰው ሃብት አስተዳደር ማኑዋል፣ የሂሳብ አስተዳደር ማኑዋል፣ የስነ-ምግባር ደንብ እና መሪ እቅድ (Strategic Plan) አዘጋጅቶ አገልግሎት የመስጠት ፕሮፌሽናል ባህል አዳብሯል፡፡"

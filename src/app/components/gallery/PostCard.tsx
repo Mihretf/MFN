@@ -37,13 +37,8 @@ export function PostCard({ post, onClick }: PostCardProps) {
         <ImageWithFallback
           src={post.media_url}
           alt={post.title}
-          className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500"
+          className="w-full h-full object-contain object-center transition-transform duration-500"
         />
-        <div className="absolute top-2 right-2">
-          <span className="px-2.5 py-0.5 rounded-full text-[10px] uppercase tracking-wider border font-semibold bg-[#F7E7CE] text-[#AE8F05] border-[#AE8F05]/30">
-            {post.type}
-          </span>
-        </div>
       </div>
 
       <div className="p-3">

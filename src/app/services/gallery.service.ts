@@ -51,7 +51,7 @@ export async function fetchGallery(regionId: string): Promise<GalleryImage[]> {
  * can continue to use the existing filtering/pagination logic.
  */
 export async function fetchGalleryPosts(): Promise<Post[]> {
-  const cacheKey = "galleryPosts";
+  const cacheKey = "galleryPosts:v2";
   const cached = getCache<Post[]>(cacheKey);
   if (cached) {
     return cached;
@@ -66,11 +66,11 @@ export async function fetchGalleryPosts(): Promise<Post[]> {
       const payload: GalleryApiResponse = await res.json();
       apiPosts = payload.galleries.map((g) => ({
         id: g.id,
-        title: g.region_name,
-        description: g.caption ?? "",
-        type: "gallery",
+        title: g.title ?? g.region_name,
+        description: g.description ?? g.caption ?? "",
+        type: (g.type as Post["type"]) || "gallery",
         media_url: g.image_url,
-        show_on_homepage: false,
+        show_on_homepage: Boolean((g as any).show_on_homepage),
         created_at: g.created_at,
         region: {
           id: g.region_id,
