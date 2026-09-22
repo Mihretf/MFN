@@ -1,4 +1,4 @@
-import { ImageWithFallback } from '../components/figma/ImageWithFallback';
+import { ImageWithFallback } from "../components/figma/ImageWithFallback";
 import React, { useState, useEffect, useMemo } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
@@ -10,23 +10,30 @@ import {
   Clock,
   ArrowRight,
   ChevronRight,
+  Bell,
+  Sparkles,
 } from "lucide-react";
 import { regionService, churchService } from "../services/app.service";
 import { getCache, setCache } from "../utils/cache";
-import { fetchGalleryPosts } from "../services/gallery.service";
-import type { Branch } from "../data/mockData"; // reuse Branch shape
-import type { Post } from "../types/gallery.type"; // for announcements
-import { LoadingState } from "../components/ui/LoadingState";
+import type { Branch } from "../data/mockData";
 import { ErrorState } from "../components/ui/ErrorState";
+import {
+  RegionSidebarSkeleton,
+  ChurchCardsSkeleton,
+} from "../components/services/ServiceSkeleton";
+import {
+  RegionalAnnouncements,
+  RegionalAnnouncement,
+} from "../components/services/RegionalAnnouncements";
+
+interface RegionAPI {
+  id: string;
+  name: string;
+  description?: string;
+}
 
 export function Services() {
   const { t } = useTranslation();
-
-  interface RegionAPI {
-    id: string;
-    name: string;
-    description?: string; // may be provided by API
-  }
 
   const normalizeRegion = (region: any, index: number): RegionAPI => ({
     id: String(region?.id ?? region?.external_id ?? `region-${index}`),
@@ -40,20 +47,26 @@ export function Services() {
     name: String(church?.name ?? "Unnamed Church"),
     externalId:
       church?.external_id != null ? String(church.external_id) : undefined,
-    location: String(church?.location || church?.address || "Location unavailable"),
+    location: String(
+      church?.location || church?.address || "Location available",
+    ),
     address: String(church?.address || church?.location || ""),
     phone: String(church?.phone ?? ""),
     email: String(church?.email ?? ""),
     description: String(church?.description ?? ""),
     heroImage: String(church?.hero_image ?? ""),
-    serviceTimes: Array.isArray(church?.service_times) ? church.service_times : [],
+    serviceTimes: Array.isArray(church?.service_times)
+      ? church.service_times
+      : [],
     announcements: Array.isArray(church?.announcements)
       ? church.announcements
       : [],
     pastor:
       church?.pastor && typeof church.pastor === "object"
         ? {
-            name: String(church.pastor.name ?? "Pastor information unavailable"),
+            name: String(
+              church.pastor.name ?? "Pastor information unavailable",
+            ),
             role: String(church.pastor.role ?? ""),
             image: String(church.pastor.image ?? ""),
             bio: String(church.pastor.bio ?? ""),
@@ -68,7 +81,9 @@ export function Services() {
     ministries: Array.isArray(church?.ministries) ? church.ministries : [],
     gallery: Array.isArray(church?.gallery) ? church.gallery : [],
     mapUrl: String(church?.map_url ?? ""),
-    locationLink: church?.location_link ? String(church.location_link) : undefined,
+    locationLink: church?.location_link
+      ? String(church.location_link)
+      : undefined,
     regionId: String(church?.region_id ?? ""),
   });
 
@@ -81,546 +96,484 @@ export function Services() {
   };
 
   const [regions, setRegions] = useState<RegionAPI[]>(() => {
-    const cached = getCache<any>("regions");
-    const raw = extractArrayPayload(cached, ["regions", "data", "results"]);
-    return raw.map((region, index) => normalizeRegion(region, index));
-  });
-  const [churches, setChurches] = useState<Branch[]>(() => {
-    const cached = getCache<any>("churches:all");
-    if (cached) {
-      const raw: any[] = extractArrayPayload(cached, [
-        "churches",
-        "data",
-        "results",
-      ]);
-      return raw.map((c, i) => normalizeChurch(c, i));
+    try {
+      const cached = getCache<any>("regions");
+      if (cached) {
+        const raw = extractArrayPayload(cached, ["regions", "data", "results"]);
+        return raw.map((region, index) => normalizeRegion(region, index));
+      }
+    } catch {
+      // Ignore cache reading error
     }
     return [];
   });
-  const [loadingRegions, setLoadingRegions] = useState(() => !getCache("regions"));
-  const [loadingChurches, setLoadingChurches] = useState(() => !getCache("churches:all"));
+
+  const [churches, setChurches] = useState<Branch[]>(() => {
+    try {
+      const cached = getCache<any>("churches:all");
+      if (cached) {
+        const raw: any[] = extractArrayPayload(cached, [
+          "churches",
+          "data",
+          "results",
+        ]);
+        return raw.map((c, i) => normalizeChurch(c, i));
+      }
+    } catch {
+      // Ignore cache reading error
+    }
+    return [];
+  });
+
+  const [loadingRegions, setLoadingRegions] = useState(() => regions.length === 0);
+  const [loadingChurches, setLoadingChurches] = useState(() => churches.length === 0);
   const [errorRegions, setErrorRegions] = useState<string | null>(null);
   const [errorChurches, setErrorChurches] = useState<string | null>(null);
 
   const [selectedRegionId, setSelectedRegionId] = useState<string>("");
 
-  // announcements area: upcoming events from gallery
-  const [announcements, setAnnouncements] = useState<Post[]>([]);
-
-  // carousel helpers for announcements
-  const sortedAnnouncements = useMemo(
-    () =>
-      [...announcements].sort(
-        (a, b) =>
-          new Date(b.created_at).getTime() - new Date(a.created_at).getTime(),
-      ),
-    [announcements],
-  );
-
-  const [currentAnnIndex, setCurrentAnnIndex] = useState(0);
-  const goNextAnn = () =>
-    setCurrentAnnIndex((i) =>
-      sortedAnnouncements.length ? (i + 1) % sortedAnnouncements.length : 0,
-    );
-  const goPrevAnn = () =>
-    setCurrentAnnIndex((i) =>
-      sortedAnnouncements.length
-        ? (i - 1 + sortedAnnouncements.length) % sortedAnnouncements.length
-        : 0,
-    );
-
-  // reset index when list changes
+  // Load regions with safe fallback
   useEffect(() => {
-    if (currentAnnIndex >= sortedAnnouncements.length) {
-      setCurrentAnnIndex(0);
-    }
-  }, [sortedAnnouncements, currentAnnIndex]);
-
-  // auto-advance announcements at interval
-  useEffect(() => {
-    if (sortedAnnouncements.length === 0) return;
-    const timer = setInterval(goNextAnn, 5000);
-    return () => clearInterval(timer);
-  }, [sortedAnnouncements]);
-
-  // optional label logic copied from home blogs
-  const getAnnLabel = (post: Post) => {
-    const text = post.description?.toLowerCase() || "";
-    if (text.includes("quote") || text.includes("”") || text.includes("“"))
-      return "Quote";
-    if (text.includes("offer") || text.includes("discount")) return "Offer";
-    if (new Date(post.created_at) > new Date(Date.now() - 1000 * 60 * 60 * 72))
-      return "New";
-    return "Update";
-  };
-
-  // clicking same region toggles filter off
-  const handleRegionClick = (id: string) => {
-    setSelectedRegionId((prev) => (prev === id ? "" : id));
-  };
-
-  // filter to show in main column
-  const filteredBranches = churches.filter((branch) => {
-    if (!selectedRegionId) return true;
-    return branch.regionId === selectedRegionId;
-  });
-
-  // count helper
-  const getRegionBranchCount = (regionId: string) => {
-    return churches.filter((branch) => branch.regionId === regionId).length;
-  };
-
-  // load regions on mount (with explicit cache check as example)
-  useEffect(() => {
-    setLoadingRegions(true);
+    let isMounted = true;
     const cacheKey = "regions";
-    const cached = getCache<any>(cacheKey);
-    if (cached) {
-      const rawList = extractArrayPayload(cached, [
-        "regions",
-        "data",
-        "results",
-      ]);
-      setRegions(rawList.map((region, index) => normalizeRegion(region, index)));
-      setLoadingRegions(false);
-      return;
-    }
 
     regionService
       .getRegions()
       .then((res) => {
+        if (!isMounted) return;
         const rawList: any[] = extractArrayPayload(res, [
           "regions",
           "data",
           "results",
         ]);
         const list: RegionAPI[] = rawList.map((r, i) => normalizeRegion(r, i));
-        setRegions(list);
-        setCache(cacheKey, list);
+        if (list.length > 0) {
+          setRegions(list);
+          setCache(cacheKey, list);
+        }
       })
       .catch((err) => {
-        console.error("failed to fetch regions", err);
-        setErrorRegions(err.message || "Unable to load regions");
+        console.warn("Failed to fetch live regions, using available data:", err);
+        if (isMounted && regions.length === 0) {
+          setErrorRegions("Unable to load regions. Please check your connection.");
+        }
       })
-      .finally(() => setLoadingRegions(false));
+      .finally(() => {
+        if (isMounted) setLoadingRegions(false);
+      });
+
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
-  // load churches once (cache handled by service already, but demonstrating)
+  // Load churches with safe fallback
   useEffect(() => {
-    setLoadingChurches(true);
+    let isMounted = true;
     const cacheKey = "churches:all";
-    const cached = getCache<any>(cacheKey);
-    if (cached) {
-      const raw: any[] = extractArrayPayload(cached, [
-        "churches",
-        "data",
-        "results",
-      ]);
-      const mapped: Branch[] = raw.map((c, i) => normalizeChurch(c, i));
-      setChurches(mapped);
-      setLoadingChurches(false);
-      return;
-    }
 
     churchService
       .getChurches({}, "")
       .then((res: any) => {
+        if (!isMounted) return;
         setCache(cacheKey, res);
-        const rawResponse = res as import("../types/church.type").ChurchListResponse;
-        const raw: any[] = extractArrayPayload(rawResponse, [
+        const raw: any[] = extractArrayPayload(res, [
           "churches",
           "data",
           "results",
         ]);
         const mapped: Branch[] = raw.map((c, i) => normalizeChurch(c, i));
-        setChurches(mapped);
+        if (mapped.length > 0) {
+          setChurches(mapped);
+        }
       })
       .catch((err) => {
-        console.error("failed to fetch churches", err);
-        setErrorChurches(err.message || "Unable to load churches");
+        console.warn("Failed to fetch live churches, using available data:", err);
+        if (isMounted && churches.length === 0) {
+          setErrorChurches("Unable to load church branches. Please try again.");
+        }
       })
-      .finally(() => setLoadingChurches(false));
+      .finally(() => {
+        if (isMounted) setLoadingChurches(false);
+      });
+
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
-  // fetch announcement posts (events not expired); fall back to mock if empty
-  useEffect(() => {
-    fetchGalleryPosts()
-      .then((posts) => {
-        const now = new Date();
-        const events = posts.filter((p) => {
-          if (p.type !== "event") return false;
-          if (!p.deadline) return true;
-          return new Date(p.deadline) > now;
-        });
-        setAnnouncements(events);
-      })
-      .catch((err) => {
-        console.error("failed to load announcements", err);
-        // on error just clear announcements; UI hides section automatically
-        setAnnouncements([]);
+  // Exclude Eyursalem Main Coordination Church from regional announcements
+  const isMainCoordinationChurch = (c: Branch) =>
+    /jerusalem|eyursalem/i.test(c.name);
+
+  // Transform church events from non-main churches into regional announcements
+  const regionalAnnouncements: RegionalAnnouncement[] = useMemo(() => {
+    return churches
+      .filter((c) => !isMainCoordinationChurch(c))
+      .flatMap((church) => {
+        const churchEvents = Array.isArray(church.events) ? church.events : [];
+        return churchEvents
+          .filter((evt) => evt && (evt.title || evt.image || evt.description))
+          .map((evt, idx) => ({
+            id: evt.id || `${church.id}-evt-${idx}`,
+            title: evt.title || `${church.name} Program`,
+            description: evt.description || "",
+            date: evt.date || "",
+            time: evt.time || "",
+            image: evt.image || church.heroImage || "",
+            churchId: church.id,
+            churchName: church.name,
+            regionId: church.regionId,
+          }));
       });
-  }, []);
+  }, [churches]);
+
+  // Count helper for regional announcements
+  const getRegionAnnouncementCount = (regionId: string) => {
+    return regionalAnnouncements.filter((a) => a.regionId === regionId).length;
+  };
+
+  // Announcements to display for the currently selected region or all regions
+  const activeAnnouncements = useMemo(() => {
+    if (!selectedRegionId) return regionalAnnouncements;
+    return regionalAnnouncements.filter((a) => a.regionId === selectedRegionId);
+  }, [regionalAnnouncements, selectedRegionId]);
+
+  const selectedRegionName = useMemo(() => {
+    if (!selectedRegionId) return "All Regional";
+    const found = regions.find((r) => r.id === selectedRegionId);
+    return found?.name || "Regional";
+  }, [regions, selectedRegionId]);
+
+  // Clicking same region toggles filter off
+  const handleRegionClick = (id: string) => {
+    setSelectedRegionId((prev) => (prev === id ? "" : id));
+  };
+
+  // Filter churches for the main column - ALWAYS place Eyerusalem branch at the top as main center
+  const filteredBranches = useMemo(() => {
+    const list = selectedRegionId
+      ? churches.filter((branch) => branch.regionId === selectedRegionId)
+      : churches;
+
+    return [...list].sort((a, b) => {
+      const aIsMain = /jerusalem|eyursalem/i.test(a.name);
+      const bIsMain = /jerusalem|eyursalem/i.test(b.name);
+      if (aIsMain && !bIsMain) return -1;
+      if (!aIsMain && bIsMain) return 1;
+      return 0;
+    });
+  }, [churches, selectedRegionId]);
+
+  // Count helper for branches in a region
+  const getRegionBranchCount = (regionId: string) => {
+    return churches.filter((branch) => branch.regionId === regionId).length;
+  };
 
   return (
-    <div className="pt-24 pb-20 min-h-screen bg-[#f5f5f5] dark:bg-gray-900 transition-colors duration-300">
+    <div className="pt-24 pb-20 min-h-screen bg-[#faf8f5] dark:bg-gray-900 transition-colors duration-300">
       <div className="max-w-7xl mx-auto px-4 md:px-8">
         {/* Header */}
         <div className="text-center mb-12">
-          <h1 className="text-4xl md:text-5xl font-bold text-[#1a3c34] dark:text-gray-100 mb-4 transition-colors">
-            {t("services.heroTitle")}
+          <h1 className="text-4xl md:text-5xl font-bold font-serif text-[#1a3c34] dark:text-gray-100 mb-4 transition-colors">
+            {t("services.heroTitle") || "Our Church Locations"}
           </h1>
-          <p className="text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto transition-colors">
-            {t("services.heroSubtitle")}
+          <p className="text-lg md:text-xl text-[#5c5854] dark:text-gray-400 max-w-2xl mx-auto transition-colors">
+            {t("services.heroSubtitle") ||
+              "Find a Mission for Nation church family near you and join us for worship."}
           </p>
         </div>
 
-        {/* announcement carousel (same style as home blogs) */}
-        {sortedAnnouncements.length > 0 && (
-          <section className="mb-12">
-            <h2 className="text-2xl font-bold text-[#1a3c34] mb-4">
-              Announcements
-            </h2>
-
-            <div className="relative flex items-center justify-center">
-              {/* previous */}
-              <button
-                onClick={goPrevAnn}
-                className="absolute left-0 sm:left-4 lg:left-8 top-1/2 transform -translate-y-1/2 z-10 p-4 bg-white/90 backdrop-blur-sm rounded-full shadow-lg hover:bg-white hover:scale-105 transition-all"
-                aria-label="Previous"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-6 w-6 text-gray-700"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M15 19l-7-7 7-7"
-                  />
-                </svg>
-              </button>
-
-              {/* card */}
-              {(() => {
-                const current = sortedAnnouncements[currentAnnIndex];
-                if (!current) return null;
-                const hasText =
-                  current.description && current.description.trim().length > 0;
-                const hasImage =
-                  current.media_url != null &&
-                  current.media_url.trim().length > 0;
-                return (
-                  <div
-                    className={`
-                      w-full max-w-lg sm:max-w-xl md:max-w-2xl lg:max-w-3xl 
-                      mx-6 sm:mx-12 md:mx-16 
-                      bg-white dark:bg-gray-800 rounded-2xl shadow-xl border border-gray-100 dark:border-gray-700 overflow-hidden
-                      transition-all duration-300
-                      flex flex-col
-                    `}
-                  >
-                    {hasImage && (
-                      <div className="w-full max-h-[60vh] overflow-hidden">
-                        <img
-                          src={current.media_url || ""}
-                          alt=""
-                          className="w-full h-auto object-contain"
-                          loading="lazy"
-                        />
-                      </div>
-                    )}
-
-                    {hasText && (
-                      <div className="p-5 sm:p-7 md:p-9 space-y-4">
-                        <div className="flex justify-center">
-                          <span className="inline-block px-3 py-1 text-xs font-semibold uppercase tracking-wide rounded-full bg-[#d4af37]/20 text-[#1a3c34] dark:text-[#d4af37]">
-                            {getAnnLabel(current)}
-                          </span>
-                        </div>
-
-                        <p
-                          className={`
-                            text-center leading-relaxed
-                            ${hasImage ? "text-base sm:text-lg" : "text-lg sm:text-xl md:text-2xl font-medium"}
-                            text-gray-800 dark:text-gray-200 whitespace-pre-line
-                          `}
-                        >
-                          {current.description}
-                        </p>
-                      </div>
-                    )}
-
-                    {!hasText && !hasImage && (
-                      <div className="p-12 text-center text-gray-400 dark:text-gray-500 italic">
-                        (No content available)
-                      </div>
-                    )}
-                  </div>
-                );
-              })()}
-
-              {/* next */}
-              <button
-                onClick={goNextAnn}
-                className="absolute right-0 sm:right-4 lg:right-8 top-1/2 transform -translate-y-1/2 z-10 p-4 bg-white/90 backdrop-blur-sm rounded-full shadow-lg hover:bg-white hover:scale-105 transition-all"
-                aria-label="Next"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-6 w-6 text-gray-700"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M9 5l7 7-7 7"
-                  />
-                </svg>
-              </button>
-            </div>
-          </section>
-        )}
-
-        {/* Two Column Layout */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-          {/* Left Sidebar - Regions */}
+        {/* Layout Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+          {/* Left Sidebar - Region/Network Filter */}
           <div className="lg:col-span-3">
-            <div className="bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-xl shadow-md p-6 sticky top-24 transition-colors duration-300">
-              <h3 className="text-lg font-bold text-[#1a3c34] dark:text-[#d4af37] mb-4">
-                {t("services.selectRegion")}
-              </h3>
+            <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-[#e5dfd0] dark:border-gray-700 p-5 sticky top-28">
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-base font-bold font-serif text-[#1a3c34] dark:text-[#f0d082]">
+                  {t("services.selectRegion") || "Networks & Regions"}
+                </h3>
+                {selectedRegionId && (
+                  <button
+                    onClick={() => setSelectedRegionId("")}
+                    className="text-xs font-semibold text-[#ae8f05] hover:underline"
+                  >
+                    View All
+                  </button>
+                )}
+              </div>
 
-              {loadingRegions && <LoadingState message="Loading regions..." className="py-8" />}
-              {errorRegions && (
-                <ErrorState 
-                  message={errorRegions} 
-                  className="mb-4"
+              {loadingRegions ? (
+                <RegionSidebarSkeleton />
+              ) : errorRegions && regions.length === 0 ? (
+                <ErrorState
+                  message={errorRegions}
+                  className="mb-4 text-xs"
                   onRetry={() => window.location.reload()}
                 />
-              )}
+              ) : (
+                <div className="space-y-2 max-h-[600px] overflow-y-auto pr-1 scrollbar-hide">
+                  {/* All Regions Button */}
+                  <button
+                    onClick={() => setSelectedRegionId("")}
+                    className={`w-full text-left p-3 rounded-xl transition-all duration-200 group ${
+                      selectedRegionId === ""
+                        ? "bg-[#1a3c34] text-white shadow-md"
+                        : "bg-stone-50 dark:bg-gray-700/50 text-[#2c2a28] dark:text-gray-200 hover:bg-[#ae8f05]/10 hover:shadow-sm"
+                    }`}
+                  >
+                    <div className="flex items-center justify-between">
+                      <div className="font-semibold text-sm">
+                        {t("services.allRegions") || "All Regions"}
+                      </div>
+                      <div className="flex items-center gap-1.5">
+                        {regionalAnnouncements.length > 0 && (
+                          <span
+                            className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-bold bg-amber-500 text-white shadow-sm"
+                            title="Total regional announcements"
+                          >
+                            <Bell className="w-3 h-3" />
+                            {regionalAnnouncements.length}
+                          </span>
+                        )}
+                        <span
+                          className={`px-2 py-0.5 rounded-full text-xs font-bold ${
+                            selectedRegionId === ""
+                              ? "bg-[#ae8f05] text-white"
+                              : "bg-stone-200 dark:bg-gray-600 text-[#1a3c34] dark:text-white"
+                          }`}
+                        >
+                          {churches.length}
+                        </span>
+                      </div>
+                    </div>
+                  </button>
 
-              <div className="space-y-2 max-h-[600px] overflow-y-auto pr-2 scrollbar-hide">
-                {regions
-                  .slice()
-                  .sort((a, b) => {
-                    // sort by descending branch count
-                    return (
-                      getRegionBranchCount(b.id) - getRegionBranchCount(a.id)
-                    );
-                  })
-                  .map((region) => {
-                    const branchCount = getRegionBranchCount(region.id);
-                    const isSelected = selectedRegionId === region.id;
+                  {/* Individual Regions */}
+                  {regions
+                    .slice()
+                    .sort((a, b) => getRegionBranchCount(b.id) - getRegionBranchCount(a.id))
+                    .map((region) => {
+                      const branchCount = getRegionBranchCount(region.id);
+                      const annCount = getRegionAnnouncementCount(region.id);
+                      const isSelected = selectedRegionId === region.id;
 
-                    return (
-                      <motion.button
-                        key={region.id}
-                        onClick={() => handleRegionClick(region.id)}
-                        className={`w-full text-left p-3 rounded-lg transition-all duration-200 group ${
-                          isSelected
-                            ? "bg-[#1a3c34] dark:bg-[#d4af37] text-white dark:text-gray-900 shadow-md"
-                            : "bg-gray-50 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-[#d4af37]/10 dark:hover:bg-gray-700 hover:shadow-sm"
-                        }`}
-                        whileHover={{ x: 4 }}
-                        whileTap={{ scale: 0.98 }}
-                      >
-                        <div className="flex items-start justify-between">
-                          <div className="flex-1">
-                            <div className="font-semibold mb-1 flex items-center gap-2">
-                              <span>{region.name}</span>
-                              {isSelected && (
-                                <motion.div
-                                  initial={{ scale: 0 }}
-                                  animate={{ scale: 1 }}
-                                  transition={{
-                                    type: "spring",
-                                    stiffness: 500,
-                                  }}
+                      return (
+                        <motion.button
+                          key={region.id}
+                          onClick={() => handleRegionClick(region.id)}
+                          className={`w-full text-left p-3 rounded-xl transition-all duration-200 group ${
+                            isSelected
+                              ? "bg-[#1a3c34] text-white shadow-md"
+                              : "bg-stone-50 dark:bg-gray-700/50 text-[#2c2a28] dark:text-gray-200 hover:bg-[#ae8f05]/10 hover:shadow-sm"
+                          }`}
+                          whileHover={{ x: 3 }}
+                          whileTap={{ scale: 0.98 }}
+                        >
+                          <div className="flex items-start justify-between">
+                            <div className="flex-1 mr-2">
+                              <div className="font-semibold text-sm flex items-center gap-1.5">
+                                <span>{region.name}</span>
+                                {isSelected && <ChevronRight className="w-4 h-4 text-[#ae8f05]" />}
+                              </div>
+                              {region.description && (
+                                <p
+                                  className={`text-xs mt-0.5 line-clamp-1 ${
+                                    isSelected ? "text-white/80" : "text-[#5c5854] dark:text-gray-400"
+                                  }`}
                                 >
-                                  <ChevronRight className="w-4 h-4" />
-                                </motion.div>
+                                  {region.description}
+                                </p>
                               )}
                             </div>
-                            <p
-                              className={`text-xs ${isSelected ? "text-white/80" : "text-gray-500"}`}
-                            >
-                              {region.description}
-                            </p>
-                          </div>
-                          {branchCount > 0 && (
-                            <div
-                              className={`ml-2 px-2 py-1 rounded-full text-xs font-bold ${
-                                isSelected
-                                  ? "bg-[#d4af37] text-[#1a3c34]"
-                                  : "bg-[#d4af37]/20 text-[#1a3c34]"
-                              }`}
-                            >
-                              {branchCount}
+
+                            <div className="flex items-center gap-1.5 shrink-0">
+                              {/* Announcement Notification Badge */}
+                              {annCount > 0 && (
+                                <span
+                                  className="inline-flex items-center gap-0.5 px-2 py-0.5 rounded-full text-[11px] font-bold bg-amber-500 text-white shadow-sm"
+                                  title={`${annCount} announcement(s) in this region`}
+                                >
+                                  <Bell className="w-2.5 h-2.5" />
+                                  {annCount}
+                                </span>
+                              )}
+
+                              {/* Branch Count */}
+                              {branchCount > 0 && (
+                                <span
+                                  className={`px-2 py-0.5 rounded-full text-xs font-bold ${
+                                    isSelected
+                                      ? "bg-[#ae8f05] text-white"
+                                      : "bg-stone-200 dark:bg-gray-600 text-[#1a3c34] dark:text-white"
+                                  }`}
+                                >
+                                  {branchCount}
+                                </span>
+                              )}
                             </div>
-                          )}
-                        </div>
-                      </motion.button>
-                    );
-                  })}
-              </div>
+                          </div>
+                        </motion.button>
+                      );
+                    })}
+                </div>
+              )}
             </div>
           </div>
 
-          {/* Right Side - Church Locations */}
+          {/* Right Main Column - Announcements & Church Locations */}
           <div className="lg:col-span-9">
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={selectedRegionId}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-                transition={{ duration: 0.3 }}
-              >
-                {/* Selected Region Header */}
-                <div className="mb-6">
-                  <h2 className="text-2xl font-bold text-[#1a3c34] dark:text-gray-100 mb-2 transition-colors">
-                    {selectedRegionId
-                      ? regions.find((r) => r.id === selectedRegionId)?.name
-                      : t("services.allRegions")}
-                  </h2>
-                  <p className="text-gray-600 dark:text-gray-400 transition-colors">
-                    {filteredBranches.length}{" "}
-                    {filteredBranches.length === 1 ? t("services.location") : t("services.locations")}{" "}
-                    {selectedRegionId ? t("services.inThisRegion") : t("services.total")}
-                  </p>
-                </div>
+            {/* Regional Announcements Section with Horizontal Sliding Motion */}
+            <RegionalAnnouncements
+              announcements={activeAnnouncements}
+              regionName={selectedRegionName}
+            />
 
-                {errorChurches && (
-                  <ErrorState 
-                    message={errorChurches} 
-                    className="mb-8"
-                    onRetry={() => window.location.reload()}
-                  />
-                )}
+            {/* Selected Region Header */}
+            <div className="mb-6 flex flex-col sm:flex-row sm:items-end sm:justify-between gap-2 border-b border-[#e5dfd0] dark:border-gray-700 pb-4">
+              <div>
+                <h2 className="text-2xl sm:text-3xl font-bold font-serif text-[#1a3c34] dark:text-gray-100">
+                  {selectedRegionId
+                    ? regions.find((r) => r.id === selectedRegionId)?.name
+                    : t("services.allRegions") || "All Church Locations"}
+                </h2>
+                <p className="text-sm text-[#5c5854] dark:text-gray-400 mt-1">
+                  Showing {filteredBranches.length}{" "}
+                  {filteredBranches.length === 1
+                    ? t("services.location") || "location"
+                    : t("services.locations") || "locations"}
+                </p>
+              </div>
+            </div>
 
-                {/* Branch Listings or Loading State */}
-                {loadingChurches ? (
-                  <div className="py-16">
-                    <LoadingState message="Loading church locations..." className="py-12" />
-                  </div>
-                ) : filteredBranches.length > 0 ? (
-                  <div className="space-y-6">
-                    {filteredBranches.map((branch, index) => (
-                      <motion.div
-                        key={branch.id}
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: index * 0.1 }}
-                      >
-                        <Link to={`/services/${branch.id}`}>
-                          <div className="bg-white dark:bg-gray-900 rounded-xl shadow-md border border-gray-100 dark:border-gray-800 hover:shadow-xl transition-all duration-300 overflow-hidden group">
-                            <div className="flex flex-col md:flex-row">
-                              {/* Image */}
-                              <div className="w-full md:w-2/5 min-h-64 md:min-h-72 flex-shrink-0 relative overflow-hidden bg-gray-50 dark:bg-gray-800 flex items-center justify-center">
-                                <ImageWithFallback 
-                                  src={branch.heroImage || "https://images.unsplash.com/photo-1548625149-fc4a29cf7092?auto=format&fit=crop&q=80&w=1080"} 
-                                  alt={branch.name} 
-                                  className="w-full h-auto max-h-72 object-contain object-center brightness-105 contrast-[1.02] group-hover:scale-[1.02] transition-transform duration-500" 
-                                />
+            {errorChurches && churches.length === 0 && (
+              <ErrorState
+                message={errorChurches}
+                className="mb-8"
+                onRetry={() => window.location.reload()}
+              />
+            )}
+
+            {/* Branch Listings or Skeleton Loader */}
+            {loadingChurches ? (
+              <ChurchCardsSkeleton />
+            ) : filteredBranches.length > 0 ? (
+              <div className="space-y-6">
+                {filteredBranches.map((branch, index) => (
+                  <motion.article
+                    key={branch.id}
+                    initial={{ opacity: 0, y: 18 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: Math.min(index * 0.06, 0.3) }}
+                  >
+                    <Link to={`/services/${branch.id}`} className="block group">
+                      <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-[#e5dfd0] dark:border-gray-700 hover:shadow-xl transition-all duration-300 overflow-hidden flex flex-col md:flex-row">
+                        {/* Church Image Container - Standalone photo without duplicated background layers or overlapping effects */}
+                        <div className="w-full md:w-2/5 min-h-[220px] md:min-h-[280px] flex-shrink-0 relative overflow-hidden bg-stone-50 dark:bg-gray-900 rounded-2xl m-3 border border-[#e5dfd0]/80 dark:border-gray-700 shadow-md flex items-center justify-center group-hover:shadow-2xl group-hover:border-[#ae8f05] group-hover:ring-2 group-hover:ring-[#ae8f05]/30 transition-all duration-300">
+                          <ImageWithFallback
+                            src={
+                              branch.heroImage ||
+                              "https://images.unsplash.com/photo-1548625149-fc4a29cf7092?auto=format&fit=crop&q=80&w=1080"
+                            }
+                            alt={branch.name}
+                            className="w-full h-full max-h-[280px] object-contain object-center p-3 transition-transform duration-500 group-hover:scale-105"
+                          />
+                        </div>
+
+                        {/* Church Details */}
+                        <div className="md:w-3/5 p-6 sm:p-8 flex flex-col justify-between flex-1">
+                          <div>
+                            {/jerusalem|eyursalem/i.test(branch.name) && (
+                              <div className="mb-2.5">
+                                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#ae8f05] text-white text-xs font-bold shadow-sm">
+                                  <Sparkles className="w-3.5 h-3.5" />
+                                  Main Center / Headquarters
+                                </span>
                               </div>
+                            )}
 
-                              {/* Content */}
-                              <div className="md:w-3/5 p-8">
-                                <div className="flex items-start justify-between mb-4">
-                                  <div>
-                                    <h2 className="text-3xl font-bold text-[#1a3c34] dark:text-white mb-2 group-hover:text-[#d4af37] transition-colors">
-                                      {branch.name}
-                                    </h2>
-                                    <div className="flex items-center text-gray-600 dark:text-gray-400 mb-3 transition-colors">
-                                      <MapPin className="w-4 h-4 mr-2 text-[#d4af37]" />
-                                      <span>{branch.location}</span>
-                                    </div>
-                                  </div>
-                                </div>
-
-                                <p className="text-gray-700 dark:text-gray-300 mb-6 line-clamp-2 transition-colors">
-                                  {branch.description}
-                                </p>
-
-                                {/* Quick Info Grid */}
-                                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
-                                  <div className="flex items-start space-x-2">
-                                    <Clock className="w-4 h-4 text-[#d4af37] mt-1 flex-shrink-0" />
-                                    <div>
-                                      <p className="text-sm font-semibold text-[#1a3c34] dark:text-gray-200 transition-colors">
-                                        {t("services.serviceTimes")}
-                                      </p>
-                                      <p className="text-xs text-gray-600 dark:text-gray-400 transition-colors">
-                                        {branch.serviceTimes[0]?.day}{" "}
-                                        {branch.serviceTimes[0]?.time}
-                                      </p>
-                                    </div>
-                                  </div>
-                                  <div className="flex items-start space-x-2">
-                                    <Phone className="w-4 h-4 text-[#d4af37] mt-1 flex-shrink-0" />
-                                    <div>
-                                      <p className="text-sm font-semibold text-[#1a3c34] dark:text-gray-200 transition-colors">
-                                        {t("services.contact")}
-                                      </p>
-                                      <p className="text-xs text-gray-600 dark:text-gray-400 transition-colors">
-                                        {branch.phone || "N/A"}
-                                      </p>
-                                    </div>
-                                  </div>
-                                  <div className="flex items-start space-x-2">
-                                    <Mail className="w-4 h-4 text-[#d4af37] mt-1 flex-shrink-0" />
-                                    <div>
-                                      <p className="text-sm font-semibold text-[#1a3c34] dark:text-gray-200 transition-colors">
-                                        {t("services.pastor")}
-                                      </p>
-                                      <p className="text-xs text-gray-600 dark:text-gray-400 transition-colors">
-                                        {branch.pastor.name}
-                                      </p>
-                                    </div>
-                                  </div>
-                                </div>
-
-                                {/* CTA Button */}
-                                <div className="flex items-center text-[#d4af37] font-semibold group-hover:gap-2 transition-all">
-                                  {t("services.viewDetails")}
-                                  <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
-                                </div>
-                              </div>
+                            <div className="flex items-start justify-between mb-2">
+                              <h3 className="text-2xl sm:text-3xl font-bold font-serif text-[#1a3c34] dark:text-white group-hover:text-[#ae8f05] transition-colors leading-snug">
+                                {branch.name}
+                              </h3>
                             </div>
+
+                            <div className="flex items-center text-sm text-[#5c5854] dark:text-gray-400 mb-4">
+                              <MapPin className="w-4 h-4 mr-2 text-[#ae8f05] shrink-0" />
+                              <span className="line-clamp-1">{branch.location}</span>
+                            </div>
+
+                            {branch.description && (
+                              <p className="text-sm text-[#5c5854] dark:text-gray-300 mb-5 line-clamp-2 leading-relaxed">
+                                {branch.description}
+                              </p>
+                            )}
+
+                            {/* Service Times Pills */}
+                            {Array.isArray(branch.serviceTimes) &&
+                              branch.serviceTimes.length > 0 && (
+                                <div className="space-y-1.5 mb-5">
+                                  <div className="text-xs font-bold uppercase tracking-wider text-[#ae8f05] flex items-center gap-1.5">
+                                    <Clock className="w-3.5 h-3.5" />
+                                    <span>{t("services.serviceTimes") || "Service Times"}</span>
+                                  </div>
+                                  <div className="flex flex-wrap gap-2 pt-1">
+                                    {branch.serviceTimes.slice(0, 3).map((service, idx) => (
+                                      <span
+                                        key={idx}
+                                        className="text-xs px-2.5 py-1 rounded-lg bg-stone-100 dark:bg-gray-700 text-[#2c2a28] dark:text-gray-300 font-medium"
+                                      >
+                                        <strong className="text-[#1a3c34] dark:text-[#f0d082]">
+                                          {service.day}:
+                                        </strong>{" "}
+                                        {service.time}
+                                      </span>
+                                    ))}
+                                  </div>
+                                </div>
+                              )}
                           </div>
-                        </Link>
-                      </motion.div>
-                    ))}
-                  </div>
-                ) : (
-                  <div className="text-center py-20 bg-white rounded-xl shadow-md border border-[#EAE6DE]">
-                    <div className="max-w-md mx-auto">
-                      <div className="w-16 h-16 bg-[#d4af37]/20 rounded-full flex items-center justify-center mx-auto mb-4">
-                        <MapPin className="w-8 h-8 text-[#d4af37]" />
+
+                          {/* Action Footer */}
+                          <div className="pt-4 border-t border-[#f0ebe0] dark:border-gray-700 flex items-center justify-between">
+                            <span className="text-xs font-semibold text-[#5c5854]">
+                              {branch.pastor?.name && branch.pastor.name !== "Pastor information unavailable"
+                                ? `Pastor: ${branch.pastor.name}`
+                                : "Welcome to visit"}
+                            </span>
+
+                            <span className="inline-flex items-center gap-1.5 text-sm font-bold text-[#ae8f05] group-hover:text-[#1a3c34] dark:group-hover:text-[#f0d082] transition-colors">
+                              <span>{t("services.viewDetails") || "View Details"}</span>
+                              <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+                            </span>
+                          </div>
+                        </div>
                       </div>
-                      <h3 className="text-xl font-bold text-[#1a3c34] mb-2">
-                        No Locations Yet
-                      </h3>
-                      <p className="text-gray-600">
-                        {selectedRegionId
-                          ? "No church locations found in this region. Please select another region or view all."
-                          : "We're currently expanding. Check back soon for updates on new church locations!"}
-                      </p>
-                    </div>
-                  </div>
-                )}
-              </motion.div>
-            </AnimatePresence>
+                    </Link>
+                  </motion.article>
+                ))}
+              </div>
+            ) : (
+              <div className="bg-white dark:bg-gray-800 rounded-2xl border border-[#e5dfd0] dark:border-gray-700 p-12 text-center">
+                <Sparkles className="w-12 h-12 text-[#ae8f05] mx-auto mb-3" />
+                <h3 className="text-xl font-bold font-serif text-[#1a3c34] dark:text-white mb-2">
+                  No church branches found in this region
+                </h3>
+                <p className="text-sm text-[#5c5854] dark:text-gray-400 mb-6 max-w-md mx-auto">
+                  We are expanding our network across Ethiopia and globally. Try selecting another region or view all locations.
+                </p>
+                <button
+                  onClick={() => setSelectedRegionId("")}
+                  className="px-6 py-2.5 rounded-xl bg-[#1a3c34] text-white text-sm font-semibold hover:bg-[#132d27] transition-all shadow-sm"
+                >
+                  View All Locations
+                </button>
+              </div>
+            )}
           </div>
         </div>
       </div>
     </div>
   );
 }
+export default Services;

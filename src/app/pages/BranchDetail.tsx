@@ -22,6 +22,7 @@ import {
 } from "lucide-react";
 import { branches } from "../data/mockData";
 import { EventCard } from "../components/EventCard";
+import { ChurchAnnouncementCard } from "../components/church/ChurchAnnouncementCard";
 import { fetchGallery } from "../services/gallery.service";
 import { churchService } from "../services/app.service";
 import type { GalleryImage } from "../types/gallery.type";
@@ -272,40 +273,30 @@ export function BranchDetail() {
             </motion.section>
 
             {/* Announcements Section */}
-            <motion.section
-              id="announcements"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3 }}
-              className="bg-white dark:bg-gray-800 rounded-xl shadow-md border border-gray-100 dark:border-gray-700 p-8 transition-colors duration-300"
-            >
-              <div className="flex items-center mb-6">
-                <AlertCircle className="w-6 h-6 text-[#d4af37] mr-3" />
-                <h2 className="text-3xl font-bold text-[#1a3c34] dark:text-[#f0d082]">
-                  {t("branchDetail.announcements")}
-                </h2>
-              </div>
-              <div className="space-y-4">
-                {branch.announcements.map((announcement) => (
-                  <div
-                    key={announcement.id}
-                    className={`border-l-4 p-4 rounded-r-lg ${priorityColors[announcement.priority as keyof typeof priorityColors] || priorityColors.low}`}
-                  >
-                    <div className="flex items-start justify-between mb-2">
-                      <h3 className="font-semibold text-[#1a3c34] dark:text-[#f0d082]">
-                        {announcement.title}
-                      </h3>
-                      <span className="text-xs text-gray-500 whitespace-nowrap ml-4">
-                        {announcement.date}
-                      </span>
-                    </div>
-                    <p className="text-gray-700 dark:text-gray-300 text-sm">
-                      {announcement.content}
-                    </p>
-                  </div>
-                ))}
-              </div>
-            </motion.section>
+            {branch.announcements && branch.announcements.length > 0 && (
+              <motion.section
+                id="announcements"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.3 }}
+                className="bg-white dark:bg-gray-800 rounded-xl shadow-md border border-gray-100 dark:border-gray-700 p-6 sm:p-8 transition-colors duration-300"
+              >
+                <div className="flex items-center mb-6">
+                  <AlertCircle className="w-6 h-6 text-[#d4af37] mr-3" />
+                  <h2 className="text-3xl font-bold font-serif text-[#1a3c34] dark:text-[#f0d082]">
+                    {t("branchDetail.announcements")}
+                  </h2>
+                </div>
+                <div className="space-y-6">
+                  {branch.announcements.map((announcement) => (
+                    <ChurchAnnouncementCard
+                      key={announcement.id || announcement.title}
+                      announcement={announcement}
+                    />
+                  ))}
+                </div>
+              </motion.section>
+            )}
 
             {/* Pastor Section */}
             <motion.section

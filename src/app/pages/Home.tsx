@@ -5,13 +5,13 @@ import GalleryHighlight from "../components/home/GalleryHighlight";
 import { ServiceTimesAndGiving } from "../components/home/ServiceTimesAndGiving";
 import BibleVerse from "../components/home/BibleVerse";
 import Blogs from "../components/home/Blogs";
-import MainChurchAnnouncements from "../components/home/MainChurchAnnouncements";
+import MainChurchEvents from "../components/home/MainChurchEvents";
 
 export default function Home() {
   return (
     <div className="bg-alabaster min-h-screen w-full">
       <Hero />
-      <MainChurchAnnouncements />
+      <MainChurchEvents />
       <AboutSection />
       <GalleryHighlight />
       <ServiceTimesAndGiving />

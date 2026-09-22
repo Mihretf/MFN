@@ -205,13 +205,20 @@ function TimelineItem({
         initial={{ opacity: 0, y: 40 }}
         animate={inView ? { opacity: 1, y: 0 } : {}}
         transition={{ delay: 0.15, duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-        className="flex-1 rounded-3xl overflow-hidden shadow-xl border border-[#AE8F05]/20 hover:shadow-2xl transition-all duration-500"
-        style={{ aspectRatio: "16/9" }}
+        className="flex-1 rounded-3xl overflow-hidden shadow-xl border border-[#AE8F05]/20 hover:shadow-2xl transition-all duration-500 bg-[#16211d] relative group flex items-center justify-center min-h-[300px] sm:min-h-[380px]"
       >
+        {/* Ambient glow matching photo colors */}
+        <img
+          src={imgSrc}
+          alt=""
+          aria-hidden="true"
+          className="absolute inset-0 w-full h-full object-cover blur-xl opacity-30 scale-110 pointer-events-none"
+        />
+        {/* Full uncropped photo */}
         <ImageWithFallback
           src={imgSrc}
           alt={imgAlt}
-          className="w-full h-full object-cover object-top hover:scale-105 transition-transform duration-700"
+          className="relative z-10 w-full h-full max-h-[420px] object-contain p-2 group-hover:scale-[1.02] transition-transform duration-500"
         />
       </motion.div>
     </div>

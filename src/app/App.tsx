@@ -14,6 +14,7 @@ import { Services } from "./pages/Services";
 import { BranchDetail } from "./pages/BranchDetail";
 import Gallery from "./pages/Gallery";
 import { ThemeProvider } from "./providers/ThemeProvider";
+import { ErrorBoundary } from "./components/ui/ErrorBoundary";
 
 // LenisScrollProvider removed — it caused scroll-jacking. Native smooth scroll
 // is configured via CSS `scroll-behavior: smooth` in globals.css.
@@ -38,15 +39,17 @@ export default function App() {
           <Header />
 
           <main className="w-full">
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/about" element={<AboutUs />} />
-              <Route path="/services" element={<Services />} />
-              <Route path="/services/:branchId" element={<BranchDetail />} />
-              <Route path="/gallery" element={<Gallery />} />
-              {/* Catch-all: redirect to home */}
-              <Route path="*" element={<Home />} />
-            </Routes>
+            <ErrorBoundary>
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/about" element={<AboutUs />} />
+                <Route path="/services" element={<Services />} />
+                <Route path="/services/:branchId" element={<BranchDetail />} />
+                <Route path="/gallery" element={<Gallery />} />
+                {/* Catch-all: redirect to home */}
+                <Route path="*" element={<Home />} />
+              </Routes>
+            </ErrorBoundary>
           </main>
 
           <Footer />

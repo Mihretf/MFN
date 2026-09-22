@@ -182,17 +182,17 @@ export default function GalleryPage() {
             )}
             <FilterSection
               selectedRegion={selectedRegion}
-              selectedPostType={selectedPostType}
+              
               regions={regions}
               onRegionChange={handleRegionChange}
-              onPostTypeChange={handlePostTypeChange}
+              
             />
 
-            {/* All Posts Grid — 4-5 columns, compact cards */}
+            {/* All Posts Grid ï¿½ 4-5 columns, compact cards */}
             <section>
               {filteredPosts.length > 0 && (
                 <div className="flex items-center gap-2 mb-4">
-                  <Sparkles className="w-5 h-5 text-sacred-gold" />
+                  
                   <h2 className="text-xl font-serif font-bold text-warm-slate">
                     {t("gallery.allPosts") || "All Posts"}
                   </h2>
