@@ -45,8 +45,13 @@ export function PostCard({ post, onClick }: PostCardProps) {
         <h3 className="text-sm font-bold mb-1 text-[#2C2A28] group-hover:text-[#AE8F05] transition-colors line-clamp-1">
           {post.title}
         </h3>
-        <div className="text-xs text-[#5C5854]">
-          <span className="line-clamp-1 font-medium">{post.church?.name || "Mission for Nation Church"}</span>
+        <div className="text-[11px] text-[#5C5854] space-y-0.5">
+          <div className="line-clamp-1 font-medium">
+            {post.church?.name || "Mission for Nation Church"}
+          </div>
+          {post.region?.name && (
+            <div className="text-[#7A736C] line-clamp-1">{post.region.name}</div>
+          )}
         </div>
       </div>
     </div>
