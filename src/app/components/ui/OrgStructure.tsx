@@ -548,16 +548,16 @@ export function OrgStructure() {
               <h4 className="font-serif text-lg font-bold text-[#2C2A28] mb-4">
                 {isAm ? "የኔትወርክ ማዕከላት አስተዳደር ፍሰት (Cascade Flow)" : "Operational Cascade Flow"}
               </h4>
-              <div className="flex flex-col sm:flex-row items-center justify-center gap-4 text-xs font-semibold">
-                <div className="px-4 py-2 rounded-xl bg-[#FAF8F5] text-[#AE8F05] border border-[#AE8F05]/20">
+              <div className="flex flex-col items-center justify-center gap-3 text-xs font-semibold w-full">
+                <div className="w-full max-w-md px-4 py-3 rounded-xl bg-[#FAF8F5] text-[#AE8F05] border border-[#AE8F05]/20 shadow-sm">
                   {isAm ? "1. የኔትወርክ ማዕከላት ማስተባበሪያ ቢሮ" : "1. Network Centers Coordination Office"}
                 </div>
-                <span className="text-[#AE8F05] font-bold">→</span>
-                <div className="px-4 py-2 rounded-xl bg-[#FAF8F5] text-[#AE8F05] border border-[#AE8F05]/20">
+                <ChevronDown className="w-5 h-5 text-[#AE8F05]" />
+                <div className="w-full max-w-md px-4 py-3 rounded-xl bg-[#FAF8F5] text-[#AE8F05] border border-[#AE8F05]/20 shadow-sm">
                   {isAm ? "2. የኔትወርክ ማዕከላት መሪዎች" : "2. Network Center Leaders"}
                 </div>
-                <span className="text-[#AE8F05] font-bold">→</span>
-                <div className="px-4 py-2 rounded-xl bg-[#FAF8F5] text-[#AE8F05] border border-[#AE8F05]/20">
+                <ChevronDown className="w-5 h-5 text-[#AE8F05]" />
+                <div className="w-full max-w-md px-4 py-3 rounded-xl bg-[#FAF8F5] text-[#AE8F05] border border-[#AE8F05]/20 shadow-sm">
                   {isAm ? "3. የአጥቢያ መሪዎችና መጋቢዎች" : "3. Branch Pastors & Local Leaders"}
                 </div>
               </div>

@@ -60,12 +60,35 @@ export async function fetchGalleryPosts(): Promise<Post[]> {
   let apiPosts: Post[] = [];
 
   try {
-    const [galleryResponse, churchesResponse] = await Promise.all([
+    const [galleryResponse, churchesResponse, regionsResponse] = await Promise.all([
       fetch(`${BASE_URL}/api/galleries/all`),
       fetch(`${BASE_URL}/api/churches`),
+      fetch(`${BASE_URL}/api/regions`),
     ]);
 
-    const ownershipByImage = new Map<string, { id: string; name: string }>();
+    const ownershipByImage = new Map<
+      string,
+      { id: string; name: string; region_id?: string; region_name?: string }
+    >();
+    const churchById = new Map<
+      string,
+      { id: string; name: string; region_id?: string; region_name?: string }
+    >();
+    const regionById = new Map<string, string>();
+
+    if (regionsResponse.ok) {
+      const regionsPayload = await regionsResponse.json();
+      const regions = Array.isArray(regionsPayload)
+        ? regionsPayload
+        : regionsPayload.regions || regionsPayload.data || [];
+
+      regions.forEach((region: any) => {
+        if (region?.id && region?.name) {
+          regionById.set(String(region.id), String(region.name));
+        }
+      });
+    }
+
     if (churchesResponse.ok) {
       const churchesPayload = await churchesResponse.json();
       const churches = Array.isArray(churchesPayload)
@@ -73,12 +96,36 @@ export async function fetchGalleryPosts(): Promise<Post[]> {
         : churchesPayload.churches || churchesPayload.data || [];
 
       churches.forEach((church: any) => {
+        const churchId = church?.id ? String(church.id) : "";
+        const churchName = String(church?.name || "Mission for Nation Church");
+        const regionId = church?.region_id ? String(church.region_id) : "";
+        const regionName =
+          church?.region?.name ||
+          church?.region_name ||
+          (regionId && regionById.get(regionId)) ||
+          "";
+
+        if (churchId) {
+          churchById.set(churchId, {
+            id: churchId,
+            name: churchName,
+            region_id: regionId,
+            region_name: regionName,
+          });
+        }
+
+        if (regionId && regionName) {
+          regionById.set(regionId, regionName);
+        }
+
         (Array.isArray(church.gallery) ? church.gallery : []).forEach(
           (galleryImage: any) => {
-            if (galleryImage?.url && church?.id) {
+            if (galleryImage?.url && churchId) {
               ownershipByImage.set(galleryImage.url, {
-                id: String(church.id),
-                name: String(church.name || "Mission for Nation Church"),
+                id: churchId,
+                name: churchName,
+                region_id: regionId,
+                region_name: regionName,
               });
             }
           },
@@ -90,25 +137,45 @@ export async function fetchGalleryPosts(): Promise<Post[]> {
       const payload: GalleryApiResponse = await galleryResponse.json();
       apiPosts = payload.galleries.map((g) => {
         const owner = ownershipByImage.get(g.image_url);
-        const churchId = g.church_id ?? owner?.id ?? "";
-        const churchName = g.church_name ?? owner?.name ?? "";
+        const churchRecord =
+          (g.church_id && churchById.get(String(g.church_id))) ||
+          owner ||
+          null;
+        const churchId = churchRecord?.id ?? g.church_id ?? owner?.id ?? "";
+        const churchName = churchRecord?.name || g.church_name || owner?.name || "";
+        const regionId =
+          (churchRecord?.region_id && String(churchRecord.region_id)) ||
+          g.region_id ||
+          owner?.region_id ||
+          "";
+        const regionName =
+          (regionId && regionById.get(regionId)) ||
+          churchRecord?.region_name ||
+          g.region_name ||
+          "";
+        const title =
+          g.title?.trim() ||
+          g.caption?.trim() ||
+          churchName ||
+          regionName ||
+          "Gallery";
 
         return {
-        id: g.id,
-        title: g.title ?? g.region_name,
-        description: g.description ?? g.caption ?? "",
-        type: (g.type as Post["type"]) || "gallery",
-        media_url: g.image_url,
-        show_on_homepage: Boolean((g as any).show_on_homepage),
-        created_at: g.created_at,
-        region: {
-          id: g.region_id,
-          name: g.region_name,
-        },
-        church: {
-          id: churchId,
-          name: churchName,
-        },
+          id: g.id,
+          title,
+          description: g.description ?? g.caption ?? "",
+          type: (g.type as Post["type"]) || "gallery",
+          media_url: g.image_url,
+          show_on_homepage: Boolean((g as any).show_on_homepage),
+          created_at: g.created_at,
+          region: {
+            id: regionId,
+            name: regionName,
+          },
+          church: {
+            id: churchId,
+            name: churchName,
+          },
         };
       });
     }
