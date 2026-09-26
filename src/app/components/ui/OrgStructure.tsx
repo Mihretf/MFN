@@ -42,7 +42,7 @@ const LEADERS_DIRECTORY: LeaderMember[] = [
   },
   {
     id: "l2",
-    nameEn: "Brother Wubliqar Teklu",
+    nameEn: "Brother Wubliker Teklu",
     nameAm: "ወንድም ውብሊቀር ተክሉ",
     roleEn: "Council Member & General Administrator of Tele'qo LeTeweld",
     roleAm: "የካውንስል አባልና የተልዕኮ ለትውልድ ዋና አስተዳደር",
@@ -360,9 +360,134 @@ const MINISTRY_TEAMS = [
   { en: "Specialized Outreach Ministries", am: "ልዩ ልዩ የዘመቻ አገልግሎቶች" }
 ];
 
+const EXCELLENCE_AREAS = [
+  {
+    titleEn: "Worship Services",
+    titleAm: "የአምልኮ አገልግሎት",
+    objectiveEn: "Make worship more engaging and spiritually enriching by improving how services are prepared and delivered.",
+    objectiveAm: "የአምልኮ አገልግሎቶችን የበለጠ አሳታፊና በመንፈስ የሚያበለጽጉ ለማድረግ ዝግጅታቸውንና አፈጻጸማቸውን ማሻሻል።",
+    tasksEn: [
+      "Prepare training for worship leaders.",
+      "Coordinate appropriate encouragement and recognition for worship team members.",
+      "Help provide the resources needed for worship services.",
+      "Invite and coordinate servers, including preparation and decoration of the platform.",
+    ],
+    tasksAm: [
+      "ለአምልኮ መሪዎች ስልጠና ማዘጋጀት።",
+      "ለአምልኮ ቡድን አባላት ማበረታቻና እውቅና እንዲዘጋጅ ማስተባበር።",
+      "ለአምልኮ አገልግሎት የሚያስፈልጉ ግብዓቶች እንዲሟሉ ማገዝ።",
+      "አገልጋዮችን መጋበዝና የመድረክ ዝግጅትና ማስዋብ ሥራን ማስተባበር።",
+    ],
+  },
+  {
+    titleEn: "Media Quality & Access",
+    titleAm: "የሚዲያ ጥራትና ተደራሽነት",
+    objectiveEn: "Strengthen audio-visual services and use digital platforms to share meaningful content with members and the wider community.",
+    objectiveAm: "የኦዲዮ-ቪዥዋል አገልግሎትን ማሻሻልና በዲጂታል መድረኮች አማካኝነት ለአባላትና ለሰፊው ማኅበረሰብ የሚደርስ ተፅዕኖ ፈጣሪ ይዘት ማቅረብ።",
+    tasksEn: [
+      "Help provide the equipment and resources needed for media services.",
+      "Establish an organized media team and expand the effective use of social media.",
+      "Arrange media education and practical training programs.",
+    ],
+    tasksAm: [
+      "ለሚዲያ አገልግሎት የሚያስፈልጉ ግብዓቶች እንዲሟሉ ማገዝ።",
+      "የተደራጀ የሚዲያ ቡድን ማቋቋምና የማኅበራዊ ሚዲያ አጠቃቀምን ማሳደግ።",
+      "የሚዲያ ትምህርትና ተግባራዊ ስልጠናዎችን ማዘጋጀት።",
+    ],
+  },
+  {
+    titleEn: "Spiritual Programs & Counsel",
+    titleAm: "የመንፈሳዊ ፕሮግራሞች አስተዳደርና ምክክር",
+    objectiveEn: "Coordinate well-planned, inclusive church programs and consult spiritual leaders so implementation reflects the congregation's needs and the church's vision.",
+    objectiveAm: "ሁሉን አሳታፊና በጥሩ ሁኔታ የታቀዱ የቤተ ክርስቲያን ፕሮግራሞችን ማስተባበር፤ አፈጻጸማቸውም የጉባኤውን ፍላጎትና የቤተ ክርስቲያኗን ራዕይ እንዲያንጸባርቅ ከመንፈሳዊ መሪዎች ጋር መምከር።",
+    tasksEn: [
+      "Assist with planning and delivering regular and special programs for children, youth, families, and guest ministers.",
+      "Prepare contingency plans for program changes and coordinate feedback from the congregation and servers.",
+      "Consult spiritual leaders on feedback, concerns, and practical improvements, then follow up on agreed actions.",
+      "Train servers in the church's core vision principles and service ethics.",
+      "Coordinate service-team manuals and guidelines and support their use.",
+    ],
+    tasksAm: [
+      "ለልጆች፣ ለወጣቶች፣ ለቤተሰቦችና ለተጋባዥ አገልጋዮች የሚዘጋጁ መደበኛና ልዩ ፕሮግራሞችን ለማቀድና ለማስፈጸም ማገዝ።",
+      "ለፕሮግራም ለውጦች ተለዋጭ ዕቅድ ማዘጋጀት፤ ከጉባኤውና ከአገልጋዮች ግብረመልስ ማሰባሰብ።",
+      "በተሰበሰቡ አስተያየቶችና ቅሬታዎች ላይ ከመንፈሳዊ መሪዎች ጋር የመፍትሔ እርምጃዎችን ማቀድና ክትትል ማድረግ።",
+      "አገልጋዮችን በራዕዩ መሠረታዊ መርሆችና በአገልግሎት ሥነ-ምግባር ማሰልጠን።",
+      "የአገልግሎት ቡድኖች ማንዋሎችና መመሪያዎች እንዲዘጋጁና እንዲተገበሩ ማስተባበር።",
+    ],
+  },
+  {
+    titleEn: "Institutional Administration",
+    titleAm: "ተቋማዊ አስተዳደር",
+    objectiveEn: "Improve administrative and property-management systems so church operations support reliable, effective service delivery.",
+    objectiveAm: "የቤተ ክርስቲያን ሥራዎች የተሳለጠና ውጤታማ አገልግሎት እንዲደግፉ የአስተዳደርና የንብረት አያያዝ ሥርዓቶችን ማሻሻል።",
+    tasksEn: [
+      "Review the church's institutional structure and administrative guidelines.",
+      "Coordinate the preparation and implementation of administrative manuals and procedures.",
+      "Assess administrative staffing needs and support appropriate organization of responsibilities.",
+      "Learn from effective administrative practices and adapt them to the church's vision and context.",
+    ],
+    tasksAm: [
+      "የቤተ ክርስቲያኗን ተቋማዊ መዋቅርና የአስተዳደር መመሪያዎች መከለስ።",
+      "የአስተዳደር ማንዋሎችና ሂደቶች እንዲዘጋጁና እንዲተገበሩ ማስተባበር።",
+      "የአስተዳደር የሰው ኃይል ፍላጎቶችን መገምገምና ኃላፊነቶች በተገቢው እንዲደራጁ ማገዝ።",
+      "ውጤታማ ከሆኑ የአስተዳደር ልምዶች በመማር ከቤተ ክርስቲያኗ ራዕይና ሁኔታ ጋር አጣጥሞ መተግበር።",
+    ],
+  },
+  {
+    titleEn: "Membership & Serving",
+    titleAm: "አባልነትና አገልጋይነት",
+    objectiveEn: "Encourage active participation, welcome new members, and strengthen a sense of belonging and fellowship across the congregation.",
+    objectiveAm: "ንቁ ተሳትፎን ማበረታታት፣ አዳዲስ አባላትን በእንግድነት መቀበል፣ በጉባኤው ውስጥም የቤተሰባዊነትና የኅብረት ስሜትን ማጠናከር።",
+    tasksEn: [
+      "Design and coordinate strategies for welcoming and connecting new members.",
+      "Develop member follow-up approaches that foster lasting relationships and a sense of belonging.",
+      "Encourage volunteer participation and active service within the church.",
+    ],
+    tasksAm: [
+      "አዳዲስ አባላትን ለመቀበልና ከጉባኤው ጋር ለማገናኘት ስልቶችን መቅረጽና ማስተባበር።",
+      "ዘላቂ ግንኙነትንና የባለቤትነት ስሜትን የሚያጠናክሩ የአባላት ክትትል ሂደቶችን ማዘጋጀት።",
+      "የበጎ ፈቃድ ተሳትፎንና በቤተ ክርስቲያን ውስጥ ንቁ አገልግሎትን ማበረታታት።",
+    ],
+  },
+];
+
+const TEAM_ENABLERS = [
+  {
+    en: "Invite capable people who understand the church's vision and are ready to serve.",
+    am: "ስለ ቤተ ክርስቲያኗ ራዕይ የተረዱና ለማገልገል ዝግጁ የሆኑ ብቁ ሰዎችን መጋበዝ።",
+  },
+  {
+    en: "Work with spiritual leaders to identify service areas that need improvement.",
+    am: "ማሻሻያ የሚፈልጉ የአገልግሎት ዘርፎችን ለመለየት ከመንፈሳዊ መሪዎች ጋር መተባበር።",
+  },
+  {
+    en: "Use feedback systems, such as surveys, to understand satisfaction and improve services.",
+    am: "እርካታን ለመረዳትና አገልግሎቶችን ለማሻሻል እንደ ዳሰሳ ጥናት ያሉ የግብረመልስ ሥርዓቶችን መጠቀም።",
+  },
+  {
+    en: "Schedule regular consultations with spiritual leaders to stay aligned with the church's vision.",
+    am: "ከቤተ ክርስቲያኗ ራዕይ ጋር የተጣጣመ ሥራ ለማከናወን ከመንፈሳዊ መሪዎች ጋር መደበኛ ምክክር ማድረግ።",
+  },
+];
+
+const TEAM_OUTCOMES = [
+  { en: "More vibrant and engaging worship services", am: "የበለጠ ንቁና አሳታፊ የአምልኮ አገልግሎቶች" },
+  { en: "Stronger media quality and wider outreach", am: "የተሻለ የሚዲያ ጥራትና ሰፊ ተደራሽነት" },
+  { en: "Better coordinated church programs", am: "የተሻለ ቅንጅት ያላቸው የቤተ ክርስቲያን ፕሮግራሞች" },
+  { en: "Stronger administrative systems and service delivery", am: "የተጠናከሩ የአስተዳደር ሥርዓቶችና የአገልግሎት አሰጣጥ" },
+  { en: "Increased active membership and volunteer service", am: "የንቁ አባላትና የበጎ ፈቃደኛ አገልጋዮች ተሳትፎ መጨመር" },
+];
+
+const TEAM_NEXT_STEPS = [
+  { en: "Present this concept note to church leadership.", am: "ይህንን የፅንሰ ሐሳብ ማስታወሻ ለቤተ ክርስቲያን አመራር ማቅረብ።" },
+  { en: "Organize the team and confirm its members.", am: "ቡድኑን ማደራጀትና አባላቱን ማረጋገጥ።" },
+  { en: "Prepare a detailed implementation timeline.", am: "ዝርዝር የአፈጻጸም የጊዜ ሰሌዳ ማዘጋጀት።" },
+];
+
 export function OrgStructure() {
   const { i18n } = useTranslation();
   const isAm = i18n.language === "am";
+  const [activeExcellenceArea, setActiveExcellenceArea] = useState(0);
 
   return (
     <section className="py-20 bg-[#FAF8F5] text-[#2C2A28] relative overflow-hidden transition-colors">
@@ -682,6 +807,209 @@ export function OrgStructure() {
               ))}
             </div>
           </div>
+
+          {/* Church Ministry Excellence Team Concept Note */}
+          <motion.section
+            whileInView={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0, y: 28 }}
+            viewport={{ once: true, margin: "-80px" }}
+            transition={{ duration: 0.6 }}
+            className="mb-20 scroll-mt-24"
+            aria-labelledby="excellence-team-title"
+          >
+            <div className="relative overflow-hidden rounded-3xl bg-[#173A32] text-white shadow-2xl">
+              <div className="absolute inset-y-0 right-0 w-1/2 bg-gradient-to-l from-[#AE8F05]/20 to-transparent pointer-events-none" />
+              <div className="relative grid lg:grid-cols-12 gap-8 lg:gap-12 p-7 sm:p-10 lg:p-14 items-center">
+                <div className="lg:col-span-7">
+                  <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-[#D4AF37]/50 bg-white/5 text-[#F0D082] text-[11px] sm:text-xs font-bold uppercase tracking-wider">
+                    <Sparkles className="w-4 h-4" />
+                    {isAm ? "ለማቋቋም የቀረበ የፅንሰ ሐሳብ ማስታወሻ" : "Proposed Establishment Framework"}
+                  </div>
+                  <h3 id="excellence-team-title" className="mt-5 font-serif text-3xl sm:text-4xl lg:text-5xl font-extrabold leading-tight">
+                    {isAm ? "የቤተ ክርስቲያን አገልግሎት ልህቀት ቡድን" : "Church Ministry Excellence Team"}
+                  </h3>
+                  <p className="mt-5 max-w-2xl text-sm sm:text-base leading-relaxed text-white/80">
+                    {isAm
+                      ? "በመንፈሳዊ እድገትና በኅብረት ላይ ያተኮረ፣ የአገልግሎቶችን ጥራት ለማሳደግ የቀረበ የቡድን ማቋቋሚያና የአሠራር ማዕቀፍ። ቡድኑ የአገልግሎት አካላትን፣ አቅርቦቶችንና አስተዳደርን በማስተባበር እያንዳንዱ ፕሮግራም መንፈሳዊ ዓላማውን የጠበቀ፣ አሳታፊና ራዕይ ተኮር እንዲሆን ለማገዝ የታሰበ ነው።"
+                      : "A proposed framework for strengthening service quality, spiritual growth, and fellowship. The team would coordinate service groups, resources, and administration so that every program remains spiritually purposeful, inclusive, and aligned with the church's vision."}
+                  </p>
+                  <div className="mt-7 flex flex-wrap gap-2">
+                    {[
+                      isAm ? "መንፈሳዊ እድገት" : "Spiritual growth",
+                      isAm ? "የአገልግሎት ጥራት" : "Service quality",
+                      isAm ? "ኅብረትና ተሳትፎ" : "Fellowship & participation",
+                    ].map((label) => (
+                      <span key={label} className="px-3 py-1.5 rounded-full bg-white/10 border border-white/15 text-xs font-semibold text-white/90">
+                        {label}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="lg:col-span-5">
+                  <figure className="overflow-hidden rounded-2xl border border-white/20 bg-[#102C26] p-2 shadow-xl">
+                    <img
+                      src="/excellence.jpg"
+                      alt={isAm ? "የአገልግሎት ልህቀት" : "Church ministry excellence"}
+                      className="h-56 sm:h-64 lg:h-72 w-full rounded-xl object-contain"
+                      loading="lazy"
+                    />
+                    <figcaption className="px-3 pt-2 pb-1 text-xs font-semibold text-white/70">
+                      {isAm ? "የአገልግሎት ልህቀት ቡድን" : "Church Ministry Excellence Team"}
+                    </figcaption>
+                  </figure>
+                </div>
+              </div>
+            </div>
+
+            <div className="mt-14 text-center">
+              <span className="text-xs font-bold uppercase tracking-[0.18em] text-[#AE8F05]">
+                {isAm ? "የቡድኑ ዝርዝር ዓላማዎች" : "The Proposed Framework"}
+              </span>
+              <h4 className="mt-2 font-serif text-2xl sm:text-3xl font-extrabold text-[#2C2A28]">
+                {isAm ? "አምስቱ የትኩረት ዘርፎች" : "Five Areas of Focus"}
+              </h4>
+              <p className="mt-3 text-sm text-[#5C5854] max-w-2xl mx-auto">
+                {isAm
+                  ? "እያንዳንዱን ዘርፍ ይምረጡ፤ ዓላማውንና የታቀዱ ቁልፍ ተግባራትን ይመልከቱ።"
+                  : "Select an area to review its objective and the practical tasks proposed for the team."}
+              </p>
+            </div>
+
+            <div className="mt-7 grid grid-cols-2 lg:grid-cols-5 gap-2.5" role="group" aria-label={isAm ? "የትኩረት ዘርፎች" : "Areas of focus"}>
+              {EXCELLENCE_AREAS.map((area, index) => {
+                const isActive = activeExcellenceArea === index;
+                return (
+                  <button
+                    key={area.titleEn}
+                    type="button"
+                    aria-pressed={isActive}
+                    aria-controls="excellence-area-detail"
+                    onClick={() => setActiveExcellenceArea(index)}
+                    className={`min-h-24 rounded-xl border p-3 text-left transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#AE8F05] focus-visible:ring-offset-2 ${
+                      isActive
+                        ? "bg-[#173A32] border-[#173A32] text-white shadow-lg"
+                        : "bg-white border-[#EAE6DE] text-[#2C2A28] hover:border-[#D4AF37] hover:shadow-md"
+                    }`}
+                  >
+                    <span className={`block text-[10px] font-extrabold tracking-wider ${isActive ? "text-[#F0D082]" : "text-[#AE8F05]"}`}>
+                      0{index + 1}
+                    </span>
+                    <span className="block mt-2 text-xs sm:text-sm font-bold leading-snug">
+                      {isAm ? area.titleAm : area.titleEn}
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
+
+            <motion.div
+              key={activeExcellenceArea}
+              id="excellence-area-detail"
+              role="region"
+              aria-live="polite"
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.25 }}
+              className="mt-4 grid lg:grid-cols-12 gap-6 rounded-2xl bg-white border border-[#EAE6DE] shadow-lg p-6 sm:p-8"
+            >
+              <div className="lg:col-span-4 lg:border-r border-[#EAE6DE] lg:pr-7">
+                <span className="inline-flex items-center justify-center w-11 h-11 rounded-xl bg-[#FAF5E6] border border-[#AE8F05]/20 text-[#AE8F05] font-serif font-extrabold">
+                  0{activeExcellenceArea + 1}
+                </span>
+                <h5 className="mt-4 font-serif text-xl sm:text-2xl font-bold text-[#2C2A28]">
+                  {isAm ? EXCELLENCE_AREAS[activeExcellenceArea].titleAm : EXCELLENCE_AREAS[activeExcellenceArea].titleEn}
+                </h5>
+                <p className="mt-3 text-sm leading-relaxed text-[#5C5854]">
+                  {isAm ? EXCELLENCE_AREAS[activeExcellenceArea].objectiveAm : EXCELLENCE_AREAS[activeExcellenceArea].objectiveEn}
+                </p>
+              </div>
+              <div className="lg:col-span-8">
+                <h6 className="text-xs font-extrabold uppercase tracking-wider text-[#AE8F05]">
+                  {isAm ? "ቁልፍ ተግባራት" : "Key Tasks"}
+                </h6>
+                <ul className="mt-4 grid sm:grid-cols-2 gap-x-6 gap-y-3">
+                  {(isAm
+                    ? EXCELLENCE_AREAS[activeExcellenceArea].tasksAm
+                    : EXCELLENCE_AREAS[activeExcellenceArea].tasksEn
+                  ).map((task) => (
+                    <li key={task} className="flex items-start gap-2.5 text-sm leading-relaxed text-[#4A4744]">
+                      <span className="mt-2 w-1.5 h-1.5 rounded-full bg-[#AE8F05] shrink-0" />
+                      <span>{task}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </motion.div>
+
+            <div className="mt-8 grid lg:grid-cols-2 gap-5">
+              <div className="rounded-2xl bg-white border border-[#EAE6DE] p-6 sm:p-7">
+                <div className="flex items-center gap-3 pb-4 border-b border-[#AE8F05]/20">
+                  <div className="w-10 h-10 rounded-xl bg-[#FAF5E6] flex items-center justify-center text-[#AE8F05]">
+                    <Users className="w-5 h-5" />
+                  </div>
+                  <h5 className="font-serif text-lg font-bold text-[#2C2A28]">
+                    {isAm ? "ለቡድኑ ስኬት የሚያስፈልጉ ሁኔታዎች" : "Conditions for Success"}
+                  </h5>
+                </div>
+                <ul className="mt-4 space-y-3">
+                  {TEAM_ENABLERS.map((item) => (
+                    <li key={item.en} className="flex items-start gap-2.5 text-sm leading-relaxed text-[#5C5854]">
+                      <span className="mt-2 w-1.5 h-1.5 rounded-full bg-[#AE8F05] shrink-0" />
+                      <span>{isAm ? item.am : item.en}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              <div className="rounded-2xl bg-[#F4F0E7] border border-[#E5D7B3] p-6 sm:p-7">
+                <div className="flex items-center gap-3 pb-4 border-b border-[#AE8F05]/20">
+                  <div className="w-10 h-10 rounded-xl bg-white flex items-center justify-center text-[#AE8F05] border border-[#AE8F05]/20">
+                    <Award className="w-5 h-5" />
+                  </div>
+                  <h5 className="font-serif text-lg font-bold text-[#2C2A28]">
+                    {isAm ? "የሚጠበቁ ውጤቶች" : "Expected Outcomes"}
+                  </h5>
+                </div>
+                <ul className="mt-4 space-y-3">
+                  {TEAM_OUTCOMES.map((item) => (
+                    <li key={item.en} className="flex items-start gap-2.5 text-sm leading-relaxed text-[#4A4744]">
+                      <span className="mt-2 w-1.5 h-1.5 rounded-full bg-[#AE8F05] shrink-0" />
+                      <span>{isAm ? item.am : item.en}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+
+            <div className="mt-5 rounded-2xl bg-[#173A32] text-white p-6 sm:p-8">
+              <div className="flex flex-col md:flex-row md:items-start gap-6">
+                <div className="md:w-1/3">
+                  <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-[#F0D082]">
+                    {isAm ? "ቀጣይ እርምጃዎች" : "Next Steps"}
+                  </span>
+                  <h5 className="mt-2 font-serif text-xl sm:text-2xl font-bold">
+                    {isAm ? "ከሐሳብ ወደ ዕቅድ" : "From Concept to Plan"}
+                  </h5>
+                </div>
+                <ol className="md:w-2/3 grid sm:grid-cols-3 gap-4">
+                  {TEAM_NEXT_STEPS.map((step, index) => (
+                    <li key={step.en} className="border-t border-white/20 pt-3">
+                      <span className="font-serif text-lg font-extrabold text-[#F0D082]">0{index + 1}</span>
+                      <p className="mt-1 text-sm leading-relaxed text-white/85">
+                        {isAm ? step.am : step.en}
+                      </p>
+                    </li>
+                  ))}
+                </ol>
+              </div>
+              <p className="mt-6 pt-5 border-t border-white/15 text-xs sm:text-sm leading-relaxed text-white/70">
+                {isAm
+                  ? "ይህ ማዕቀፍ በአመራር ውይይት፣ በቡድን ምስረታና በዝርዝር ዕቅድ እንዲጠናከር የቀረበ የጽንሰ ሐሳብ ነው።"
+                  : "This is a proposed concept note, to be reviewed with church leadership and developed through team formation and detailed implementation planning."}
+              </p>
+            </div>
+          </motion.section>
 
           {/* FULL DIRECTORY: Leaders Cards */}
           <div className="mt-16">

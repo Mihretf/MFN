@@ -33,7 +33,7 @@ const MAIN_LEADERS = [
     photoUrl: "https://res.cloudinary.com/droslno9i/image/upload/v1788753339/photo_5832592152800727193_y_1_wmqcmx.jpg",
   },
   {
-    nameEn: "Sir Aynalem Merse",
+    nameEn: "Seer Aynalem Merse",
     nameAm: "ሲር አይናለም መርሴ",
     roleEn: "Council Member & Burayu Network Leader",
     roleAm: "የካውንስል አባልና የቡራዩ ኔትወርክ መሪ",
@@ -45,6 +45,13 @@ const MAIN_LEADERS = [
     roleEn: "Council Member & Head of the Healing School",
     roleAm: "የካውንስል አባልና የሂሊንግ ስኩል ኃላፊ",
     photoUrl: "https://res.cloudinary.com/droslno9i/image/upload/v1788753339/Screenshot_20260906-203454_Facebook_ouead5.jpg",
+  },
+  {
+    nameEn: "Brother Wubliker Teklu",
+    nameAm: "ወንድም ውብሊቀር ተክሉ",
+    roleEn: "General Administrator of Mission for Nation Church",
+    roleAm: "የተልዕኮ ለትውልድ ቤተ ክርስቲያን አጠቃላይ አስተዳደር",
+    photoUrl: "/new-leader-wubliker-teklu.jpg",
   },
 ];
 
@@ -343,7 +350,7 @@ export default function AboutSection() {
           </div>
 
           {/* Leaders grid — full image cards */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-6">
             {MAIN_LEADERS.map((leader, idx) => (
               <LeaderCard key={idx} leader={leader} isAm={isAm} index={idx} />
             ))}
