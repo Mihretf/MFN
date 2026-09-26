@@ -74,7 +74,7 @@ const LEADERS_DIRECTORY: LeaderMember[] = [
   },
   {
     id: "l6",
-    nameEn: "Sir Aynalem Merse",
+    nameEn: "Seer Aynalem Merse",
     nameAm: "ሲር አይናለም መርሴ",
     roleEn: "Council Member & Burayu Network Leader",
     roleAm: "የካውንስል አባልና የቡራዩ ኔትወርክ መሪ",
@@ -358,6 +358,35 @@ const MINISTRY_TEAMS = [
   { en: "Business & Economic Ministry", am: "የቢዝነስና ኢኮኖሚ አገልግሎት" },
   { en: "Pastoral & Eldership Staff", am: "የመጋቢዎችና የሽማግሌዎች አካል" },
   { en: "Specialized Outreach Ministries", am: "ልዩ ልዩ የዘመቻ አገልግሎቶች" }
+];
+
+const EXCELLENCE_TEAM_MEMBERS = [
+  {
+    nameEn: "Yonas Alemayehu",
+    nameAm: "ዮናስ አለማየው",
+    photo: "/excellence-team-head.jpg",
+    isHead: true,
+  },
+  {
+    nameEn: "Bereket Abebe",
+    nameAm: "በረከት አበበ",
+    photo: "/735831803_1029050962855649_4434336346865934254_n.jpg",
+  },
+  {
+    nameEn: "Abraham Abatnehe",
+    nameAm: "አብርሃም አባተነህ",
+    photo: "/photo_5891075330900955052_y.jpg",
+  },
+  {
+    nameEn: "Abreham Bekele",
+    nameAm: "አብርሃም በቀለ",
+    photo: "/photo_5891075330900955056_x.jpg",
+  },
+  {
+    nameEn: "Wondwosen Zeleke",
+    nameAm: "ወንድወሰን ዘለቀ",
+    photo: "/photo_5891075330900955055_y.jpg",
+  },
 ];
 
 const EXCELLENCE_AREAS = [
@@ -692,8 +721,8 @@ export function OrgStructure() {
         </div>
 
         {/* SECTION 2: Global Network & Ministries Directory */}
-        <div className="mb-20">
-          <div className="text-center mb-16">
+        <div className="mb-20 flex flex-col">
+          <div className="order-2 text-center mb-16">
             <h3 className="font-serif text-2xl sm:text-3xl font-bold gold-gradient-text uppercase tracking-wider">
               {isAm ? "ክፍል 2: አገር አቀፍና ዓለም አቀፍ የአገልግሎት ማውጫ" : "Section 2: Global Network & Ministries Directory"}
             </h3>
@@ -705,7 +734,7 @@ export function OrgStructure() {
             whileInView={{ opacity: 1, scale: 1 }}
             initial={{ opacity: 0, scale: 0.95 }}
             viewport={{ once: true }}
-            className="mb-16 rounded-3xl p-8 bg-gradient-to-r from-[#D4AF37] via-[#AE8F05] to-[#7E6503] text-white shadow-2xl text-center relative overflow-hidden"
+            className="order-3 mb-16 rounded-3xl p-8 bg-gradient-to-r from-[#D4AF37] via-[#AE8F05] to-[#7E6503] text-white shadow-2xl text-center relative overflow-hidden"
           >
             <Award className="w-12 h-12 mx-auto mb-3 text-white drop-shadow-md" />
             <h4 className="font-serif text-3xl sm:text-5xl font-black tracking-tight">
@@ -719,7 +748,7 @@ export function OrgStructure() {
           </motion.div>
 
           {/* Grid Layout: Local Networks & International Churches */}
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-16">
+          <div className="order-4 grid grid-cols-1 lg:grid-cols-12 gap-8 mb-16">
             
             {/* Subsection A: Local Network Centers (All 18) */}
             <div className="lg:col-span-7 bg-white rounded-3xl p-6 md:p-8 border border-[#EAE6DE] shadow-xl">
@@ -783,7 +812,7 @@ export function OrgStructure() {
           </div>
 
           {/* Subsection D: Excellence & Ministry Teams */}
-          <div className="bg-white rounded-3xl p-6 md:p-10 border border-[#EAE6DE] shadow-xl mb-16">
+          <div className="order-5 bg-white rounded-3xl p-6 md:p-10 border border-[#EAE6DE] shadow-xl mb-16">
             <div className="flex items-center space-x-3 mb-8 pb-4 border-b border-[#AE8F05]/20">
               <Layers className="w-7 h-7 text-[#AE8F05]" />
               <div>
@@ -814,21 +843,17 @@ export function OrgStructure() {
             initial={{ opacity: 0, y: 28 }}
             viewport={{ once: true, margin: "-80px" }}
             transition={{ duration: 0.6 }}
-            className="mb-20 scroll-mt-24"
+            className="order-1 mb-20 scroll-mt-24"
             aria-labelledby="excellence-team-title"
           >
-            <div className="relative overflow-hidden rounded-3xl bg-[#173A32] text-white shadow-2xl">
-              <div className="absolute inset-y-0 right-0 w-1/2 bg-gradient-to-l from-[#AE8F05]/20 to-transparent pointer-events-none" />
+            <div className="relative overflow-hidden rounded-3xl bg-white text-[#2C2A28] border border-[#EAE6DE] shadow-xl">
+              <div className="absolute inset-y-0 right-0 w-1/2 bg-gradient-to-l from-[#F7E7CE]/60 to-transparent pointer-events-none" />
               <div className="relative grid lg:grid-cols-12 gap-8 lg:gap-12 p-7 sm:p-10 lg:p-14 items-center">
                 <div className="lg:col-span-7">
-                  <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-[#D4AF37]/50 bg-white/5 text-[#F0D082] text-[11px] sm:text-xs font-bold uppercase tracking-wider">
-                    <Sparkles className="w-4 h-4" />
-                    {isAm ? "ለማቋቋም የቀረበ የፅንሰ ሐሳብ ማስታወሻ" : "Proposed Establishment Framework"}
-                  </div>
                   <h3 id="excellence-team-title" className="mt-5 font-serif text-3xl sm:text-4xl lg:text-5xl font-extrabold leading-tight">
                     {isAm ? "የቤተ ክርስቲያን አገልግሎት ልህቀት ቡድን" : "Church Ministry Excellence Team"}
                   </h3>
-                  <p className="mt-5 max-w-2xl text-sm sm:text-base leading-relaxed text-white/80">
+                  <p className="mt-5 max-w-2xl text-sm sm:text-base leading-relaxed text-[#5C5854]">
                     {isAm
                       ? "በመንፈሳዊ እድገትና በኅብረት ላይ ያተኮረ፣ የአገልግሎቶችን ጥራት ለማሳደግ የቀረበ የቡድን ማቋቋሚያና የአሠራር ማዕቀፍ። ቡድኑ የአገልግሎት አካላትን፣ አቅርቦቶችንና አስተዳደርን በማስተባበር እያንዳንዱ ፕሮግራም መንፈሳዊ ዓላማውን የጠበቀ፣ አሳታፊና ራዕይ ተኮር እንዲሆን ለማገዝ የታሰበ ነው።"
                       : "A proposed framework for strengthening service quality, spiritual growth, and fellowship. The team would coordinate service groups, resources, and administration so that every program remains spiritually purposeful, inclusive, and aligned with the church's vision."}
@@ -839,7 +864,7 @@ export function OrgStructure() {
                       isAm ? "የአገልግሎት ጥራት" : "Service quality",
                       isAm ? "ኅብረትና ተሳትፎ" : "Fellowship & participation",
                     ].map((label) => (
-                      <span key={label} className="px-3 py-1.5 rounded-full bg-white/10 border border-white/15 text-xs font-semibold text-white/90">
+                      <span key={label} className="px-3 py-1.5 rounded-full bg-[#FAF5E6] border border-[#AE8F05]/20 text-xs font-semibold text-[#6D5704]">
                         {label}
                       </span>
                     ))}
@@ -847,14 +872,23 @@ export function OrgStructure() {
                 </div>
 
                 <div className="lg:col-span-5">
-                  <figure className="overflow-hidden rounded-2xl border border-white/20 bg-[#102C26] p-2 shadow-xl">
-                    <img
-                      src="/excellence.jpg"
-                      alt={isAm ? "የአገልግሎት ልህቀት" : "Church ministry excellence"}
-                      className="h-56 sm:h-64 lg:h-72 w-full rounded-xl object-contain"
-                      loading="lazy"
-                    />
-                    <figcaption className="px-3 pt-2 pb-1 text-xs font-semibold text-white/70">
+                  <figure className="overflow-hidden rounded-2xl border border-[#EAE6DE] bg-[#FAF8F5] p-2 shadow-lg">
+                    <div className="grid grid-cols-2 gap-2">
+                      {EXCELLENCE_TEAM_MEMBERS.map((member) => (
+                        <div key={member.nameEn} className={member.isHead ? "col-span-2" : ""}>
+                          <img
+                            src={member.photo}
+                            alt={isAm ? member.nameAm : member.nameEn}
+                            className={`${member.isHead ? "h-64 sm:h-72 lg:h-80 object-cover object-bottom" : "h-32 sm:h-36 lg:h-40 object-cover object-center"} w-full rounded-xl`}
+                            loading="lazy"
+                          />
+                          <p className="px-1 pt-1 text-[11px] font-semibold text-[#5C5854]">
+                            {isAm ? member.nameAm : member.nameEn}
+                          </p>
+                        </div>
+                      ))}
+                    </div>
+                    <figcaption className="px-3 pt-2 pb-1 text-xs font-semibold text-[#5C5854]">
                       {isAm ? "የአገልግሎት ልህቀት ቡድን" : "Church Ministry Excellence Team"}
                     </figcaption>
                   </figure>
@@ -863,9 +897,6 @@ export function OrgStructure() {
             </div>
 
             <div className="mt-14 text-center">
-              <span className="text-xs font-bold uppercase tracking-[0.18em] text-[#AE8F05]">
-                {isAm ? "የቡድኑ ዝርዝር ዓላማዎች" : "The Proposed Framework"}
-              </span>
               <h4 className="mt-2 font-serif text-2xl sm:text-3xl font-extrabold text-[#2C2A28]">
                 {isAm ? "አምስቱ የትኩረት ዘርፎች" : "Five Areas of Focus"}
               </h4>
@@ -982,10 +1013,10 @@ export function OrgStructure() {
               </div>
             </div>
 
-            <div className="mt-5 rounded-2xl bg-[#173A32] text-white p-6 sm:p-8">
+              <div className="mt-5 rounded-2xl bg-[#F4F0E7] text-[#2C2A28] border border-[#E5D7B3] p-6 sm:p-8">
               <div className="flex flex-col md:flex-row md:items-start gap-6">
                 <div className="md:w-1/3">
-                  <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-[#F0D082]">
+                  <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-[#AE8F05]">
                     {isAm ? "ቀጣይ እርምጃዎች" : "Next Steps"}
                   </span>
                   <h5 className="mt-2 font-serif text-xl sm:text-2xl font-bold">
@@ -995,15 +1026,15 @@ export function OrgStructure() {
                 <ol className="md:w-2/3 grid sm:grid-cols-3 gap-4">
                   {TEAM_NEXT_STEPS.map((step, index) => (
                     <li key={step.en} className="border-t border-white/20 pt-3">
-                      <span className="font-serif text-lg font-extrabold text-[#F0D082]">0{index + 1}</span>
-                      <p className="mt-1 text-sm leading-relaxed text-white/85">
+                      <span className="font-serif text-lg font-extrabold text-[#AE8F05]">0{index + 1}</span>
+                      <p className="mt-1 text-sm leading-relaxed text-[#5C5854]">
                         {isAm ? step.am : step.en}
                       </p>
                     </li>
                   ))}
                 </ol>
               </div>
-              <p className="mt-6 pt-5 border-t border-white/15 text-xs sm:text-sm leading-relaxed text-white/70">
+              <p className="mt-6 pt-5 border-t border-[#AE8F05]/20 text-xs sm:text-sm leading-relaxed text-[#5C5854]">
                 {isAm
                   ? "ይህ ማዕቀፍ በአመራር ውይይት፣ በቡድን ምስረታና በዝርዝር ዕቅድ እንዲጠናከር የቀረበ የጽንሰ ሐሳብ ነው።"
                   : "This is a proposed concept note, to be reviewed with church leadership and developed through team formation and detailed implementation planning."}
@@ -1012,7 +1043,7 @@ export function OrgStructure() {
           </motion.section>
 
           {/* FULL DIRECTORY: Leaders Cards */}
-          <div className="mt-16">
+          <div className="order-6 mt-16">
             <div className="text-center mb-10">
               <h4 className="font-serif text-2xl sm:text-3xl font-bold text-[#2C2A28]">
                 {isAm ? "የካውንስል አባላት፣ የኔትወርክና የዲፓርትመንት መሪዎች ማውጫ" : "Council Members, Network Leaders & Section Heads Directory"}
